@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Media Player</string>
+    <string name="notification_title_text">notification_title_text</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="exit">Exit</string>
+    <string name="songimage">SongImage</string>
+</resources>
