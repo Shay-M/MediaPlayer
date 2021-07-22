@@ -1,17 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:background="@color/teal_700"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp">
+
+
+    <EditText
+        android:id="@+id/link"
+        android:layout_width="288dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="43dp"
+        android:layout_marginBottom="144dp"
+        android:autofillHints="@string/enter_music_link"
+        android:gravity="center"
+        android:hint="@string/enter_music_link"
+        android:inputType="textWebEditText" />
+
+    <ImageButton
+        android:id="@+id/big_pic"
+        android:layout_width="268dp"
+        android:layout_height="292dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginEnd="88dp"
+        android:background="@null"
+        android:contentDescription="@string/music_pic_big"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher_background" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Play!"
-        android:id="@+id/play_btn"
-         />
+        android:id="@+id/btn_play"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
 
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="49dp"
+        android:background="@drawable/roundedbutton"
+        android:text="" />
+
+    <ImageButton
+        android:id="@+id/addLinkBtn"
+        android:layout_width="38dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="140dp"
+        android:layout_toEndOf="@+id/link"
+        android:background="@null"
+        android:contentDescription="@string/add_link"
+        android:src="@android:drawable/ic_input_add" />
+</RelativeLayout>
