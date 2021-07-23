@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -133,14 +134,22 @@ public class MainActivity extends AppCompatActivity {
 
         });
         //add button,add a song by link
+//        addBtn.setOnClickListener(int aa,new View.OnClickListener()
+//        {
+//
+//        });
+
+
         addBtn.setOnClickListener(view -> {
+
             String link = linkEt.getText().toString();
             if (!link.isEmpty()) {
-//                managerListSongs.addSong(link);//sen to
                 try {
                     managerListSongs.addSong(link);//sen to
                     songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
                     recyclerView.setAdapter(songAdapter.get());
+                    MusicPlayerService musicPlayerService = new MusicPlayerService();
+                    musicPlayerService.UpdateSongList();
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     Snackbar snackbar = Snackbar
@@ -156,4 +165,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    interface OnAddASongListener {
+        void SucceededAddASong();
+
+//        void FailedAddASong();
+    }
 }
+

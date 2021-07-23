@@ -228,7 +228,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             case "new_instance":
                 if (!mediaPlayer.isPlaying()) {
 //                    listOfSongsGet = intent.getStringArrayListExtra("listOfSongs");
-                    listOfSongs = managerListSongs.getListOfUrlSongs();
+                    UpdateSongList();
                     try {
                         mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
                         UpdateSongDetails();
@@ -263,6 +263,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         return super.onStartCommand(intent, flags, startId);
     }
 
+
     private void playSong(boolean isNext) {
         if (isNext) {
             currentPlaying++;
@@ -292,8 +293,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onPrepared(MediaPlayer mediaPlayer) {
         UpdateSongDetails();
         mediaPlayer.start();
-        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): "+mediaPlayer.getTrackInfo());
-        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): "+mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
+        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): " + mediaPlayer.getTrackInfo());
+        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): " + mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
     }
 
     @Override
@@ -308,11 +309,17 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void UpdateSongDetails() {
         //        remoteViews.setImageViewResource(R.id.notification_title,1);
+        UpdateSongList();
         remoteViews.setTextViewText(R.id.notification_title, listOfSongs.get(currentPlaying));
 
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
 
+    public void UpdateSongList() {
+        listOfSongs = managerListSongs.getListOfUrlSongs();
+        Log.d("UpdateSongList", "listOfSongs: " + listOfSongs);
+
+    }
 
     /*private void updateNotification(){
 

@@ -14,13 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="43dp"
-        android:layout_marginBottom="144dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginBottom="124dp"
         android:autofillHints="@string/enter_music_link"
         android:gravity="center"
         android:hint="@string/enter_music_link"
         android:inputType="textWebEditText" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_songs"
