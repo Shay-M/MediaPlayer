@@ -96,6 +96,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
     boolean isPlaying = false;
@@ -119,25 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
         ManagerListSongs managerListSongs = new ManagerListSongs();
 
-//        try {
-//            managerListSongs.addSong("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            managerListSongs.addSong("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            managerListSongs.addSong("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
-        SongAdapter songAdapter = new SongAdapter(managerListSongs.getListOfSongsItems());
-        recyclerView.setAdapter(songAdapter);
+        AtomicReference<SongAdapter> songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
+        recyclerView.setAdapter(songAdapter.get());
 
 
         //play button
@@ -151,17 +135,19 @@ public class MainActivity extends AppCompatActivity {
         //add button,add a song by link
         addBtn.setOnClickListener(view -> {
             String link = linkEt.getText().toString();
-            //if (!link.isEmpty()) {
+            if (!link.isEmpty()) {
 //                managerListSongs.addSong(link);//sen to
                 try {
                     managerListSongs.addSong(link);//sen to
+                    songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
+                    recyclerView.setAdapter(songAdapter.get());
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     Snackbar snackbar = Snackbar
                             .make(view, "" + e.getMessage(), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
-            //}
+            }
             linkEt.setText("");
         });
 

@@ -23,8 +23,14 @@ public class ManagerListSongs {
 //        listOfUrlSongs.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
 //        listOfUrlSongs.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
 
+        try {
+            this.addSong("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         listOfSongsItems = new ArrayList<>();
-//        listOfSongsItems.add(new SongItem("null", this.getListOfUrlSongs().get(1), "1", null));
+//        listOfSongsItems.add(new SongItem("null", "", "1", null));
 
     }
 
@@ -38,10 +44,9 @@ public class ManagerListSongs {
     }
 
     public void addSong(String stringUrl) throws Exception {
-
+        //get song name
         String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
         // Url Validator
-
         try {
             new URL(stringUrl).toURI();
         } catch (MalformedURLException | URISyntaxException e) {
@@ -50,11 +55,11 @@ public class ManagerListSongs {
             throw new Exception("the URL is not in a valid form. " + e.getMessage());
         }
 
-        if (!NameOfSongFromUrl.isEmpty()) {
+        if (!NameOfSongFromUrl.isEmpty() && NameOfSongFromUrl.contains(".")) {
             this.listOfUrlSongs.add(stringUrl);
             Log.d("ManagerListSongs", "addSong: " + stringUrl);
             listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, "1", null));
-        }
+        } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
 
         /*try {
             NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
