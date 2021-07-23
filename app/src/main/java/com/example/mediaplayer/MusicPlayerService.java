@@ -143,6 +143,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
@@ -291,6 +292,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onPrepared(MediaPlayer mediaPlayer) {
         ManagerSongsList();
         mediaPlayer.start();
+        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): "+mediaPlayer.getTrackInfo());
+        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): "+mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
     }
 
     @Override

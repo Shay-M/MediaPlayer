@@ -87,6 +87,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -103,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
         final EditText linkEt = findViewById(R.id.link);
         final Button playBtn = findViewById(R.id.btn_play);
         final ImageButton addBtn = findViewById(R.id.addLinkBtn);
-        final ImageButton imageButton = findViewById(R.id.big_pic);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_songs);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         ListSongsManager listOfSongsSend = new ListSongsManager();
 
@@ -122,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        imageButton.setOnClickListener(view -> {
-        });
+        /*imageButton.setOnClickListener(view -> {
+        });*/
 
 
     }
