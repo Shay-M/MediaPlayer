@@ -92,6 +92,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,18 +119,28 @@ public class MainActivity extends AppCompatActivity {
 
         ManagerListSongs managerListSongs = new ManagerListSongs();
 
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1),"1",null));
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0),"2",null));
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1),"1",null));
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0),"2",null));
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1),"1",null));
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0),"2",null));
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1), "1", null));
-//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0), "2", null));
+//        try {
+//            managerListSongs.addSong("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            managerListSongs.addSong("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            managerListSongs.addSong("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
 
         SongAdapter songAdapter = new SongAdapter(managerListSongs.getListOfSongsItems());
         recyclerView.setAdapter(songAdapter);
-        //play
+
+
+        //play button
         playBtn.setOnClickListener(view -> {
 
             intent = new Intent(MainActivity.this, MusicPlayerService.class);
@@ -137,12 +148,21 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
 
         });
-        //add a song by link
+        //add button,add a song by link
         addBtn.setOnClickListener(view -> {
             String link = linkEt.getText().toString();
-//            if (!link.isEmpty())
-            managerListSongs.addSong(link);//sen to
-
+            //if (!link.isEmpty()) {
+//                managerListSongs.addSong(link);//sen to
+                try {
+                    managerListSongs.addSong(link);//sen to
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    Snackbar snackbar = Snackbar
+                            .make(view, "" + e.getMessage(), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            //}
+            linkEt.setText("");
         });
 
         /*imageButton.setOnClickListener(view -> {

@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,18 +19,15 @@ public class ManagerListSongs {
     //    ListSongsManager(ArrayList<String> listOfSongsGet) {
     ManagerListSongs() {
         listOfUrlSongs = new ArrayList<>();
-        listOfUrlSongs.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
-        listOfUrlSongs.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
-        listOfUrlSongs.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
+//        listOfUrlSongs.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
+//        listOfUrlSongs.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
+//        listOfUrlSongs.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
 
         listOfSongsItems = new ArrayList<>();
-        listOfSongsItems.add(new SongItem("null", this.getListOfUrlSongs().get(1), "1", null));
-
+//        listOfSongsItems.add(new SongItem("null", this.getListOfUrlSongs().get(1), "1", null));
 
     }
 
-    public void addSongItem() {
-    }
 
     public List<SongItem> getListOfSongsItems() {
         return listOfSongsItems;
@@ -37,26 +37,38 @@ public class ManagerListSongs {
         return listOfUrlSongs;
     }
 
-    public void addSong(String stringUrl) {
+    public void addSong(String stringUrl) throws Exception {
 
-        String NameOfSongFromUrl = null;
+        String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
+        // Url Validator
+
         try {
-            NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
-        } catch (Exception e) {
-            e.printStackTrace();
+            new URL(stringUrl).toURI();
+        } catch (MalformedURLException | URISyntaxException e) {
+            Log.d("addSong", "the URL is not in a valid form: " + e.getMessage());
+            NameOfSongFromUrl = "";
+            throw new Exception("the URL is not in a valid form. " + e.getMessage());
         }
 
-//        UrlValidator urlValidator = new UrlValidator();
-//        urlValidator.isValid("http://my favorite site!");
+        if (!NameOfSongFromUrl.isEmpty()) {
+            this.listOfUrlSongs.add(stringUrl);
+            Log.d("ManagerListSongs", "addSong: " + stringUrl);
+            listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, "1", null));
+        }
 
-        this.listOfUrlSongs.add(stringUrl);
-        Log.d("NameOfSongFromUrl", "addSong: " + NameOfSongFromUrl);
-
-
-
-        //
-
-//        UrlValidator urlValidator = new UrlValidator();
-//        urlValidator.isValid("http://my favorite site!");
+        /*try {
+            NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
+            URL url = new URL(stringUrl);
+            URLConnection conn = url.openConnection();
+            conn.connect();
+        } catch (MalformedURLException e) {
+            Log.d("addSong", "the URL is not in a valid form. " + e.getMessage());
+            NameOfSongFromUrl = "";
+            //t
+        } catch (IOException e) {
+            Log.d("addSong", "the connection couldn't be established. " + e.getMessage());
+            NameOfSongFromUrl = "";
+            throw new Exception("the connection couldn't be established. " + e.getMessage());
+        }*/
     }
 }
