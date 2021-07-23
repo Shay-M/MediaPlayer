@@ -11,13 +11,6 @@ public class SongItem {
 
     public SongItem(String url, String name, String duration, ImageView imageView) {
         Url = url;
-        if (name != null)
-            Name = name;
-        //Name = url.substring(url.lastIndexOf("/") + 1);
-
-//        UrlValidator urlValidator = new UrlValidator();
-//        urlValidator.isValid("http://my favorite site!");
-
         Name = name;
         Duration = duration;
         this.imageView = imageView;
