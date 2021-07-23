@@ -90,7 +90,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
+import com.example.mediaplayer.SongsRecyclerView.SongItem;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     boolean isPlaying = false;
@@ -110,9 +114,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        List<SongItem> songsList = new ArrayList<>();
 
-        ListSongsManager listOfSongsSend = new ListSongsManager();
+        ManagerListSongs managerListSongs = new ManagerListSongs();
 
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1),"1",null));
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0),"2",null));
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1),"1",null));
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0),"2",null));
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1),"1",null));
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0),"2",null));
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(1), "1", null));
+//        songsList.add(new SongItem("null", managerListSongs.getListOfUrlSongs().get(0), "2", null));
+
+        SongAdapter songAdapter = new SongAdapter(managerListSongs.getListOfSongsItems());
+        recyclerView.setAdapter(songAdapter);
+        //play
         playBtn.setOnClickListener(view -> {
 
             intent = new Intent(MainActivity.this, MusicPlayerService.class);
@@ -120,11 +137,11 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
 
         });
-
+        //add a song by link
         addBtn.setOnClickListener(view -> {
             String link = linkEt.getText().toString();
-            if (!link.isEmpty())
-                listOfSongsSend.addSong(link);
+//            if (!link.isEmpty())
+            managerListSongs.addSong(link);//sen to
 
         });
 

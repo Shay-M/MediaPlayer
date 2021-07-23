@@ -4,35 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:outlineAmbientShadowColor="#E91E63"
-    android:outlineSpotShadowColor="#E91E63"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="9dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background"
-        android:outlineAmbientShadowColor="#E91E63"
         android:padding="7dp">
 
         <ImageView
             android:id="@+id/song_image"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@+id/song_image"
             android:cropToPadding="true"
-            android:src="@drawable/sound_icon"
-            android:contentDescription="@+id/song_image" />
+            android:src="@drawable/sound_icon" />
 
         <TextView
             android:id="@+id/song_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/song_image"
+            android:maxLength="26"
             android:padding="10dp"
             android:text="@color/white"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/song_details"

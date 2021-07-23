@@ -21,21 +21,19 @@
         android:hint="@string/enter_music_link"
         android:inputType="textWebEditText" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_songs"
-        android:padding="4dp"
-        android:clipToPadding="false"
-        android:layout_width="268dp"
-        android:layout_height="292dp"
+        android:layout_width="401dp"
+        android:layout_height="511dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="83dp"
-        android:layout_marginTop="47dp"
-        android:layout_marginEnd="88dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
         android:background="@color/cardview_shadow_end_color"
-         />
-
+        android:padding="4dp" />
 
     <Button
         android:id="@+id/btn_play"

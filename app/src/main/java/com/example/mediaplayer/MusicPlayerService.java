@@ -162,7 +162,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     RemoteViews remoteViews;
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
-    private ListSongsManager listSongsManager = new ListSongsManager();
+    private ManagerListSongs managerListSongs = new ManagerListSongs();
 
 
     @Nullable
@@ -228,10 +228,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             case "new_instance":
                 if (!mediaPlayer.isPlaying()) {
 //                    listOfSongsGet = intent.getStringArrayListExtra("listOfSongs");
-                    listOfSongs = listSongsManager.getListOfSongs();
+                    listOfSongs = managerListSongs.getListOfUrlSongs();
                     try {
                         mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
-                        ManagerSongsList();
+                        UpdateSongDetails();
                         mediaPlayer.prepareAsync();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -290,7 +290,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        ManagerSongsList();
+        UpdateSongDetails();
         mediaPlayer.start();
         Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): "+mediaPlayer.getTrackInfo());
         Log.d("onStartCommand", "mediaPlayer.getTimestamp(): "+mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
@@ -306,9 +306,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
-    public void ManagerSongsList() {
+    public void UpdateSongDetails() {
         //        remoteViews.setImageViewResource(R.id.notification_title,1);
         remoteViews.setTextViewText(R.id.notification_title, listOfSongs.get(currentPlaying));
+
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
 
