@@ -142,12 +142,15 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -157,12 +160,12 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     final int NOTIFY_ID = 100;
     MediaPlayer mediaPlayer = new MediaPlayer();
-    ArrayList<String> listOfSongs;
+    ArrayList<String> listOfSongs = new ArrayList<>();
     int currentPlaying = 0;
     RemoteViews remoteViews;
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
-    private ManagerListSongs managerListSongs = new ManagerListSongs();
+    private ManagerListSongs managerListSongs;
 
 
     @Nullable
@@ -217,19 +220,23 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         builder.setContent(remoteViews);
 
         startForeground(NOTIFY_ID, builder.build());
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         String command = intent.getStringExtra("command");
+        if (managerListSongs == null)
+            managerListSongs = intent.getExtras().getParcelable("managerListSongs");
+
+        listOfSongs = managerListSongs.getListOfUrlSongs();
 
         switch (command) {
             case "new_instance":
                 if (!mediaPlayer.isPlaying()) {
-//                    listOfSongsGet = intent.getStringArrayListExtra("listOfSongs");
-                    UpdateSongList();
                     try {
+                        UpdateSongList();
                         mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
                         UpdateSongDetails();
                         mediaPlayer.prepareAsync();
@@ -266,16 +273,21 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private void playSong(boolean isNext) {
         if (isNext) {
+            UpdateSongList();
             currentPlaying++;
+//            listOfSongs = managerListSongs.getListOfUrlSongs();
             if (currentPlaying == listOfSongs.size())
                 currentPlaying = 0;
         } else {
+            UpdateSongList();
             currentPlaying--;
+//            listOfSongs = managerListSongs.getListOfUrlSongs();
             if (currentPlaying < 0)
                 currentPlaying = listOfSongs.size() - 1;
         }
         mediaPlayer.reset();
         try {
+            UpdateSongList();
             mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
@@ -292,9 +304,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         UpdateSongDetails();
+        UpdateSongList();
         mediaPlayer.start();
-        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): " + mediaPlayer.getTrackInfo());
-        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): " + mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
+//        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): " + mediaPlayer.getTrackInfo());
+//        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): " + mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
     }
 
     @Override
@@ -316,8 +329,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     public void UpdateSongList() {
-        listOfSongs = managerListSongs.getListOfUrlSongs();
-        Log.d("UpdateSongList", "listOfSongs: " + listOfSongs);
+
+        Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
 
     }
 

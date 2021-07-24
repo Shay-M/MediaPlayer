@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Parcelable;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -91,13 +91,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 public class MainActivity extends AppCompatActivity {
     boolean isPlaying = false;
@@ -119,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
 
         List<SongItem> songsList = new ArrayList<>();
 
+        Class<MusicPlayerService> MPS = MusicPlayerService.class;
+
         ManagerListSongs managerListSongs = new ManagerListSongs();
 
         AtomicReference<SongAdapter> songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
@@ -130,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
             intent = new Intent(MainActivity.this, MusicPlayerService.class);
             intent.putExtra("command", "new_instance");
+            intent.putExtra("managerListSongs", (Parcelable) managerListSongs);
             startService(intent);
 
         });
@@ -148,8 +154,7 @@ public class MainActivity extends AppCompatActivity {
                     managerListSongs.addSong(link);//sen to
                     songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
                     recyclerView.setAdapter(songAdapter.get());
-                    MusicPlayerService musicPlayerService = new MusicPlayerService();
-                    musicPlayerService.UpdateSongList();
+
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     Snackbar snackbar = Snackbar
