@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+//public class ManagerListSongs {
 public class ManagerListSongs implements Parcelable {
 
     private final ArrayList<String> listOfUrlSongs;
@@ -70,6 +71,7 @@ public class ManagerListSongs implements Parcelable {
 //            listOfUrlSongs.clear();
 //            listOfUrlSongs.add(song_i.getUrl());
 //        }
+        Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
         return listOfUrlSongs;
     }
 
@@ -87,6 +89,7 @@ public class ManagerListSongs implements Parcelable {
 
         if (!NameOfSongFromUrl.isEmpty() && NameOfSongFromUrl.contains(".")) {
             listOfUrlSongs.add(stringUrl);
+//            Log.d("ManagerListSongs", "addSong: " + stringUrl);
             Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
             listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, "1", null));
 

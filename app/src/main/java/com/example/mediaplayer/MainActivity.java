@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -122,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
         List<SongItem> songsList = new ArrayList<>();
 
-        Class<MusicPlayerService> MPS = MusicPlayerService.class;
 
         ManagerListSongs managerListSongs = new ManagerListSongs();
 
@@ -151,7 +151,10 @@ public class MainActivity extends AppCompatActivity {
             String link = linkEt.getText().toString();
             if (!link.isEmpty()) {
                 try {
-                    managerListSongs.addSong(link);//sen to
+                    managerListSongs.addSong(link);
+                    Log.d(">>>addBtn", "managerListSongs: " + managerListSongs);
+
+                    // update the view list
                     songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
                     recyclerView.setAdapter(songAdapter.get());
 

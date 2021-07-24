@@ -142,7 +142,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -227,10 +226,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         String command = intent.getStringExtra("command");
-        if (managerListSongs == null)
+        if (managerListSongs == null) {
             managerListSongs = intent.getExtras().getParcelable("managerListSongs");
-
-        listOfSongs = managerListSongs.getListOfUrlSongs();
+            listOfSongs = managerListSongs.getListOfUrlSongs();
+        }
 
         switch (command) {
             case "new_instance":
@@ -272,22 +271,21 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     private void playSong(boolean isNext) {
+        listOfSongs = managerListSongs.getListOfUrlSongs();
         if (isNext) {
-            UpdateSongList();
             currentPlaying++;
-//            listOfSongs = managerListSongs.getListOfUrlSongs();
             if (currentPlaying == listOfSongs.size())
                 currentPlaying = 0;
         } else {
-            UpdateSongList();
             currentPlaying--;
-//            listOfSongs = managerListSongs.getListOfUrlSongs();
             if (currentPlaying < 0)
                 currentPlaying = listOfSongs.size() - 1;
         }
         mediaPlayer.reset();
         try {
-            UpdateSongList();
+            Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
+            Log.d(">>>UpdateSongList", "managerListSongs: " + managerListSongs);
+
             mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
@@ -329,8 +327,22 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     public void UpdateSongList() {
+//        listOfSongs = managerListSongs.getListOfUrlSongs();
+//        mediaPlayer.stop();
+//        mediaPlayer.reset();
+//        try {
+//            mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            mediaPlayer.prepare();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        mediaPlayer.start();
 
-        Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
+//        Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
 
     }
 
