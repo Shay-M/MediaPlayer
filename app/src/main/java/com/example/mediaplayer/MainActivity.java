@@ -59,30 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText("Playing legendery Bob, enjoy");
 
 
-        notificationManager.notify(1,builder.build());*//*
+        notificationManager.notify(1,builder.build());*/
 
-
-    }
-
-    private void playMusic() {
-        Intent intent = new Intent(this, MusicPlayerService.class);
-//        intent.putExtra("link", "http://syntax.org.il/xtra/bob.m4a");
-        intent.putExtra("link", "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
-
-        startService(intent);
-    }
-
-    private void stopMusic() {
-        Intent intent = new Intent(this, MusicPlayerService.class);
-        stopService(intent);
-    }
-}
-*/
-
-
+import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,20 +78,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
-import com.example.mediaplayer.SongsRecyclerView.SongItem;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ServiceConnection {
     boolean isPlaying = false;
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
+    private MusicPlayerService musicPlayerService;
 
+
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,14 +99,15 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText linkEt = findViewById(R.id.link);
         final Button playBtn = findViewById(R.id.btn_play);
+        final Button nextBtn = findViewById(R.id.btn_next);
+        final Button nextPrevious = findViewById(R.id.btn_previous);
         final ImageButton addBtn = findViewById(R.id.addLinkBtn);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_songs);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<SongItem> songsList = new ArrayList<>();
-
+//        List<SongItem> songsList = new ArrayList<>();
 
         ManagerListSongs managerListSongs = new ManagerListSongs();
 
@@ -133,15 +118,21 @@ public class MainActivity extends AppCompatActivity {
         //play button
         playBtn.setOnClickListener(view -> {
 
+//                playBtn.setImageResource(R.drawable.ic_launcher_background);
+//            intent = new Intent(MainActivity.this, MusicPlayerService.class);
+//            intent.putExtra("command", "new_instance");
+
             intent = new Intent(MainActivity.this, MusicPlayerService.class);
-            intent.putExtra("command", "new_instance");
-            intent.putExtra("managerListSongs", (Parcelable) managerListSongs);
-            startService(intent);
+            bindService(intent,this,BIND_AUTO_CREATE);
+//            intent.putExtra("managerListSongs", (Parcelable) managerListSongs);
+            // bindService(intent, (ServiceConnection) this, BIND_AUTO_CREATE);
+
+//            startService(intent);
 
         });
+
         //add button,add a song by link
-//        addBtn.setOnClickListener(int aa,new View.OnClickListener()
-//        {
+//        addBtn.setOnClickListener( int aa, new View.OnClickListener() {
 //
 //        });
 
@@ -151,9 +142,12 @@ public class MainActivity extends AppCompatActivity {
             String link = linkEt.getText().toString();
             if (!link.isEmpty()) {
                 try {
-                    managerListSongs.addSong(link);
-                    Log.d(">>>addBtn", "managerListSongs: " + managerListSongs);
+                    managerListSongs.addClicked(link);
+//                    managerListSongs.addSong(link);
 
+                    Log.d(">>>addBtn", "managerListSongs: " + managerListSongs);
+                    toggleUpdates();
+//                    intent.putExtra()
                     // update the view list
                     songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
                     recyclerView.setAdapter(songAdapter.get());
@@ -168,16 +162,48 @@ public class MainActivity extends AppCompatActivity {
             linkEt.setText("");
         });
 
-        /*imageButton.setOnClickListener(view -> {
-        });*/
+
+        nextPrevious.setOnClickListener(view -> {
+            managerListSongs.nextClicked();
+        });
+
+        nextBtn.setOnClickListener(view -> {
+            managerListSongs.nextClicked();
+        });
 
 
     }
 
-    interface OnAddASongListener {
-        void SucceededAddASong();
-
-//        void FailedAddASong();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(this);
     }
+
+    private void toggleUpdates() {
+
+    }
+
+    //implements ServiceConnection
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        MusicPlayerService.MyBinder binder = (MusicPlayerService.MyBinder) service;
+        musicPlayerService = binder.getService();
+        Log.e("onServiceConnected", "" + musicPlayerService);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        musicPlayerService = null;
+        Log.e("onServiceDisconnected", "" + musicPlayerService);
+
+    }
+
+
+//    interface OnAddASongListener {
+//        void SucceededAddASong(ArrayList<String> URLs);
+//
+////        void FailedAddASong();
+//    }
 }
 

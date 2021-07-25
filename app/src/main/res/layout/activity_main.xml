@@ -21,6 +21,8 @@
         android:hint="@string/enter_music_link"
         android:inputType="textWebEditText" />
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_songs"
         android:layout_width="401dp"
@@ -39,11 +41,38 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
-
         android:layout_alignParentBottom="true"
         android:layout_marginStart="60dp"
         android:layout_marginBottom="49dp"
         android:background="@drawable/roundedbutton"
+        android:foreground="@drawable/ic_baseline_play_circle_outline_24"
+        android:foregroundTint="@color/_dark_blue"
+        android:text="" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="47dp"
+        android:layout_toEndOf="@+id/btn_previous"
+        android:background="@drawable/roundedbutton"
+        android:foreground="@android:drawable/ic_media_next"
+        android:foregroundTint="@color/_dark_blue"
+        android:text="" />
+
+    <Button
+        android:id="@+id/btn_previous"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="47dp"
+        android:layout_toEndOf="@+id/btn_play"
+        android:background="@drawable/roundedbutton"
+        android:foreground="@android:drawable/ic_media_previous"
+        android:foregroundTint="@color/_dark_blue"
         android:text="" />
 
     <ImageButton

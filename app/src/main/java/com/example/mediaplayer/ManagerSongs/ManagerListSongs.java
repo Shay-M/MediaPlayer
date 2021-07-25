@@ -1,10 +1,8 @@
 package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/2021 */
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
-import com.example.mediaplayer.MusicPlayerService;
+import com.example.mediaplayer.ActionPlaying;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 
 import java.net.MalformedURLException;
@@ -13,20 +11,20 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-//public class ManagerListSongs {
-public class ManagerListSongs implements Parcelable {
+public class ManagerListSongs implements ActionPlaying {
+//public class ManagerListSongs implements Parcelable {
 
     private final ArrayList<String> listOfUrlSongs;
-    private  List<SongItem> listOfSongsItems;
-    private MusicPlayerService musicPlayerService;
+    private List<SongItem> listOfSongsItems;
+//    private MusicPlayerService musicPlayerService;
 //    private int currentPlaying = 0;
 
     //    ListSongsManager(ArrayList<String> listOfSongsGet) {
     public ManagerListSongs() {
         listOfUrlSongs = new ArrayList<>();
-        ArrayList<String> listOfUrlSongsToAddBrfore = new ArrayList<>();
         listOfSongsItems = new ArrayList<>();
-        //musicPlayerService = new MusicPlayerService();
+
+        ArrayList<String> listOfUrlSongsToAddBrfore = new ArrayList<>();
 
 
         listOfUrlSongsToAddBrfore.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
@@ -35,18 +33,17 @@ public class ManagerListSongs implements Parcelable {
 
         for (String songUrl : listOfUrlSongsToAddBrfore) {
             try {
-                this.addSong(songUrl);
+                this.addClicked(songUrl);
             } catch (Exception e) {
                 Log.d("ManagerListSongs", "songUrl: " + e.getMessage() + " songUrl: " + songUrl);
             }
 //            Set<String> noDuplicatesDlistOfUrlSongs = new LinkedHashSet<>(listOfUrlSongs);
 //            https://stackoverflow.com/questions/203984/how-do-i-remove-repeated-elements-from-arraylist
-//            Log.d(">>>>>>", ">>>songUrl: " + songUrl);
         }
 
     }
 
-    protected ManagerListSongs(Parcel in) {
+    /*protected ManagerListSongs(Parcel in) {
         listOfUrlSongs = in.createStringArrayList();
     }
 
@@ -60,7 +57,7 @@ public class ManagerListSongs implements Parcelable {
         public ManagerListSongs[] newArray(int size) {
             return new ManagerListSongs[size];
         }
-    };
+    };*/
 
     public List<SongItem> getListOfSongsItems() {
         return listOfSongsItems;
@@ -75,7 +72,7 @@ public class ManagerListSongs implements Parcelable {
         return listOfUrlSongs;
     }
 
-    public void addSong(String stringUrl) throws Exception {
+/*    public void addSong(String stringUrl) throws Exception {
         //get song name
         String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
         // Url Validator
@@ -94,7 +91,7 @@ public class ManagerListSongs implements Parcelable {
             listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, "1", null));
 
         } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
-        /*try {
+        *//*try {
             NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
             URL url = new URL(stringUrl);
             URLConnection conn = url.openConnection();
@@ -107,10 +104,48 @@ public class ManagerListSongs implements Parcelable {
             Log.d("addSong", "the connection couldn't be established. " + e.getMessage());
             NameOfSongFromUrl = "";
             throw new Exception("the connection couldn't be established. " + e.getMessage());
-        }*/
+        }*//*
+    }*/
+
+    @Override
+    public void nextClicked() {
+
     }
 
     @Override
+    public void prevClicked() {
+
+    }
+
+    @Override
+    public void playClicked() {
+
+    }
+
+    @Override
+    public void addClicked(String stringUrl) throws Exception {
+        //get song name
+        String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
+        // Url Validator
+        try {
+            new URL(stringUrl).toURI();
+        } catch (MalformedURLException | URISyntaxException e) {
+            Log.d("addSong", "the URL is not in a valid form: " + e.getMessage());
+            NameOfSongFromUrl = "";
+            throw new Exception("the URL is not in a valid form. " + e.getMessage());
+        }
+
+        if (!NameOfSongFromUrl.isEmpty() && NameOfSongFromUrl.contains(".")) {
+            listOfUrlSongs.add(stringUrl);
+//            Log.d("ManagerListSongs", "addSong: " + stringUrl);
+            Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
+            listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, "1", null));
+
+        } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
+
+    }
+
+    /*@Override
     public int describeContents() {
         return 0;
     }
@@ -118,5 +153,5 @@ public class ManagerListSongs implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringList(listOfUrlSongs);
-    }
+    }*/
 }

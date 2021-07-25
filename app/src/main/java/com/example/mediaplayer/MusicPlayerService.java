@@ -142,6 +142,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -158,25 +160,41 @@ import java.util.ArrayList;
 public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     final int NOTIFY_ID = 100;
-    MediaPlayer mediaPlayer = new MediaPlayer();
-    ArrayList<String> listOfSongs = new ArrayList<>();
-    int currentPlaying = 0;
-    RemoteViews remoteViews;
+    private MediaPlayer mediaPlayer;
+    private ArrayList<String> listOfSongs;
+    private int currentPlaying;
+    private RemoteViews remoteViews;
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
-    private ManagerListSongs managerListSongs;
+    private ManagerListSongs managerListSongs = new ManagerListSongs();
 
+    private final IBinder mBinder = new MyBinder();
+    private Handler mHandler;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        Log.d("onBind", "intent: " + intent);
+        return mBinder;
+    }
+
+    public class MyBinder extends Binder {
+
+        MusicPlayerService getService() {
+            Log.d("getService", "getService: ");
+
+            return MusicPlayerService.this;
+        }
+
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         Context context = this;
+        listOfSongs = new ArrayList<>();
+        currentPlaying = 0;
+        mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.reset();
@@ -225,17 +243,17 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+
         String command = intent.getStringExtra("command");
-        if (managerListSongs == null) {
+       /* if (managerListSongs == null) {
             managerListSongs = intent.getExtras().getParcelable("managerListSongs");
             listOfSongs = managerListSongs.getListOfUrlSongs();
-        }
-
+        }*/
+        listOfSongs = managerListSongs.getListOfUrlSongs();
         switch (command) {
             case "new_instance":
                 if (!mediaPlayer.isPlaying()) {
                     try {
-                        UpdateSongList();
                         mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
                         UpdateSongDetails();
                         mediaPlayer.prepareAsync();
@@ -266,12 +284,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 stopSelf();
 
         }
+
         return super.onStartCommand(intent, flags, startId);
+
     }
 
-
     private void playSong(boolean isNext) {
-        listOfSongs = managerListSongs.getListOfUrlSongs();
+        //listOfSongs = managerListSongs.getListOfUrlSongs();
         if (isNext) {
             currentPlaying++;
             if (currentPlaying == listOfSongs.size())
@@ -284,7 +303,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         mediaPlayer.reset();
         try {
             Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
-            Log.d(">>>UpdateSongList", "managerListSongs: " + managerListSongs);
 
             mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
             mediaPlayer.prepareAsync();
@@ -302,7 +320,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         UpdateSongDetails();
-        UpdateSongList();
+
         mediaPlayer.start();
 //        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): " + mediaPlayer.getTrackInfo());
 //        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): " + mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
@@ -320,12 +338,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void UpdateSongDetails() {
         //        remoteViews.setImageViewResource(R.id.notification_title,1);
-        UpdateSongList();
+
         remoteViews.setTextViewText(R.id.notification_title, listOfSongs.get(currentPlaying));
 
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
 
+    //        FBM.createUser(newUser, new FirebaseEvents.OnCreateUser() {
     public void UpdateSongList() {
 //        listOfSongs = managerListSongs.getListOfUrlSongs();
 //        mediaPlayer.stop();
@@ -342,9 +361,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 //        }
 //        mediaPlayer.start();
 
-//        Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
+        Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
 
     }
+
+
 
     /*private void updateNotification(){
 
