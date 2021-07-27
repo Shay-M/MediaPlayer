@@ -227,7 +227,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         String command = intent.getStringExtra("command");
         if (managerListSongs == null) {
-            managerListSongs = intent.getExtras().getParcelable("managerListSongs");
+//            managerListSongs = intent.getExtras().getParcelable("managerListSongs");
+            managerListSongs = ManagerListSongs.getInstance();
+            Log.d("onStartCommand", "managerListSongs: " + managerListSongs);
             listOfSongs = managerListSongs.getListOfUrlSongs();
         }
 
@@ -272,19 +274,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private void playSong(boolean isNext) {
         listOfSongs = managerListSongs.getListOfUrlSongs();
-        if (isNext) {
-            currentPlaying++;
-            if (currentPlaying == listOfSongs.size())
-                currentPlaying = 0;
-        } else {
-            currentPlaying--;
-            if (currentPlaying < 0)
-                currentPlaying = listOfSongs.size() - 1;
-        }
+
+        if (isNext)
+            currentPlaying = managerListSongs.getCurrentPlaying(1);
+        else
+            currentPlaying = managerListSongs.getCurrentPlaying(-1);
+
         mediaPlayer.reset();
         try {
-            Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
-            Log.d(">>>UpdateSongList", "managerListSongs: " + managerListSongs);
 
             mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
             mediaPlayer.prepareAsync();
@@ -327,22 +324,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     public void UpdateSongList() {
-//        listOfSongs = managerListSongs.getListOfUrlSongs();
-//        mediaPlayer.stop();
-//        mediaPlayer.reset();
-//        try {
-//            mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        mediaPlayer.start();
 
-//        Log.d(">>>UpdateSongList", "listOfSongs: " + listOfSongs);
 
     }
 

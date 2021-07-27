@@ -1,9 +1,9 @@
 package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/2021 */
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.mediaplayer.ActionsPlayer;
 import com.example.mediaplayer.MusicPlayerService;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 
@@ -13,27 +13,28 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-//public class ManagerListSongs {
-public class ManagerListSongs implements Parcelable {
+public class ManagerListSongs implements ActionsPlayer {
 
+    //public static final String NEXT_SONG = "next_song";
+    //public static final String NEXT_SONG = "next_song";
+    private static ManagerListSongs instead;
     private final ArrayList<String> listOfUrlSongs;
-    private  List<SongItem> listOfSongsItems;
+    private List<SongItem> listOfSongsItems;
     private MusicPlayerService musicPlayerService;
-//    private int currentPlaying = 0;
+    private int currentPlaying;
 
-    //    ListSongsManager(ArrayList<String> listOfSongsGet) {
-    public ManagerListSongs() {
+    private ManagerListSongs() {
+        currentPlaying = 0; // todo
         listOfUrlSongs = new ArrayList<>();
-        ArrayList<String> listOfUrlSongsToAddBrfore = new ArrayList<>();
+        ArrayList<String> listOfUrlSongsToAddFirstTime = new ArrayList<>();
         listOfSongsItems = new ArrayList<>();
-        //musicPlayerService = new MusicPlayerService();
 
 
-        listOfUrlSongsToAddBrfore.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
-        listOfUrlSongsToAddBrfore.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
-        listOfUrlSongsToAddBrfore.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
 
-        for (String songUrl : listOfUrlSongsToAddBrfore) {
+        for (String songUrl : listOfUrlSongsToAddFirstTime) {
             try {
                 this.addSong(songUrl);
             } catch (Exception e) {
@@ -42,6 +43,8 @@ public class ManagerListSongs implements Parcelable {
 //            Set<String> noDuplicatesDlistOfUrlSongs = new LinkedHashSet<>(listOfUrlSongs);
 //            https://stackoverflow.com/questions/203984/how-do-i-remove-repeated-elements-from-arraylist
 //            Log.d(">>>>>>", ">>>songUrl: " + songUrl);
+
+//            todo get from sd  list and  currentPlaying = 0;
         }
 
     }
@@ -50,31 +53,41 @@ public class ManagerListSongs implements Parcelable {
         listOfUrlSongs = in.createStringArrayList();
     }
 
-    public static final Creator<ManagerListSongs> CREATOR = new Creator<ManagerListSongs>() {
-        @Override
-        public ManagerListSongs createFromParcel(Parcel in) {
-            return new ManagerListSongs(in);
+    public static ManagerListSongs getInstance() {
+        if (instead == null)
+            instead = new ManagerListSongs();
+        return instead;
+    }
+
+    public int getCurrentPlaying(int command) {
+
+        if (command == 1) {
+            currentPlaying++;
+            if (currentPlaying == listOfUrlSongs.size())
+                currentPlaying = 0;
+        } else if (command == -1) {
+            currentPlaying--;
+            if (currentPlaying < 0)
+                currentPlaying = listOfUrlSongs.size() - 1;
+
         }
 
-        @Override
-        public ManagerListSongs[] newArray(int size) {
-            return new ManagerListSongs[size];
-        }
-    };
+        return currentPlaying;
+    }
 
     public List<SongItem> getListOfSongsItems() {
         return listOfSongsItems;
     }
 
     public ArrayList<String> getListOfUrlSongs() {
-//        for (SongItem song_i : listOfSongsItems) {
-//            listOfUrlSongs.clear();
-//            listOfUrlSongs.add(song_i.getUrl());
-//        }
         Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
         return listOfUrlSongs;
     }
 
+    /**
+     * @param stringUrl song url to add
+     * @throws Exception if the url is not in a valid
+     */
     public void addSong(String stringUrl) throws Exception {
         //get song name
         String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
@@ -89,34 +102,28 @@ public class ManagerListSongs implements Parcelable {
 
         if (!NameOfSongFromUrl.isEmpty() && NameOfSongFromUrl.contains(".")) {
             listOfUrlSongs.add(stringUrl);
-//            Log.d("ManagerListSongs", "addSong: " + stringUrl);
             Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
             listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, "1", null));
 
         } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
-        /*try {
-            NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
-            URL url = new URL(stringUrl);
-            URLConnection conn = url.openConnection();
-            conn.connect();
-        } catch (MalformedURLException e) {
-            Log.d("addSong", "the URL is not in a valid form. " + e.getMessage());
-            NameOfSongFromUrl = "";
-            //t
-        } catch (IOException e) {
-            Log.d("addSong", "the connection couldn't be established. " + e.getMessage());
-            NameOfSongFromUrl = "";
-            throw new Exception("the connection couldn't be established. " + e.getMessage());
-        }*/
+
+    }
+
+
+    @Override
+    public void nextClick() {
+
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public void prevClick() {
+
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringList(listOfUrlSongs);
+    public void playClick() {
+
     }
 }
+
+

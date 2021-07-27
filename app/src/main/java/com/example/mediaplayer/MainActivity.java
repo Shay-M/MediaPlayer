@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -97,16 +96,16 @@ import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActionsPlayer {
     boolean isPlaying = false;
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
+    private ManagerListSongs managerListSongs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final EditText linkEt = findViewById(R.id.link);
-        final Button playBtn = findViewById(R.id.btn_play);
+        final Button playBtn = findViewById(R.id.btn_play_main);
+        final Button nextBtn = findViewById(R.id.btn_next_main);
         final ImageButton addBtn = findViewById(R.id.addLinkBtn);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_songs);
 
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
         List<SongItem> songsList = new ArrayList<>();
 
+        managerListSongs = ManagerListSongs.getInstance();
 
-        ManagerListSongs managerListSongs = new ManagerListSongs();
 
         AtomicReference<SongAdapter> songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
         recyclerView.setAdapter(songAdapter.get());
@@ -132,12 +132,16 @@ public class MainActivity extends AppCompatActivity {
 
         //play button
         playBtn.setOnClickListener(view -> {
+            if (intent == null) {
 
-            intent = new Intent(MainActivity.this, MusicPlayerService.class);
-            intent.putExtra("command", "new_instance");
-            intent.putExtra("managerListSongs", (Parcelable) managerListSongs);
-            startService(intent);
+                intent = new Intent(MainActivity.this, MusicPlayerService.class);
+                intent.putExtra("command", "new_instance");
 
+//            intent.putExtra("managerListSongs", (Parcelable) managerListSongs);
+                Log.d("playBtn", "managerListSongs: " + managerListSongs);
+
+                startService(intent);
+            }
         });
         //add button,add a song by link
 //        addBtn.setOnClickListener(int aa,new View.OnClickListener()
@@ -168,9 +172,24 @@ public class MainActivity extends AppCompatActivity {
             linkEt.setText("");
         });
 
-        /*imageButton.setOnClickListener(view -> {
-        });*/
+        nextBtn.setOnClickListener(view -> nextClick());
 
+
+    }
+
+    @Override
+    public void nextClick() {
+        managerListSongs.nextClick();
+
+    }
+
+    @Override
+    public void prevClick() {
+
+    }
+
+    @Override
+    public void playClick() {
 
     }
 
