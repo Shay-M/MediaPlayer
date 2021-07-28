@@ -133,14 +133,16 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 }
 */
 
-package com.example.mediaplayer;
+package com.example.mediaplayer;/* Created by Shay Mualem 22/07/2021 */
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
@@ -151,6 +153,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
+import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -221,6 +224,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         startForeground(NOTIFY_ID, builder.build());
 
+
+
     }
 
     @Override
@@ -262,6 +267,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 playSong(false);
                 break;
             case Actions.PAUSE_SONG:
+                sendBroadcast(new Intent(Actions.PAUSE_SONG));
                 if (mediaPlayer.isPlaying())
                     mediaPlayer.pause();
                 break;
@@ -280,14 +286,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
         mediaPlayer.reset();
-        try {
 
+        try {
             mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -320,6 +325,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
+
+
 
 
     /*private void updateNotification(){

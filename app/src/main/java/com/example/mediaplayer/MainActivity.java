@@ -1,4 +1,4 @@
-package com.example.mediaplayer;
+package com.example.mediaplayer;/* Created by Shay Mualem 22/07/2021 */
 /*
 
 import android.annotation.SuppressLint;
@@ -80,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
 */
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -107,6 +110,18 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
     private ManagerListSongs managerListSongs;
+    //////////////////
+    private BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            pause();
+//            updateMetaData();
+//            buildNotification(PlaybackStatus.PAUSED);
+//            playbackStatus = PlaybackStatus.PAUSED ;
+            Log.d("BroadcastReceiver", "onReceive: ");
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,12 +200,13 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
 
         nextBtn.setOnClickListener(view -> nextClick());
 
+        register_pausePlayingAudio();
 
     }
 
     @Override
     public void nextClick() {
-        managerListSongs.nextClick();
+        //managerListSongs.nextClick();
 
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.NEXT_SONG);
@@ -224,13 +240,14 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.PAUSE_SONG);
 
+
         startService(intent);
     }
 
-    interface OnAddASongListener {
-        void SucceededAddASong();
-
-//        void FailedAddASong();
+    private void register_pausePlayingAudio() {
+        IntentFilter intentFilter = new IntentFilter(Actions.PAUSE_SONG);
+        registerReceiver(pausePlayingAudio, intentFilter);
     }
+
 }
 
