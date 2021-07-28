@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -91,6 +90,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mediaplayer.ActionsMediaPlayer.Actions;
+import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
@@ -113,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
         setContentView(R.layout.activity_main);
 
         final EditText linkEt = findViewById(R.id.link);
-        final Button playBtn = findViewById(R.id.btn_play_main);
-        final Button nextBtn = findViewById(R.id.btn_next_main);
+        final ImageButton playBtn = findViewById(R.id.btn_play_main);
+        final ImageButton nextBtn = findViewById(R.id.btn_next_main);
         final ImageButton addBtn = findViewById(R.id.addLinkBtn);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_songs);
 
@@ -132,15 +133,25 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
 
         //play button
         playBtn.setOnClickListener(view -> {
-            if (intent == null) {
-
-                intent = new Intent(MainActivity.this, MusicPlayerService.class);
-                intent.putExtra("command", "new_instance");
-
+            if (!isPlaying) {
+                //first time
+                if (intent == null) {
+                    intent = new Intent(MainActivity.this, MusicPlayerService.class);
+                    intent.putExtra("command", "new_instance");
 //            intent.putExtra("managerListSongs", (Parcelable) managerListSongs);
-                Log.d("playBtn", "managerListSongs: " + managerListSongs);
+                    Log.d("playBtn", "managerListSongs: " + managerListSongs);
 
-                startService(intent);
+                    startService(intent);
+
+
+                } else playClick();
+                isPlaying = true;
+//                playBtn.setBackground(Drawable.createFromPath("R.drawable.sound_icon"));
+                playBtn.setImageResource(R.drawable.sound_icon);
+            } else {
+                isPlaying = false;
+                pauseClick();
+                playBtn.setImageResource(R.drawable.ic_launcher_foreground);
             }
         });
         //add button,add a song by link
@@ -181,16 +192,39 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
     public void nextClick() {
         managerListSongs.nextClick();
 
+        intent = new Intent(MainActivity.this, MusicPlayerService.class);
+        intent.putExtra("command", Actions.NEXT_SONG);
+
+        startService(intent);
+
     }
 
     @Override
     public void prevClick() {
+
+        intent = new Intent(MainActivity.this, MusicPlayerService.class);
+        intent.putExtra("command", Actions.PREV_SONG);
+
+        startService(intent);
 
     }
 
     @Override
     public void playClick() {
 
+        intent = new Intent(MainActivity.this, MusicPlayerService.class);
+        intent.putExtra("command", Actions.PLAY_SONG);
+
+        startService(intent);
+
+    }
+
+    @Override
+    public void pauseClick() {
+        intent = new Intent(MainActivity.this, MusicPlayerService.class);
+        intent.putExtra("command", Actions.PAUSE_SONG);
+
+        startService(intent);
     }
 
     interface OnAddASongListener {

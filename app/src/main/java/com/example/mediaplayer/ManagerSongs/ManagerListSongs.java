@@ -3,7 +3,7 @@ package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/202
 import android.os.Parcel;
 import android.util.Log;
 
-import com.example.mediaplayer.ActionsPlayer;
+import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
 import com.example.mediaplayer.MusicPlayerService;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 
@@ -15,8 +15,7 @@ import java.util.List;
 
 public class ManagerListSongs implements ActionsPlayer {
 
-    //public static final String NEXT_SONG = "next_song";
-    //public static final String NEXT_SONG = "next_song";
+
     private static ManagerListSongs instead;
     private final ArrayList<String> listOfUrlSongs;
     private List<SongItem> listOfSongsItems;
@@ -59,13 +58,13 @@ public class ManagerListSongs implements ActionsPlayer {
         return instead;
     }
 
-    public int getCurrentPlaying(int command) {
+    public int getCurrentPlaying(boolean next_p) {
 
-        if (command == 1) {
+        if (next_p) {
             currentPlaying++;
             if (currentPlaying == listOfUrlSongs.size())
                 currentPlaying = 0;
-        } else if (command == -1) {
+        } else {
             currentPlaying--;
             if (currentPlaying < 0)
                 currentPlaying = listOfUrlSongs.size() - 1;
@@ -122,6 +121,11 @@ public class ManagerListSongs implements ActionsPlayer {
 
     @Override
     public void playClick() {
+
+    }
+
+    @Override
+    public void pauseClick() {
 
     }
 }

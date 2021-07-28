@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_700"
+    android:background="@drawable/gradient_background"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp">
@@ -34,7 +34,7 @@
         android:background="@color/cardview_shadow_end_color"
         android:padding="4dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_play_main"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -42,9 +42,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="60dp"
         android:layout_marginBottom="49dp"
-        android:background="@android:drawable/ic_media_play" />
+        android:background="#FF0000"
+        android:src="@android:drawable/ic_media_play" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_next_main"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -54,7 +55,7 @@
         android:layout_marginTop="-1dp"
         android:layout_marginBottom="1dp"
         android:layout_toEndOf="@+id/btn_play_main"
-        android:background="@android:drawable/ic_media_next" />
+        android:src="@android:drawable/ic_media_next" />
 
     <ImageButton
         android:id="@+id/addLinkBtn"

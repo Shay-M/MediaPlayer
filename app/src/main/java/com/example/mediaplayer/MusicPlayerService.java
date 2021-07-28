@@ -149,6 +149,7 @@ import android.widget.RemoteViews;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 
 import java.io.IOException;
@@ -158,10 +159,10 @@ import java.util.ArrayList;
 public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     final int NOTIFY_ID = 100;
-    MediaPlayer mediaPlayer = new MediaPlayer();
-    ArrayList<String> listOfSongs = new ArrayList<>();
-    int currentPlaying = 0;
-    RemoteViews remoteViews;
+    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private ArrayList<String> listOfSongs = new ArrayList<>();
+    private int currentPlaying = 0;
+    private RemoteViews remoteViews;
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
     private ManagerListSongs managerListSongs;
@@ -192,27 +193,27 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
         Intent playIntent = new Intent(context, MusicPlayerService.class);
-        playIntent.putExtra("command", "play");
+        playIntent.putExtra("command", Actions.PLAY_SONG);
         PendingIntent playPendingIntent = PendingIntent.getService(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.play_btn, playPendingIntent);
 
         Intent pauseIntent = new Intent(context, MusicPlayerService.class);
-        pauseIntent.putExtra("command", "pause");
+        pauseIntent.putExtra("command", Actions.PAUSE_SONG);
         PendingIntent pausePendingIntent = PendingIntent.getService(context, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.pause_btn, pausePendingIntent);
 
         Intent nextIntent = new Intent(context, MusicPlayerService.class);
-        nextIntent.putExtra("command", "next");
+        nextIntent.putExtra("command", Actions.NEXT_SONG);
         PendingIntent nextPendingIntent = PendingIntent.getService(context, 2, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.next_btn, nextPendingIntent);
 
         Intent prevIntent = new Intent(context, MusicPlayerService.class);
-        prevIntent.putExtra("command", "prev");
+        prevIntent.putExtra("command", Actions.PREV_SONG);
         PendingIntent prevPendingIntent = PendingIntent.getService(context, 3, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.prev_btn, prevPendingIntent);
 
         Intent closeIntent = new Intent(context, MusicPlayerService.class);
-        closeIntent.putExtra("command", "close");
+        closeIntent.putExtra("command", Actions.CLOSE_SONG);
         PendingIntent closePendingIntent = PendingIntent.getService(context, 4, closeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.exit_btn, closePendingIntent);
 
@@ -234,10 +235,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
 
         switch (command) {
-            case "new_instance":
+            case Actions.NEW_INSTANCE:
                 if (!mediaPlayer.isPlaying()) {
                     try {
-                        UpdateSongList();
+
                         mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
                         UpdateSongDetails();
                         mediaPlayer.prepareAsync();
@@ -246,25 +247,25 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     }
                 }
                 break;
-            case "play":
+            case Actions.PLAY_SONG:
                 if (!mediaPlayer.isPlaying())
                     mediaPlayer.start();
                 break;
-            case "next":
+            case Actions.NEXT_SONG:
                 if (mediaPlayer.isPlaying())
                     mediaPlayer.stop();
                 playSong(true);
                 break;
-            case "prev":
+            case Actions.PREV_SONG:
                 if (mediaPlayer.isPlaying())
                     mediaPlayer.stop();
                 playSong(false);
                 break;
-            case "pause":
+            case Actions.PAUSE_SONG:
                 if (mediaPlayer.isPlaying())
                     mediaPlayer.pause();
                 break;
-            case "close":
+            case Actions.CLOSE_SONG:
                 stopSelf();
 
         }
@@ -272,13 +273,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void playSong(boolean isNext) {
+    private void playSong(boolean NextOrPrev) {
         listOfSongs = managerListSongs.getListOfUrlSongs();
 
-        if (isNext)
-            currentPlaying = managerListSongs.getCurrentPlaying(1);
-        else
-            currentPlaying = managerListSongs.getCurrentPlaying(-1);
+        currentPlaying = managerListSongs.getCurrentPlaying(NextOrPrev);
+
 
         mediaPlayer.reset();
         try {
@@ -299,7 +298,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         UpdateSongDetails();
-        UpdateSongList();
         mediaPlayer.start();
 //        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): " + mediaPlayer.getTrackInfo());
 //        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): " + mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
@@ -317,16 +315,12 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void UpdateSongDetails() {
         //        remoteViews.setImageViewResource(R.id.notification_title,1);
-        UpdateSongList();
+
         remoteViews.setTextViewText(R.id.notification_title, listOfSongs.get(currentPlaying));
 
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
 
-    public void UpdateSongList() {
-
-
-    }
 
     /*private void updateNotification(){
 
