@@ -1,57 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/_light_blue"
+    android:background="@color/_R_red"
     android:padding="15dp">
 
     <TextView
         android:id="@+id/dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="center"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
-        android:background="@color/_blue"
+        android:layout_marginEnd="10dp"
+        android:background="@color/_R_orange"
         android:fadingEdge="horizontal"
         android:gravity="center"
         android:padding="12dp"
         android:text="@string/add_a_song"
-        android:textColor="@color/white"
-
+        android:textColor="@color/_R_black"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/link"
-        android:layout_width="288dp"
+        android:id="@+id/dialog_link"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dialog_title"
         android:layout_alignParentStart="true"
-
         android:layout_gravity="center"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="18dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/take_a_pic"
         android:autofillHints="@string/enter_music_link"
+        android:background="@color/_R_green"
         android:gravity="center"
         android:hint="@string/enter_music_link"
         android:inputType="textWebEditText"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:textColor="@color/_R_yellow"
+        android:textColorHint="@color/_R_orange"
+        android:textStyle="bold" />
 
     <ImageButton
         android:id="@+id/take_a_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dialog_title"
-        android:layout_alignParentEnd="true"
         android:layout_gravity="center"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="12dp"
-        android:background="@null"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/add_a_pic"
+        android:background="@color/_R_green"
         android:contentDescription="@+id/take_a_pic"
         android:gravity="center"
         android:padding="7dp"
         android:src="@android:drawable/ic_menu_camera" />
+
+    <ImageButton
+        android:id="@+id/add_a_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/take_a_pic"
+        android:layout_alignBottom="@+id/take_a_pic"
+
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="-1dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/_R_green"
+        android:contentDescription="@+id/add_a_pic"
+        android:gravity="center"
+        android:padding="7dp"
+        android:src="@android:drawable/ic_menu_gallery" />
 
 
 </RelativeLayout>

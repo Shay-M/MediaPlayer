@@ -86,9 +86,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -98,7 +100,6 @@ import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,14 +112,12 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
     private Intent intent;
     private ManagerListSongs managerListSongs;
     //////////////////
+
     private BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            pause();
-//            updateMetaData();
-//            buildNotification(PlaybackStatus.PAUSED);
-//            playbackStatus = PlaybackStatus.PAUSED ;
-            Log.d("BroadcastReceiver", "onReceive: ");
+//
+            Log.d("BroadcastReceiver", "context: " + context + "Intent: " + intent);
 
         }
     };
@@ -169,33 +168,40 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
                 playBtn.setImageResource(R.drawable.ic_launcher_foreground);
             }
         });
-        //add button,add a song by link
-//        addBtn.setOnClickListener(int aa,new View.OnClickListener()
-//        {
-//
-//        });
 
 
         addBtn.setOnClickListener(view -> {
 
-            String link = linkEt.getText().toString();
-            if (!link.isEmpty()) {
-                try {
-                    managerListSongs.addSong(link);
-                    Log.d(">>>addBtn", "managerListSongs: " + managerListSongs);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);
+            View dialogView = getLayoutInflater().inflate(R.layout.add_song_dialog, null);
 
-                    // update the view list
-                    songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
-                    recyclerView.setAdapter(songAdapter.get());
+            EditText linkText = dialogView.findViewById(R.id.dialog_link);
+            ImageButton takeApic = dialogView.findViewById(R.id.take_a_pic);
+            ImageButton addApic = dialogView.findViewById(R.id.add_a_pic);
 
-                } catch (Exception e) {
-//                    e.printStackTrace();
-                    Snackbar snackbar = Snackbar
-                            .make(view, "" + e.getMessage(), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                }
-            }
-            linkEt.setText("");
+            builder.setView(dialogView).setPositiveButton("Cancel", (dialog, which) -> {
+            }).show();
+
+
+//            String link = linkEt.getText().toString();
+//            if (!link.isEmpty()) {
+//                try {
+//                    managerListSongs.addSong(link);
+//                    Log.d(">>>addBtn", "managerListSongs: " + managerListSongs);
+//
+//                    // update the view list
+//                    songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
+//                    recyclerView.setAdapter(songAdapter.get());
+//                    com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
+//
+//                } catch (Exception e) {
+////                    e.printStackTrace();
+//                    Snackbar snackbar = Snackbar
+//                            .make(view, "" + e.getMessage(), Snackbar.LENGTH_LONG);
+//                    snackbar.show();
+//                }
+//            }
+//            linkEt.setText("");
         });
 
         nextBtn.setOnClickListener(view -> nextClick());
@@ -244,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
         startService(intent);
     }
 
+    //register
     private void register_pausePlayingAudio() {
         IntentFilter intentFilter = new IntentFilter(Actions.PAUSE_SONG);
         registerReceiver(pausePlayingAudio, intentFilter);
