@@ -86,32 +86,35 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
+import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
+import com.example.mediaplayer.utils.GlobalSnackBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public class MainActivity extends AppCompatActivity implements ActionsPlayer {
+public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
     boolean isPlaying = false;
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
     private ManagerListSongs managerListSongs;
-    //////////////////
+    private AtomicReference<SongAdapter> songAdapter;
+    private RecyclerView recyclerView;
 
     private BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
@@ -126,12 +129,13 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        GlobalSnackBar globalSnackBar = new GlobalSnackBar(getWindow().getDecorView().findViewById(android.R.id.content))
 
         final EditText linkEt = findViewById(R.id.link);
-        final ImageButton playBtn = findViewById(R.id.btn_play_main);
+        final ImageView playBtn = findViewById(R.id.btn_play_main);
         final ImageButton nextBtn = findViewById(R.id.btn_next_main);
         final ImageButton addBtn = findViewById(R.id.addLinkBtn);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_songs);
+        recyclerView = findViewById(R.id.recycler_view_songs);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -141,13 +145,14 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
         managerListSongs = ManagerListSongs.getInstance();
 
 
-        AtomicReference<SongAdapter> songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
+        songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
         recyclerView.setAdapter(songAdapter.get());
 
 
         //play button
         playBtn.setOnClickListener(view -> {
             if (!isPlaying) {
+
                 //first time
                 if (intent == null) {
                     intent = new Intent(MainActivity.this, MusicPlayerService.class);
@@ -157,30 +162,54 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
 
                     startService(intent);
 
-
                 } else playClick();
                 isPlaying = true;
 //                playBtn.setBackground(Drawable.createFromPath("R.drawable.sound_icon"));
-                playBtn.setImageResource(R.drawable.sound_icon);
+                playBtn.setImageResource(R.drawable.pausexhdpi);
             } else {
                 isPlaying = false;
                 pauseClick();
-                playBtn.setImageResource(R.drawable.ic_launcher_foreground);
+                playBtn.setImageResource(R.drawable.playxhdpi);
             }
         });
 
 
         addBtn.setOnClickListener(view -> {
+            AddSongDialog addSongDialog = new AddSongDialog();
+            addSongDialog.show(getSupportFragmentManager(), "add song dialog");
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);
-            View dialogView = getLayoutInflater().inflate(R.layout.add_song_dialog, null);
 
-            EditText linkText = dialogView.findViewById(R.id.dialog_link);
-            ImageButton takeApic = dialogView.findViewById(R.id.take_a_pic);
-            ImageButton addApic = dialogView.findViewById(R.id.add_a_pic);
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+//            View dialogView = getLayoutInflater().inflate(R.layout.add_song_dialog, null);
+//
+//            EditText linkText = dialogView.findViewById(R.id.dialog_link);
+//            ImageButton takeApic = dialogView.findViewById(R.id.take_a_pic);
+//            ImageButton addApic = dialogView.findViewById(R.id.add_a_pic);
 
-            builder.setView(dialogView).setPositiveButton("Cancel", (dialog, which) -> {
-            }).show();
+
+            /*builder.setView(dialogView).setNegativeButton("Cancel", (dialog, which) -> {
+            }).setView(dialogView).setPositiveButton("Add", (dialog, which) -> {
+
+                String link = linkText.getText().toString();
+                if (!link.isEmpty()) {
+                    try {
+                        managerListSongs.addSong(link);
+
+                        // update the view list
+                        songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
+                        recyclerView.setAdapter(songAdapter.get());
+                        com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
+
+                    } catch (Exception e) {
+//                    e.printStackTrace();
+                        Snackbar snackbar = Snackbar
+                                .make(view, "" + e.getMessage(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                }
+
+
+            }).show();*/
 
 
 //            String link = linkEt.getText().toString();
@@ -189,10 +218,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
 //                    managerListSongs.addSong(link);
 //                    Log.d(">>>addBtn", "managerListSongs: " + managerListSongs);
 //
-//                    // update the view list
-//                    songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
-//                    recyclerView.setAdapter(songAdapter.get());
-//                    com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
+//
 //
 //                } catch (Exception e) {
 ////                    e.printStackTrace();
@@ -256,5 +282,33 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer {
         registerReceiver(pausePlayingAudio, intentFilter);
     }
 
+    @Override
+    public void applyAddSong(String Name, String songUrl, String imgUrl) {
+
+        //GlobalSnackBar.SandGlobalSnackBar("hii");
+        // update the view list
+//        songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
+//        recyclerView.setAdapter(songAdapter.get());
+//
+//        //hide the keyboard
+//        com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
+
+
+
+        try {
+            managerListSongs.addSong(songUrl);
+
+            // update the view list
+            songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
+            recyclerView.setAdapter(songAdapter.get());
+            com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
+
+        } catch (Exception e) {
+//                    e.printStackTrace();
+            Snackbar snackbar = Snackbar
+                    .make(getWindow().getDecorView().findViewById(android.R.id.content), "" + e.getMessage(), Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+    }
 }
 

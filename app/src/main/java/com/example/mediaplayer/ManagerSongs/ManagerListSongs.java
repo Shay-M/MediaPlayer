@@ -50,7 +50,7 @@ public class ManagerListSongs {
     protected ManagerListSongs(Parcel in) {
         listOfUrlSongs = in.createStringArrayList();
     }
-
+//singleton
     public static ManagerListSongs getInstance() {
         if (instead == null)
             instead = new ManagerListSongs();

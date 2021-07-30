@@ -12,16 +12,17 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@drawable/bac</item>
+        <item name="android:windowBackground">@drawable/bacxhdpi</item>
     </style>
 
 
     <style name="splashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/bac</item>
+        <item name="android:windowBackground">@drawable/bacxhdpi</item>
         <item name="android:statusBarColor">@color/_R_black</item>
     </style>
 
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/_R_black</item>
+
+        <item name="android:background">@color/_R_yellow</item>
     </style>
 </resources>

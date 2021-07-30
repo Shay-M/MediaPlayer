@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/activity_main.xml" value="0.11865942028985507" />
-        <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/add_song_dialog.xml" value="0.4799999863354132" />
+        <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/drawable/gradient_background.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/drawable/roundedbutton.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/activity_main.xml" value="0.2364179037174423" />
+        <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/add_song_dialog.xml" value="0.2364179037174423" />
         <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/card_of_song.xml" value="0.19655797101449277" />
       </map>
     </option>
