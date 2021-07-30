@@ -100,7 +100,7 @@ import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
-import com.example.mediaplayer.utils.GlobalSnackBar;
+import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
     private ManagerListSongs managerListSongs;
+    private CameraManagerUrl cameraManagerUrl;
     private AtomicReference<SongAdapter> songAdapter;
     private RecyclerView recyclerView;
 
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 //        GlobalSnackBar globalSnackBar = new GlobalSnackBar(getWindow().getDecorView().findViewById(android.R.id.content))
 
         final EditText linkEt = findViewById(R.id.link);
@@ -140,9 +142,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
         List<SongItem> songsList = new ArrayList<>();
 
         managerListSongs = ManagerListSongs.getInstance();
+        cameraManagerUrl = CameraManagerUrl.getInstance(this);
 
 
         songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
@@ -292,7 +296,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 //
 //        //hide the keyboard
 //        com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
-
 
 
         try {
