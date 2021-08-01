@@ -6,7 +6,7 @@
 
 
     <ImageView
-        android:id="@+id/SongImage"
+        android:id="@+id/song_image"
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_weight="1"
@@ -14,7 +14,7 @@
         android:contentDescription="@string/songimage"
         android:cropToPadding="true"
         android:padding="7dp"
-        android:src="@drawable/ic_launcher_background" />
+        android:src="@drawable/musicxxhdpi" />
 
     <LinearLayout
         android:layout_width="match_parent"

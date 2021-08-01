@@ -2,8 +2,10 @@ package com.example.mediaplayer.Dialogs;/* Created by Shay Mualem 29/07/2021 */
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -26,7 +28,6 @@ public class AddSongDialog extends DialogFragment {
     private ImageView picContentView;
 
     private Uri imgUri = null;
-
 
     private ManagerListSongs managerListSongs;
     private CameraManagerUrl cameraManagerUrl;
@@ -52,12 +53,6 @@ public class AddSongDialog extends DialogFragment {
                     String songUrl = linkText.getText().toString();
                     if (!songUrl.isEmpty()) {
 
-                        try {
-                            managerListSongs.addSong(songUrl, null);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
                         String Name = nameText.getText().toString();
                         String url = linkText.getText().toString();
 
@@ -72,11 +67,36 @@ public class AddSongDialog extends DialogFragment {
         nameText = view.findViewById(R.id.dialog_name);
 
         ImageView takeApicBtn = view.findViewById(R.id.take_a_pic);
+        ImageView galleriapicBtn = view.findViewById(R.id.add_a_pic);
+
         picContentView = view.findViewById(R.id.song_image);
 
+        //From Camera
         takeApicBtn.setOnClickListener(v -> takeApicFromCamera());
+        //From Galleria
+        galleriapicBtn.setOnClickListener(v -> picFromGalleria());
 
         return builder.create();
+    }
+
+    private void picFromGalleria() {
+//        GalleryManagerUrl galleryManagerUrl = new GalleryManagerUrl();
+
+//        galleryManagerUrl.fileFun();
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 3);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 3) {
+            Log.d("TAG", "onActivityResult: " + data);
+            imgUri = data.getData();
+            Glide.with(this).load(data.getData()).centerCrop().thumbnail(0.10f).into(picContentView);
+        }
     }
 
     @Override
@@ -92,35 +112,10 @@ public class AddSongDialog extends DialogFragment {
 
     private void takeApicFromCamera() {
         imgUri = cameraManagerUrl.dispatchTakePictureIntent();
-        Glide.with(this).load(imgUri).into(picContentView);
+        Glide.with(this).load(imgUri).centerCrop().into(picContentView);
 
     }
 
-//    private void initDialog() {
-//
-////        cameraFullSizeResultLauncher = registerForActivityResult(
-////                new ActivityResultContracts.TakePicture(),
-////                new ActivityResultCallback<Boolean>() {
-////                    @Override
-////                    public void onActivityResult(Boolean result) {
-////                    //true if the image saved to the uri given in the launch function
-////                    }
-////                });
-//
-////        someActivityResultLauncher = registerForActivityResult(
-////                new ActivityResultContracts.StartActivityForResult(),
-////                new ActivityResultCallback<ActivityResult>() {
-////                    @Override
-////                    public void onActivityResult(ActivityResult result) {
-////                        if (result.getResultCode() == Activity.RESULT_OK) {
-////                            Log.d("getAbsolutePath", "onActivityResult: " + file.getAbsolutePath());
-////
-////                        }
-////                    }
-////                });
-////        file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "pic1.jpg");
-//
-//    }
 
     public interface AddSongDialogListener {
         void applyAddSong(String Name, String songUrl, Uri imgUri);

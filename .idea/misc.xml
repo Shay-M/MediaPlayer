@@ -8,6 +8,7 @@
         <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/activity_main.xml" value="0.17910447251321387" />
         <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/add_song_dialog.xml" value="0.35820894502642775" />
         <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/card_of_song.xml" value="0.64477610104757" />
+        <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/fragment_sound_big.xml" value="0.35820894502642775" />
         <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/layout/media_player_notification_layout.xml" value="0.4799999863354132" />
         <entry key="..\:/Users/shay/AndroidStudioProjects/MediaPlayer/app/src/main/res/xml/file_paths.xml" value="0.10055724417426545" />
       </map>
@@ -22,7 +23,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.4799999863354132" />
+        <option name="scale" value="0.35820894502642775" />
       </ProjectState>
     </option>
   </component>

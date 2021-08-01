@@ -15,14 +15,13 @@
         <item name="android:windowBackground">@drawable/bacxhdpi</item>
     </style>
 
-
-    <style name="splashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/logoxhdpi</item>
-        <item name="android:statusBarColor">@color/_R_black</item>
-    </style>
+    <!--    https://medium.com/geekculture/implementing-the-perfect-splash-screen-in-android-295de045a8dc-->
+    <!--    <style name="splashScreen" parent="Theme.AppCompat.Light.NoActionBar">-->
+    <!--        <item name="android:windowBackground">@drawable/logoxhdpi</item>-->
+    <!--        <item name="android:statusBarColor">@color/_R_black</item>-->
+    <!--    </style>-->
 
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-
         <item name="android:background">@color/_R_yellow</item>
     </style>
 </resources>

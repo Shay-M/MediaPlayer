@@ -49,7 +49,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
 //        holder.songDetailsTv.setText(SongItem.getUrl());
         //holder.songDetailsTv.setText(SongItem.getDuration());//todo
         if (SongItem.getUri() != null)
-            Glide.with(this.context).load(SongItem.getUri()).into(holder.songImageIv);
+            Glide.with(this.context).load(SongItem.getUri()).centerCrop().into(holder.songImageIv);
 
     }
 

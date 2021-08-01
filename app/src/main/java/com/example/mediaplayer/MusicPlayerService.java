@@ -135,15 +135,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
 package com.example.mediaplayer;/* Created by Shay Mualem 22/07/2021 */
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -151,9 +151,10 @@ import android.widget.RemoteViews;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.NotificationTarget;
 import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
-import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -189,6 +190,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         NotificationChannel channel = new NotificationChannel("channelId", "channelName", NotificationManager.IMPORTANCE_HIGH);
+        //Notification sound https://stackoverflow.com/questions/48986856/android-notification-setsound-is-not-working
+        channel.setSound(null, null);
         notificationManager.createNotificationChannel(channel);
 
         builder = new NotificationCompat.Builder(context, "channelId");
@@ -225,7 +228,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         startForeground(NOTIFY_ID, builder.build());
 
 
-
     }
 
     @Override
@@ -233,7 +235,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         String command = intent.getStringExtra("command");
         if (managerListSongs == null) {
-//            managerListSongs = intent.getExtras().getParcelable("managerListSongs");
             managerListSongs = ManagerListSongs.getInstance();
             Log.d("onStartCommand", "managerListSongs: " + managerListSongs);
             listOfSongs = managerListSongs.getListOfUrlSongs();
@@ -280,6 +281,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     private void playSong(boolean NextOrPrev) {
+
         listOfSongs = managerListSongs.getListOfUrlSongs();
 
         currentPlaying = managerListSongs.getCurrentPlaying(NextOrPrev);
@@ -304,8 +306,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public void onPrepared(MediaPlayer mediaPlayer) {
         UpdateSongDetails();
         mediaPlayer.start();
-//        Log.d("onStartCommand", "mediaPlayer.getTrackInfo(): " + mediaPlayer.getTrackInfo());
-//        Log.d("onStartCommand", "mediaPlayer.getTimestamp(): " + mediaPlayer.getTimestamp().getAnchorSystemNanoTime());
     }
 
     @Override
@@ -318,12 +318,38 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         }
     }
 
+    /**
+     * Update Notification ui
+     */
     public void UpdateSongDetails() {
-        //        remoteViews.setImageViewResource(R.id.notification_title,1);
+        String stringUrl = listOfSongs.get(currentPlaying);
 
-        remoteViews.setTextViewText(R.id.notification_title, listOfSongs.get(currentPlaying));
+        remoteViews.setTextViewText(R.id.notification_title, stringUrl.substring(stringUrl.lastIndexOf('/') + 1));
 
-        notificationManager.notify(NOTIFY_ID, builder.build());
+        final Notification notification = builder.build();
+        notificationManager.notify(NOTIFY_ID, notification);
+
+        //add pic using glide https://futurestud.io/tutorials/glide-loading-images-into-notifications-and-appwidgets
+
+        NotificationTarget notificationTarget = new NotificationTarget(
+
+                this,
+                R.id.song_image,
+                remoteViews,
+                notification,
+                NOTIFY_ID);
+
+        Uri uri = managerListSongs.getListOfSongsItems().get(currentPlaying).getUri();
+
+
+        Glide
+                .with(this.getApplicationContext())
+                .asBitmap()
+                .load(uri)
+                .centerCrop()
+                .into(notificationTarget);
+
+
     }
 
 

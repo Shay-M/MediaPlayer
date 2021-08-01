@@ -114,12 +114,14 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     private ManagerListSongs managerListSongs;
     private AtomicReference<SongAdapter> songAdapter;
     private RecyclerView recyclerView;
+    private ImageView playBtn;
 
     private BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//
+
             Log.d("BroadcastReceiver", "context: " + context + "Intent: " + intent);
+            playBtn.setImageResource(R.drawable.playxhdpi);
 
         }
     };
@@ -129,9 +131,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        GlobalSnackBar globalSnackBar = new GlobalSnackBar(getWindow().getDecorView().findViewById(android.R.id.content))
-
-        final ImageView playBtn = findViewById(R.id.btn_play_main);
+        playBtn = findViewById(R.id.btn_play_main);
         final ImageView nextBtn = findViewById(R.id.btn_next_main);
         final ImageView addBtn = findViewById(R.id.addLinkBtn);
         recyclerView = findViewById(R.id.recycler_view_songs);
@@ -145,8 +145,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         managerListSongs = ManagerListSongs.getInstance();
 
         CameraManagerUrl.init(this);
-        //CameraManagerUrl.getInstance();
-
 
         songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
         recyclerView.setAdapter(songAdapter.get());
@@ -160,14 +158,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
                 if (intent == null) {
                     intent = new Intent(MainActivity.this, MusicPlayerService.class);
                     intent.putExtra("command", "new_instance");
-//            intent.putExtra("managerListSongs", (Parcelable) managerListSongs);
-                    Log.d("playBtn", "managerListSongs: " + managerListSongs);
 
                     startService(intent);
 
                 } else playClick();
                 isPlaying = true;
-//                playBtn.setBackground(Drawable.createFromPath("R.drawable.sound_icon"));
                 playBtn.setImageResource(R.drawable.pausexhdpi);
             } else {
                 isPlaying = false;
@@ -181,56 +176,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             AddSongDialog addSongDialog = new AddSongDialog();
             addSongDialog.show(getSupportFragmentManager(), "add song dialog");
 
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
-//            View dialogView = getLayoutInflater().inflate(R.layout.add_song_dialog, null);
-//
-//            EditText linkText = dialogView.findViewById(R.id.dialog_link);
-//            ImageButton takeApic = dialogView.findViewById(R.id.take_a_pic);
-//            ImageButton addApic = dialogView.findViewById(R.id.add_a_pic);
-
-
-            /*builder.setView(dialogView).setNegativeButton("Cancel", (dialog, which) -> {
-            }).setView(dialogView).setPositiveButton("Add", (dialog, which) -> {
-
-                String link = linkText.getText().toString();
-                if (!link.isEmpty()) {
-                    try {
-                        managerListSongs.addSong(link);
-
-                        // update the view list
-                        songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
-                        recyclerView.setAdapter(songAdapter.get());
-                        com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
-
-                    } catch (Exception e) {
-//                    e.printStackTrace();
-                        Snackbar snackbar = Snackbar
-                                .make(view, "" + e.getMessage(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                }
-
-
-            }).show();*/
-
-
-//            String link = linkEt.getText().toString();
-//            if (!link.isEmpty()) {
-//                try {
-//                    managerListSongs.addSong(link);
-//                    Log.d(">>>addBtn", "managerListSongs: " + managerListSongs);
-//
-//
-//
-//                } catch (Exception e) {
-////                    e.printStackTrace();
-//                    Snackbar snackbar = Snackbar
-//                            .make(view, "" + e.getMessage(), Snackbar.LENGTH_LONG);
-//                    snackbar.show();
-//                }
-//            }
-//            linkEt.setText("");
         });
 
         nextBtn.setOnClickListener(view -> nextClick());

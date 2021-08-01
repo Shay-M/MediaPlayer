@@ -37,6 +37,9 @@ public class ManagerListSongs {
         listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
         listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
         listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
+        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
 
         for (String songUrl : listOfUrlSongsToAddFirstTime) {
             try {
