@@ -2,6 +2,7 @@ package com.example.mediaplayer.Dialogs;/* Created by Shay Mualem 29/07/2021 */
 
 import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,19 +19,13 @@ import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.R;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 
-import java.io.File;
-
 public class AddSongDialog extends DialogFragment {
 
-
-    //private  MainActivity mainActivity;
     private EditText linkText;
     private EditText nameText;
-    private ImageView takeApicBtn;
-    private ImageView addApic;
     private ImageView picContentView;
 
-    private File file;
+    private Uri imgUri = null;
 
 
     private ManagerListSongs managerListSongs;
@@ -38,19 +33,13 @@ public class AddSongDialog extends DialogFragment {
 
     private AddSongDialogListener listener;
 
-//    public AddSongDialog(MainActivity mainActivity) {
-//        this.mainActivity = mainActivity;
-//    }
-
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         cameraManagerUrl = CameraManagerUrl.getInstance();
         managerListSongs = ManagerListSongs.getInstance();
-//        cameraManagerUrl = CameraManagerUrl.getInstance();
 
-        //initLaunchers();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyDialogTheme);
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -64,15 +53,17 @@ public class AddSongDialog extends DialogFragment {
                     if (!songUrl.isEmpty()) {
 
                         try {
-                            managerListSongs.addSong(songUrl);
+                            managerListSongs.addSong(songUrl, null);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-                        String Name = linkText.getText().toString();
-                        String imgUrl = linkText.getText().toString();
+                        String Name = nameText.getText().toString();
+                        String url = linkText.getText().toString();
 
-                        listener.applyAddSong(Name, songUrl, imgUrl);
+
+                        listener.applyAddSong(Name, url, imgUri);
+
                     }
                 });
 
@@ -80,8 +71,7 @@ public class AddSongDialog extends DialogFragment {
         linkText = view.findViewById(R.id.dialog_link);
         nameText = view.findViewById(R.id.dialog_name);
 
-        takeApicBtn = view.findViewById(R.id.take_a_pic);
-        addApic = view.findViewById(R.id.add_a_pic);
+        ImageView takeApicBtn = view.findViewById(R.id.take_a_pic);
         picContentView = view.findViewById(R.id.song_image);
 
         takeApicBtn.setOnClickListener(v -> takeApicFromCamera());
@@ -95,46 +85,44 @@ public class AddSongDialog extends DialogFragment {
         try {
             listener = (AddSongDialogListener) context;
         } catch (ClassCastException e) {
-            // e.printStackTrace();
-            throw new ClassCastException(context.toString() + "must implement AddSongDialogListener!");
+            throw new ClassCastException(context.toString() + "must implement AddSongDialogListener , " + e.getMessage());
         }
 
     }
 
     private void takeApicFromCamera() {
-        cameraManagerUrl.dispatchTakePictureIntent();
-
-        Glide.with(this).load(cameraManagerUrl.dispatchTakePictureIntent()).into(picContentView);
+        imgUri = cameraManagerUrl.dispatchTakePictureIntent();
+        Glide.with(this).load(imgUri).into(picContentView);
 
     }
 
-    private void initLaunchers() {
-
-//        cameraFullSizeResultLauncher = registerForActivityResult(
-//                new ActivityResultContracts.TakePicture(),
-//                new ActivityResultCallback<Boolean>() {
-//                    @Override
-//                    public void onActivityResult(Boolean result) {
-//                    //true if the image saved to the uri given in the launch function
-//                    }
-//                });
-
-//        someActivityResultLauncher = registerForActivityResult(
-//                new ActivityResultContracts.StartActivityForResult(),
-//                new ActivityResultCallback<ActivityResult>() {
-//                    @Override
-//                    public void onActivityResult(ActivityResult result) {
-//                        if (result.getResultCode() == Activity.RESULT_OK) {
-//                            Log.d("getAbsolutePath", "onActivityResult: " + file.getAbsolutePath());
+//    private void initDialog() {
 //
-//                        }
-//                    }
-//                });
-//        file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "pic1.jpg");
-
-    }
+////        cameraFullSizeResultLauncher = registerForActivityResult(
+////                new ActivityResultContracts.TakePicture(),
+////                new ActivityResultCallback<Boolean>() {
+////                    @Override
+////                    public void onActivityResult(Boolean result) {
+////                    //true if the image saved to the uri given in the launch function
+////                    }
+////                });
+//
+////        someActivityResultLauncher = registerForActivityResult(
+////                new ActivityResultContracts.StartActivityForResult(),
+////                new ActivityResultCallback<ActivityResult>() {
+////                    @Override
+////                    public void onActivityResult(ActivityResult result) {
+////                        if (result.getResultCode() == Activity.RESULT_OK) {
+////                            Log.d("getAbsolutePath", "onActivityResult: " + file.getAbsolutePath());
+////
+////                        }
+////                    }
+////                });
+////        file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "pic1.jpg");
+//
+//    }
 
     public interface AddSongDialogListener {
-        void applyAddSong(String Name, String songUrl, String imgUrl);
+        void applyAddSong(String Name, String songUrl, Uri imgUri);
     }
 }

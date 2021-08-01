@@ -1,5 +1,6 @@
 package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/2021 */
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.util.Log;
 
@@ -31,10 +32,15 @@ public class ManagerListSongs {
         listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
         listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
         listOfUrlSongsToAddFirstTime.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
+        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
 
         for (String songUrl : listOfUrlSongsToAddFirstTime) {
             try {
-                this.addSong(songUrl);
+                this.addSong(songUrl, null);//todo
             } catch (Exception e) {
                 Log.d("ManagerListSongs", "songUrl: " + e.getMessage() + " songUrl: " + songUrl);
             }
@@ -50,7 +56,8 @@ public class ManagerListSongs {
     protected ManagerListSongs(Parcel in) {
         listOfUrlSongs = in.createStringArrayList();
     }
-//singleton
+
+    //singleton
     public static ManagerListSongs getInstance() {
         if (instead == null)
             instead = new ManagerListSongs();
@@ -86,9 +93,10 @@ public class ManagerListSongs {
      * @param stringUrl song url to add
      * @throws Exception if the url is not in a valid
      */
-    public void addSong(String stringUrl) throws Exception {
+    public void addSong(String stringUrl, Uri imgUri) throws Exception {
         //get song name
         String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
+
         // Url Validator
         try {
             new URL(stringUrl).toURI();
@@ -101,7 +109,8 @@ public class ManagerListSongs {
         if (!NameOfSongFromUrl.isEmpty() && NameOfSongFromUrl.contains(".")) {
             listOfUrlSongs.add(stringUrl);
             Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
-            listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, "1", null));
+
+            listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, imgUri));
 
         } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
 

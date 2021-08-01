@@ -1,19 +1,17 @@
 package com.example.mediaplayer.SongsRecyclerView;/* Created by Shay Mualem 23/07/2021 */
 
-import android.widget.ImageView;
+import android.net.Uri;
 
 public class SongItem {
 
     private String Url;
     private String Name;
-    private String Duration;
-    private ImageView imageView;
+    private Uri uri;
 
-    public SongItem(String url, String name, String duration, ImageView imageView) {
+    public SongItem(String url, String name, Uri uri) {
         Url = url;
         Name = name;
-        Duration = duration;
-        this.imageView = imageView;
+        this.uri = uri;
 
 
     }
@@ -21,12 +19,12 @@ public class SongItem {
     public SongItem() {
     }
 
-    public String getDuration() {
-        return Duration;
+    public Uri getUri() {
+        return uri;
     }
 
-    public void setDuration(String duration) {
-        Duration = duration;
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 
     public String getUrl() {
@@ -45,11 +43,5 @@ public class SongItem {
         Name = name;
     }
 
-    public int getImageView() {
-        return 0;
-    }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
-    }
 }

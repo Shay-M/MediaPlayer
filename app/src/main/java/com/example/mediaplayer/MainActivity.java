@@ -80,13 +80,12 @@ public class MainActivity extends AppCompatActivity {
 */
 
 
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -149,8 +148,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         //CameraManagerUrl.getInstance();
 
 
-
-        songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
+        songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
         recyclerView.setAdapter(songAdapter.get());
 
 
@@ -287,32 +285,27 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         registerReceiver(pausePlayingAudio, intentFilter);
     }
 
+    /**
+     * parameter from the interface AddSongDialogListener
+     */
     @Override
-    public void applyAddSong(String Name, String songUrl, String imgUrl) {
-
-        //GlobalSnackBar.SandGlobalSnackBar("hii");
-        // update the view list
-//        songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
-//        recyclerView.setAdapter(songAdapter.get());
-//
-//        //hide the keyboard
-//        com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
-
-
+    public void applyAddSong(String Name, String songUrl, Uri imgUri) {
         try {
-            managerListSongs.addSong(songUrl);
-
-            // update the view list
-            songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems()));
-            recyclerView.setAdapter(songAdapter.get());
-            com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
+            managerListSongs.addSong(songUrl, imgUri);
 
         } catch (Exception e) {
-//                    e.printStackTrace();
+            e.printStackTrace();
             Snackbar snackbar = Snackbar
-                    .make(getWindow().getDecorView().findViewById(android.R.id.content), "" + e.getMessage(), Snackbar.LENGTH_LONG);
+                    .make(getWindow().getDecorView().findViewById(R.id.RelativeLayout), "" + e.getMessage(), Snackbar.LENGTH_LONG);
             snackbar.show();
         }
+
+        // update the view list
+        songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
+        recyclerView.setAdapter(songAdapter.get());
+
+        //Hide the Keyboard
+        com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
     }
 }
 

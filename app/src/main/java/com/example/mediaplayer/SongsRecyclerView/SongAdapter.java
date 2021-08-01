@@ -1,5 +1,6 @@
 package com.example.mediaplayer.SongsRecyclerView;/* Created by Shay Mualem 23/07/2021 */
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.mediaplayer.R;
 
 import java.util.List;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolder> {
     private List<SongItem> songItemList;
+    private Context context;
 
-    public SongAdapter(List<SongItem> songItemList) {
+    public SongAdapter(List<SongItem> songItemList, Context context) {
         this.songItemList = songItemList;
+        this.context = context;
     }
 
     /**
@@ -43,8 +47,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         SongItem SongItem = songItemList.get(position);
         holder.songTitleTv.setText(SongItem.getName());
 //        holder.songDetailsTv.setText(SongItem.getUrl());
-        holder.songDetailsTv.setText(SongItem.getDuration());
-//        holder.songImageIv.setImageResource(SongItem.getImageView());
+        //holder.songDetailsTv.setText(SongItem.getDuration());//todo
+        if (SongItem.getUri() != null)
+            Glide.with(this.context).load(SongItem.getUri()).into(holder.songImageIv);
 
     }
 

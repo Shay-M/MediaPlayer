@@ -46,7 +46,7 @@
         android:inputType="textWebEditText"
         android:minHeight="60dp"
         android:padding="10dp"
-        android:textColor="@color/_R_yellow"
+        android:textColor="@color/_R_black"
         android:textColorHint="@color/_R_black"
         android:textStyle="bold" />
 
