@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,50 +11,76 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_songs"
-        android:layout_width="401dp"
-        android:layout_height="511dp"
+        android:layout_width="388dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="280dp"
         android:background="@color/cardview_shadow_end_color"
         android:padding="4dp" />
+
+    <ImageView
+        android:id="@+id/tape"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_above="@+id/btn_play_main"
+        android:layout_marginBottom="-74dp"
+        android:src="@drawable/tapexhdpi"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/prev_main"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@+id/btn_play_main"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/backxhdpi"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/btn_play_main"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="60dp"
-        android:layout_marginBottom="49dp"
-        android:src="@drawable/playxhdpi" />
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="47dp"
+        android:layout_toEndOf="@+id/prev_main"
+        android:src="@drawable/playxhdpi"
+        tools:ignore="ContentDescription" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btn_next_main"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignTop="@+id/btn_play_main"
         android:layout_alignBottom="@+id/btn_play_main"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="-1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="-3dp"
         android:layout_toEndOf="@+id/btn_play_main"
-        android:src="@android:drawable/ic_media_next" />
+        android:src="@drawable/nextxhdpi"
+        tools:ignore="ContentDescription" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/addLinkBtn"
-        android:layout_width="38dp"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="140dp"
-        android:layout_toEndOf="@+id/link"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="87dp"
         android:background="@null"
-        android:contentDescription="@string/add_link"
-        android:src="@android:drawable/ic_input_add" />
+        android:src="@drawable/addxhdpi"
+        tools:ignore="ContentDescription" />
+
+
 </RelativeLayout>

@@ -17,7 +17,7 @@
 
 
     <style name="splashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/bacxhdpi</item>
+        <item name="android:windowBackground">@drawable/logoxhdpi</item>
         <item name="android:statusBarColor">@color/_R_black</item>
     </style>
 

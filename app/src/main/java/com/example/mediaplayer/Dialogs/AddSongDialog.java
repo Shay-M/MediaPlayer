@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.R;
 import com.example.mediaplayer.utils.CameraManagerUrl;
@@ -23,25 +23,32 @@ import java.io.File;
 public class AddSongDialog extends DialogFragment {
 
 
+    //private  MainActivity mainActivity;
     private EditText linkText;
     private EditText nameText;
-    private ImageButton takeApicBtn;
-    private ImageButton addApic;
+    private ImageView takeApicBtn;
+    private ImageView addApic;
     private ImageView picContentView;
 
     private File file;
+
 
     private ManagerListSongs managerListSongs;
     private CameraManagerUrl cameraManagerUrl;
 
     private AddSongDialogListener listener;
 
+//    public AddSongDialog(MainActivity mainActivity) {
+//        this.mainActivity = mainActivity;
+//    }
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
+        cameraManagerUrl = CameraManagerUrl.getInstance();
         managerListSongs = ManagerListSongs.getInstance();
-        cameraManagerUrl = CameraManagerUrl.getInstance(null);
+//        cameraManagerUrl = CameraManagerUrl.getInstance();
 
         //initLaunchers();
 
@@ -75,6 +82,7 @@ public class AddSongDialog extends DialogFragment {
 
         takeApicBtn = view.findViewById(R.id.take_a_pic);
         addApic = view.findViewById(R.id.add_a_pic);
+        picContentView = view.findViewById(R.id.song_image);
 
         takeApicBtn.setOnClickListener(v -> takeApicFromCamera());
 
@@ -94,22 +102,9 @@ public class AddSongDialog extends DialogFragment {
     }
 
     private void takeApicFromCamera() {
+        cameraManagerUrl.dispatchTakePictureIntent();
 
-        cameraManagerUrl.TakePicFromCamera();
-
-//        file = new File(getExternalFilesDir(), "piccc.jpg");
-//
-//        Uri imageUri = FileProvider.getUriForFile(
-//                this.getContext(),
-//                "syntax.org.il.externalstorageexample.provider", //(use your app signature + ".provider" )
-//                file);
-//
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-//        startActivityForResult(intent, CAMERA_REQUEST);
-//        File file = new File(getFilesDir(), "picFromCamera");
-//        Uri uri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", file);
-
+        Glide.with(this).load(cameraManagerUrl.dispatchTakePictureIntent()).into(picContentView);
 
     }
 

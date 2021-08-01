@@ -80,14 +80,14 @@ public class MainActivity extends AppCompatActivity {
 */
 
 
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
     private ManagerListSongs managerListSongs;
-    private CameraManagerUrl cameraManagerUrl;
     private AtomicReference<SongAdapter> songAdapter;
     private RecyclerView recyclerView;
 
@@ -133,10 +132,9 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
 //        GlobalSnackBar globalSnackBar = new GlobalSnackBar(getWindow().getDecorView().findViewById(android.R.id.content))
 
-        final EditText linkEt = findViewById(R.id.link);
         final ImageView playBtn = findViewById(R.id.btn_play_main);
-        final ImageButton nextBtn = findViewById(R.id.btn_next_main);
-        final ImageButton addBtn = findViewById(R.id.addLinkBtn);
+        final ImageView nextBtn = findViewById(R.id.btn_next_main);
+        final ImageView addBtn = findViewById(R.id.addLinkBtn);
         recyclerView = findViewById(R.id.recycler_view_songs);
 
         recyclerView.setHasFixedSize(true);
@@ -146,7 +144,10 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         List<SongItem> songsList = new ArrayList<>();
 
         managerListSongs = ManagerListSongs.getInstance();
-        cameraManagerUrl = CameraManagerUrl.getInstance(this);
+
+        CameraManagerUrl.init(this);
+        //CameraManagerUrl.getInstance();
+
 
 
         songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems()));
