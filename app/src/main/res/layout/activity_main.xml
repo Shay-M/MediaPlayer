@@ -10,6 +10,11 @@
     android:id="@+id/RelativeLayout">
 
 
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@color/_dark_blue"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_songs"
         android:layout_width="390dp"
