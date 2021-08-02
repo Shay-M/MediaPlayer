@@ -11,6 +11,8 @@ public class SongItem {
     public SongItem(String url, String name, Uri uri) {
         Url = url;
         Name = name;
+        if (uri == null)
+            uri = uri.parse("file:///android_asset/musicxhdpi.png");
         this.uri = uri;
 
 

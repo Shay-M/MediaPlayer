@@ -97,6 +97,12 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
             public void onLongClick(int position, View view) {
                 Log.d("onLongClick", "position: " + position);
             }
+
+            @Override
+            public void onImgClick(int position, View view) {
+                Log.d("onImgClick", "position: " + position);
+
+            }
         });
 
 

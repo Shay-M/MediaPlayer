@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,13 +19,12 @@ import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
 import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
-import com.example.mediaplayer.SongsRecyclerView.SongItem;
+import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongRecyclerView_UpdateUI_Fragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
@@ -55,12 +55,15 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //https://www.geeksforgeeks.org/different-ways-to-hide-action-bar-in-android-with-examples/
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         playBtn = findViewById(R.id.btn_play_main);
         final ImageView nextBtn = findViewById(R.id.btn_next_main);
         final ImageView addBtn = findViewById(R.id.addLinkBtn);
 
-
-        List<SongItem> songsList = new ArrayList<>();
 
         managerListSongs = ManagerListSongs.getInstance();
 
@@ -70,16 +73,36 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         ////recyclerView.setAdapter(songAdapter.get());
 
         /////////////////
+        SongAdapter.RecyclerViewListener recyclerViewListener = new SongAdapter.RecyclerViewListener() {
+            @Override
+            public void onItemClick(int position, View view) {
 
-        songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment();
+            }
+
+            @Override
+            public void onLongClick(int position, View view) {
+
+            }
+
+            @Override
+            public void onImgClick(int position, View view) {
+
+            }
+        };
+
+        ////
+
+        songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_out, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.fragment_list_and_big, songRecyclerViewFragment, REGISTER_FRAGMENT_TAG);
         fragmentTransaction.commit();
 
         //////////////////
+
 
         //play button
         playBtn.setOnClickListener(view -> {

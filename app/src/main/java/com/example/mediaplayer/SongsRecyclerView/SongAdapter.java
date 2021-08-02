@@ -70,7 +70,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
                 // make sure Glide doesn't load anything into this view until told otherwise
                 Glide.with(context).clear(holder.songImageIv);
                 // remove the placeholder (optional); read comments below
-                //holder.songImageIv.setImageDrawable(null);
+                holder.songImageIv.setImageDrawable(null);
             }
 
     }
@@ -103,6 +103,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         void onItemClick(int position, View view);
 
         void onLongClick(int position, View view);
+
+        void onImgClick(int position, View view);
     }
 
     //crete view holder, for hold reference in a cell
@@ -128,6 +130,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
                 if (listener != null)
                     listener.onLongClick(getAdapterPosition(), v);
                 return false;
+            });
+
+            songImageIv.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onImgClick(getAdapterPosition(), v);
             });
 
 
