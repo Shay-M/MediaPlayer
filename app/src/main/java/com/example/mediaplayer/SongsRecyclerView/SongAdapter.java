@@ -13,15 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mediaplayer.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolder> {
-    private List<SongItem> songItemList;
+    private ArrayList<SongItem> songItemList;
+
+    //callback fun
+    private RecyclerViewListener listener;
     private Context context;
 
-    public SongAdapter(List<SongItem> songItemList, Context context) {
-        this.songItemList = songItemList;
+    public SongAdapter(ArrayList<SongItem> listOfSongsItems, Context context) {
+        this.songItemList = listOfSongsItems;
         this.context = context;
+    }
+
+    public void setListener(RecyclerViewListener listener) {
+
+        this.listener = listener;
     }
 
     /**
@@ -33,11 +41,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
     @Override
     public SongsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_of_song, parent, false);
+
         return new SongsViewHolder(view);
     }
 
     /**
-     * call to load a cell
+     * call to load a cell ,this fun get parameter for a cell
      *
      * @param holder   type
      * @param position position of cell
@@ -45,11 +54,23 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
     @Override
     public void onBindViewHolder(SongAdapter.SongsViewHolder holder, int position) {
         SongItem SongItem = songItemList.get(position);
+
+
         holder.songTitleTv.setText(SongItem.getName());
 //        holder.songDetailsTv.setText(SongItem.getUrl());
         //holder.songDetailsTv.setText(SongItem.getDuration());//todo
+
+        //update img song
+        ImageView imageView = holder.songImageIv;
+
         if (SongItem.getUri() != null)
-            Glide.with(this.context).load(SongItem.getUri()).centerCrop().into(holder.songImageIv);
+            Glide.with(context).load(SongItem.getUri()).centerCrop().into(imageView);
+        else {
+            // make sure Glide doesn't load anything into this view until told otherwise
+           // Glide.with(context).clear(holder.songImageIv);
+            // remove the placeholder (optional); read comments below
+            //holder.songImageIv.setImageDrawable(null);
+        }
 
     }
 
@@ -72,6 +93,17 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         return super.getItemViewType(position);
     }
 
+
+    /**
+     * interface to manager all RecyclerView events
+     */
+    public interface RecyclerViewListener {
+
+        void onItemClick(int position, View view);
+
+        void onLongClick(int position, View view);
+    }
+
     //crete view holder, for hold reference in a cell
     public class SongsViewHolder extends RecyclerView.ViewHolder {
 
@@ -85,9 +117,21 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
             songTitleTv = itemView.findViewById(R.id.song_title);
             songDetailsTv = itemView.findViewById(R.id.song_details);
             songImageIv = itemView.findViewById(R.id.song_image);
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onItemClick(getAdapterPosition(), v);
+            });
+
+            itemView.setOnLongClickListener(v -> {
+                if (listener != null)
+                    listener.onLongClick(getAdapterPosition(), v);
+                return false;
+            });
+
+
         }
     }
-
 
 }
 

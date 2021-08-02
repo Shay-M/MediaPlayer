@@ -18,7 +18,7 @@ public class ManagerListSongs {
 
     private static ManagerListSongs instead;
     private final ArrayList<String> listOfUrlSongs;
-    private List<SongItem> listOfSongsItems;
+    private ArrayList<SongItem> listOfSongsItems;
     private MusicPlayerService musicPlayerService;
     private int currentPlaying;
 
@@ -83,7 +83,7 @@ public class ManagerListSongs {
         return currentPlaying;
     }
 
-    public List<SongItem> getListOfSongsItems() {
+    public ArrayList<SongItem> getListOfSongsItems() {
         return listOfSongsItems;
     }
 

@@ -11,8 +11,8 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
@@ -20,6 +20,7 @@ import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
+import com.example.mediaplayer.SongsRecyclerView.SongRecyclerView_Fragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,13 +30,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
+    final String REGISTER_FRAGMENT_TAG = "register_fragemnt";
     boolean isPlaying = false;
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
     private ManagerListSongs managerListSongs;
     private AtomicReference<SongAdapter> songAdapter;
-    private RecyclerView recyclerView;
+    //private RecyclerView recyclerView;
     private ImageView playBtn;
+    private SongRecyclerView_Fragment songRecyclerViewFragment;
 
     private BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
@@ -55,10 +58,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         playBtn = findViewById(R.id.btn_play_main);
         final ImageView nextBtn = findViewById(R.id.btn_next_main);
         final ImageView addBtn = findViewById(R.id.addLinkBtn);
-        recyclerView = findViewById(R.id.recycler_view_songs);
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
         List<SongItem> songsList = new ArrayList<>();
@@ -67,9 +66,20 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
         CameraManagerUrl.init(this);
 
-        songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
-        recyclerView.setAdapter(songAdapter.get());
+        ////songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
+        ////recyclerView.setAdapter(songAdapter.get());
 
+        /////////////////
+
+        songRecyclerViewFragment = new SongRecyclerView_Fragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_out, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.fragment_list_and_big, songRecyclerViewFragment, REGISTER_FRAGMENT_TAG);
+        fragmentTransaction.commit();
+
+        //////////////////
 
         //play button
         playBtn.setOnClickListener(view -> {
@@ -167,8 +177,9 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         }
 
         // update the view list
-        songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
-        recyclerView.setAdapter(songAdapter.get());
+
+        ////songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
+        ////recyclerView.setAdapter(songAdapter.get());
 
         //Hide the Keyboard
         com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
