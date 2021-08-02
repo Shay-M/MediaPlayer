@@ -29,7 +29,7 @@
             <TextView
                 android:id="@+id/notification_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="26dp"
                 android:layout_weight="1"
                 android:maxLength="25"
                 android:paddingStart="8dp"
@@ -63,17 +63,6 @@
 
 
             <ImageButton
-                android:id="@+id/play_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="@null"
-                android:contentDescription="@string/play"
-                android:scaleType="centerInside"
-                android:src="@drawable/playxhdpi" />
-
-            <ImageButton
                 android:id="@+id/pause_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -83,6 +72,17 @@
                 android:contentDescription="@string/pause"
                 android:scaleType="centerInside"
                 android:src="@drawable/pausexhdpi" />
+
+            <ImageButton
+                android:id="@+id/play_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:contentDescription="@string/play"
+                android:scaleType="centerInside"
+                android:src="@drawable/playxhdpi" />
 
             <ImageButton
                 android:id="@+id/prev_btn"

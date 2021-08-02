@@ -21,6 +21,7 @@ import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
 import com.example.mediaplayer.SongsRecyclerView.SongRecyclerView_UpdateUI_Fragment;
+import com.example.mediaplayer.SongsRecyclerView.SoundBigFragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -69,26 +70,37 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
         CameraManagerUrl.init(this);
 
-        ////songAdapter = new AtomicReference<>(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
-        ////recyclerView.setAdapter(songAdapter.get());
 
         /////////////////
         SongAdapter.RecyclerViewListener recyclerViewListener = new SongAdapter.RecyclerViewListener() {
             @Override
             public void onItemClick(int position, View view) {
-
+                Log.d("onItemClick", "position: " + position);
             }
 
             @Override
             public void onLongClick(int position, View view) {
-
+                Log.d("onLongClick", "position: " + position);
             }
 
             @Override
             public void onImgClick(int position, View view) {
+                Log.d("onImgClick", "position: " + position);
+                String songName =  managerListSongs.getListOfSongsItems().get(position).getName();
+                 managerListSongs.getListOfSongsItems().get(position).getUri();
+
+                SoundBigFragment soundBigFragment = SoundBigFragment.newInstance(songName, managerListSongs.getListOfSongsItems().get(position).getUri());
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left);
+                fragmentTransaction.replace(R.id.fragment_list_and_big, soundBigFragment, REGISTER_FRAGMENT_TAG);
+                fragmentTransaction.commit();
 
             }
         };
+
 
         ////
 

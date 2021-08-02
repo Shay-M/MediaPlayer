@@ -1,7 +1,6 @@
 package com.example.mediaplayer.SongsRecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private  static SongAdapter.RecyclerViewListener recyclerViewListener = null;
 
     private RecyclerView recyclerView;
     private ManagerListSongs managerListSongs;
@@ -41,6 +41,10 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
         // Required empty public constructor
     }
 
+    public SongRecyclerView_UpdateUI_Fragment(SongAdapter.RecyclerViewListener recyclerViewListener) {
+        this.recyclerViewListener = recyclerViewListener;
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the ***provided parameters.***
@@ -51,7 +55,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static SongRecyclerView_UpdateUI_Fragment newInstance(String param1, String param2) {
-        SongRecyclerView_UpdateUI_Fragment fragment = new SongRecyclerView_UpdateUI_Fragment();
+        SongRecyclerView_UpdateUI_Fragment fragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,24 +90,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 //        songAdapter.notifyDataSetChanged();
 
 
-        songAdapter.setListener(new SongAdapter.RecyclerViewListener() {
-
-            @Override
-            public void onItemClick(int position, View view) {
-                Log.d("onItemClick", "position: " + position);
-            }
-
-            @Override
-            public void onLongClick(int position, View view) {
-                Log.d("onLongClick", "position: " + position);
-            }
-
-            @Override
-            public void onImgClick(int position, View view) {
-                Log.d("onImgClick", "position: " + position);
-
-            }
-        });
+        songAdapter.setListener(recyclerViewListener);
 
 
         recyclerView.setAdapter(songAdapter);

@@ -147,8 +147,9 @@ public class CameraManagerUrl {
     }
 
     public synchronized static CameraManagerUrl init(MainActivity context) {
-        if (instead != null) {
-            throw new AssertionError("You already initialized me");
+        if (instead == null) {
+            instead = new CameraManagerUrl(context);
+            //throw new AssertionError("You already initialized me");
         }
 
         instead = new CameraManagerUrl(context);

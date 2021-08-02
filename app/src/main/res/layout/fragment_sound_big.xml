@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SoundBigFragment">
+    tools:context=".SongsRecyclerView.SoundBigFragment">
 
-    <ImageView
-        android:id="@+id/big_pic_song"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/_R_yellow" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:alpha="0.5"
-        android:background="@color/_R_black"
-        android:ellipsize="none"
-        android:fadingEdgeLength="100dp"
-        android:requiresFadingEdge="vertical" />
+        <ImageView
+            android:id="@+id/big_pic_song"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/_R_red"
+            tools:layout_editor_absoluteX="0dp"
+            android:src="@drawable/musicxxhdpi"
+            tools:layout_editor_absoluteY="-359dp" />
 
-    <TextView
-        android:id="@+id/big_name_song"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="19dp"
-        android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:alpha="0.5"
+            android:background="@color/_R_black"
+            android:ellipsize="none"
+            android:fadingEdgeLength="100dp"
+            android:requiresFadingEdge="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.19" />
 
+        <TextView
+            android:id="@+id/big_name_song"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="19dp"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/big_pic_song"
+            app:layout_constraintVertical_bias="0.19" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

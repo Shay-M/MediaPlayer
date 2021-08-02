@@ -16,7 +16,7 @@
         android:layout_height="440dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
-        android:background="@color/_dark_blue" />
+        android:background="@null" />
 
 <!--    <androidx.recyclerview.widget.RecyclerView-->
 <!--        android:id="@+id/recycler_view_songs"-->
