@@ -27,6 +27,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         this.context = context;
     }
 
+
     public void setListener(RecyclerViewListener listener) {
 
         this.listener = listener;
@@ -64,13 +65,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         ImageView imageView = holder.songImageIv;
 
         if (SongItem.getUri() != null)
-            Glide.with(context).load(SongItem.getUri()).centerCrop().into(imageView);
-        else {
-            // make sure Glide doesn't load anything into this view until told otherwise
-           // Glide.with(context).clear(holder.songImageIv);
-            // remove the placeholder (optional); read comments below
-            //holder.songImageIv.setImageDrawable(null);
-        }
+                Glide.with(context).load(SongItem.getUri()).centerCrop().into(imageView);
+            else {
+                // make sure Glide doesn't load anything into this view until told otherwise
+                Glide.with(context).clear(holder.songImageIv);
+                // remove the placeholder (optional); read comments below
+                //holder.songImageIv.setImageDrawable(null);
+            }
 
     }
 

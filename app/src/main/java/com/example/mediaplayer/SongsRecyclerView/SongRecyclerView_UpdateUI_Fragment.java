@@ -1,7 +1,7 @@
 package com.example.mediaplayer.SongsRecyclerView;
 
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,35 +10,34 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.R;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SongRecyclerView_Fragment#newInstance} factory method to
+ * Use the {@link SongRecyclerView_UpdateUI_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SongRecyclerView_Fragment extends Fragment implements  AddSongDialog.AddSongDialogListener{
+public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
     ///////
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    //    private List<String> listOfSongs = new ArrayList<>();
+
     private RecyclerView recyclerView;
     private ManagerListSongs managerListSongs;
     //    private RecyclerViewClickInterface recyclerViewClickInterface;
-    private AtomicReference<SongAdapter> songAdapter;
+    //private AtomicReference<SongAdapter> songAdapter;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     //////
 
+    private SongAdapter songAdapter;
 
-    public SongRecyclerView_Fragment() {
+    public SongRecyclerView_UpdateUI_Fragment() {
         // Required empty public constructor
     }
 
@@ -51,8 +50,8 @@ public class SongRecyclerView_Fragment extends Fragment implements  AddSongDialo
      * @return A new instance of fragment SongRecyclerView_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SongRecyclerView_Fragment newInstance(String param1, String param2) {
-        SongRecyclerView_Fragment fragment = new SongRecyclerView_Fragment();
+    public static SongRecyclerView_UpdateUI_Fragment newInstance(String param1, String param2) {
+        SongRecyclerView_UpdateUI_Fragment fragment = new SongRecyclerView_UpdateUI_Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,31 +82,36 @@ public class SongRecyclerView_Fragment extends Fragment implements  AddSongDialo
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         managerListSongs = ManagerListSongs.getInstance();
 
-        SongAdapter songAdapter = new SongAdapter(managerListSongs.getListOfSongsItems(), getActivity());
+        songAdapter = new SongAdapter(managerListSongs.getListOfSongsItems(), getActivity());
+//        songAdapter.notifyDataSetChanged();
 
 
         songAdapter.setListener(new SongAdapter.RecyclerViewListener() {
 
             @Override
             public void onItemClick(int position, View view) {
-
+                Log.d("onItemClick", "position: " + position);
             }
 
             @Override
             public void onLongClick(int position, View view) {
-
+                Log.d("onLongClick", "position: " + position);
             }
         });
 
 
         recyclerView.setAdapter(songAdapter);
 
+        managerListSongs.setListener(new ManagerListSongs.RecyclerViewUpdateUIListener() {
+            @Override
+            public void onUpdateListItem() {
+                songAdapter.notifyDataSetChanged();
+                //songAdapter.notifyItemInserted(songAdapter.getItemCount() + 1);
+            }
+        });
+
         return rootView;
     }
 
 
-    @Override
-    public void applyAddSong(String Name, String songUrl, Uri imgUri) {
-        songAdapter.notifyDataSetChanged();
-    }
 }

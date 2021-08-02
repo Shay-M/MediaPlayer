@@ -3,7 +3,9 @@ package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/202
 import android.net.Uri;
 import android.os.Parcel;
 import android.util.Log;
+import android.view.View;
 
+import com.example.mediaplayer.MainActivity;
 import com.example.mediaplayer.MusicPlayerService;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 
@@ -21,6 +23,7 @@ public class ManagerListSongs {
     private ArrayList<SongItem> listOfSongsItems;
     private MusicPlayerService musicPlayerService;
     private int currentPlaying;
+    private RecyclerViewUpdateUIListener listener;
 
     private ManagerListSongs() {
         currentPlaying = 0; // todo
@@ -114,10 +117,22 @@ public class ManagerListSongs {
             Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
 
             listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, imgUri));
-
+            listener.onUpdateListItem();
         } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
 
     }
+
+    public void setListener(RecyclerViewUpdateUIListener listener) {
+
+        this.listener = listener;
+    }
+
+    public interface RecyclerViewUpdateUIListener {
+        //        void onInsertItem(int position, View view);
+        void onUpdateListItem();
+    }
+
+
 
 
 }

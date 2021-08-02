@@ -90,12 +90,16 @@ public class AddSongDialog extends DialogFragment {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 3);
     }
 
+    //Galleria
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 3) {
-            Log.d("TAG", "onActivityResult: " + data);
-            imgUri = data.getData();
-            Glide.with(this).load(data.getData()).centerCrop().thumbnail(0.10f).into(picContentView);
+            Log.d("onActivityResult", "Intent: " + data);
+
+            if (data == null)
+                imgUri = imgUri.parse("file:///android_asset/musicxhdpi.png");
+            else imgUri = data.getData();
+            Glide.with(this).load(imgUri).centerCrop().into(picContentView);//.thumbnail(0.10f)
         }
     }
 
@@ -112,7 +116,8 @@ public class AddSongDialog extends DialogFragment {
 
     private void takeApicFromCamera() {
         imgUri = cameraManagerUrl.dispatchTakePictureIntent();
-        Glide.with(this).load(imgUri).centerCrop().into(picContentView);
+
+            Glide.with(this).load(imgUri).centerCrop().into(picContentView);
 
     }
 
