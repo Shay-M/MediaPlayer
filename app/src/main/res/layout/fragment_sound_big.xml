@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
     tools:context=".SongsRecyclerView.SoundBigFragment">
-
+    <!--android:clickable="true" >> prevent clickable-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,8 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/_R_red"
-            tools:layout_editor_absoluteX="0dp"
             android:src="@drawable/musicxxhdpi"
+            tools:ignore="ContentDescription"
+            tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="-359dp" />
 
         <ImageView
@@ -31,7 +33,8 @@
             android:requiresFadingEdge="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.19" />
+            app:layout_constraintVertical_bias="0.80"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/big_name_song"
@@ -43,7 +46,8 @@
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/big_pic_song"
-            app:layout_constraintVertical_bias="0.19" />
+            app:layout_constraintVertical_bias="0.80" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

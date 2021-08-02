@@ -72,7 +72,6 @@ public class SoundBigFragment extends Fragment {
         ImageView songImg = rootView.findViewById(R.id.big_pic_song);
         songTitle.setText(mSongName);
         Glide.with(this).load(imgUri).centerCrop().into(songImg);//.thumbnail(0.10f)
-//        songImg.setOnClickListener(v->{ });
 
 
 

@@ -37,7 +37,10 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     //private AtomicReference<SongAdapter> songAdapter;
     //private RecyclerView recyclerView;
     private ImageView playBtn;
+    private ImageView backBigPic;
     private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
+
+    private SongAdapter.RecyclerViewListener recyclerViewListener;
 //    private RecyclerViewUpdateUIListener listener;
 
     private BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
             Log.d("BroadcastReceiver", "context: " + context + "Intent: " + intent);
             playBtn.setImageResource(R.drawable.playxhdpi);
+
 
         }
     };
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         }
 
         playBtn = findViewById(R.id.btn_play_main);
+        backBigPic = findViewById(R.id.back_big_pic);
         final ImageView nextBtn = findViewById(R.id.btn_next_main);
         final ImageView addBtn = findViewById(R.id.addLinkBtn);
 
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
 
         /////////////////
-        SongAdapter.RecyclerViewListener recyclerViewListener = new SongAdapter.RecyclerViewListener() {
+        recyclerViewListener = new SongAdapter.RecyclerViewListener() {
             @Override
             public void onItemClick(int position, View view) {
                 Log.d("onItemClick", "position: " + position);
@@ -86,32 +91,25 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             @Override
             public void onImgClick(int position, View view) {
                 Log.d("onImgClick", "position: " + position);
-                String songName =  managerListSongs.getListOfSongsItems().get(position).getName();
-                 managerListSongs.getListOfSongsItems().get(position).getUri();
+                String songName = managerListSongs.getListOfSongsItems().get(position).getName();
+                managerListSongs.getListOfSongsItems().get(position).getUri();
 
                 SoundBigFragment soundBigFragment = SoundBigFragment.newInstance(songName, managerListSongs.getListOfSongsItems().get(position).getUri());
-
+                backBigPic.setVisibility(View.VISIBLE);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left);
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 fragmentTransaction.replace(R.id.fragment_list_and_big, soundBigFragment, REGISTER_FRAGMENT_TAG);
+
                 fragmentTransaction.commit();
 
             }
         };
 
-
         ////
-
-        songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_out, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.fragment_list_and_big, songRecyclerViewFragment, REGISTER_FRAGMENT_TAG);
-        fragmentTransaction.commit();
+        backBigPic.setOnClickListener(v-> showListOfSongFragment());
+        showListOfSongFragment();
 
         //////////////////
 
@@ -147,6 +145,19 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         nextBtn.setOnClickListener(view -> nextClick());
 
         register_pausePlayingAudio();
+
+    }
+
+    private void showListOfSongFragment() {
+
+        songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
+        backBigPic.setVisibility(View.GONE);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        fragmentTransaction.replace(R.id.fragment_list_and_big, songRecyclerViewFragment, REGISTER_FRAGMENT_TAG);
+        fragmentTransaction.commit();
 
     }
 
