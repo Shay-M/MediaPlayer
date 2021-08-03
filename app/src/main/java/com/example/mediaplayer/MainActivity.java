@@ -31,9 +31,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     boolean isPlaying = false;
     private Intent intent;
     private ManagerListSongs managerListSongs;
-
     private ImageView playBtn;
-
     private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -54,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
         }
     };
+    private ImageView backBigPic;
+
+    ///
+    private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
+    private SongAdapter.RecyclerViewListener recyclerViewListener;
 
     //register to actions
     private void register_pausePlayingAudio() {
@@ -65,11 +68,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         IntentFilter intentFilter = new IntentFilter(Actions.CLOSE_SONG);
         registerReceiver(closePlayingAudio, intentFilter);
     }
-
-
-    private ImageView backBigPic;
-    private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
-    private SongAdapter.RecyclerViewListener recyclerViewListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

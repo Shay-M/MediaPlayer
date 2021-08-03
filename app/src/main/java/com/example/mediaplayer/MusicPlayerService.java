@@ -145,7 +145,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
@@ -163,7 +162,7 @@ import java.util.ArrayList;
 public class MusicPlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     final int NOTIFY_ID = 100;
-    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private final MediaPlayer mediaPlayer = new MediaPlayer();
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private int currentPlaying = 0;
     private RemoteViews remoteViews;
@@ -200,7 +199,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         Intent playIntent = new Intent(context, MusicPlayerService.class);
         playIntent.putExtra("command", Actions.PLAY_SONG);
-        PendingIntent playPendingIntent = PendingIntent.getService(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent playPendingIntent = PendingIntent.getService(context, 0, playIntent, 0);
         remoteViews.setOnClickPendingIntent(R.id.play_btn, playPendingIntent);
 
         Intent pauseIntent = new Intent(context, MusicPlayerService.class);
@@ -234,10 +233,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         String command = intent.getStringExtra("command");
-        if (managerListSongs == null) {
+        if (managerListSongs == null)
             managerListSongs = ManagerListSongs.getInstance();
-            Log.d("onStartCommand", "managerListSongs: " + managerListSongs);
-        }
+
         listOfSongs = managerListSongs.getListOfUrlSongs();
         switch (command) {
             case Actions.NEW_INSTANCE:
@@ -267,13 +265,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 playSong(false);
                 break;
             case Actions.PAUSE_SONG:
-                sendBroadcast(new Intent(Actions.PAUSE_SONG));
+                sendBroadcast(new Intent(Actions.PAUSE_SONG)); //update ui in main
                 if (mediaPlayer.isPlaying())
                     mediaPlayer.pause();
                 break;
             case Actions.CLOSE_SONG:
-                mediaPlayer.stop();
-               // stopSelf();
+                if (mediaPlayer.isPlaying())
+                    mediaPlayer.stop();
+                sendBroadcast(new Intent(Actions.CLOSE_SONG)); //update ui in main
+                stopSelf();
 
         }
         return super.onStartCommand(intent, flags, startId);
