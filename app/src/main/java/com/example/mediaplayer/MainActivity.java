@@ -25,42 +25,58 @@ import com.example.mediaplayer.SongsRecyclerView.SoundBigFragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
-    final String REGISTER_FRAGMENT_TAG = "register_fragemnt";
+    final String REGISTER_FRAGMENT_TAG = "register_fragment";
     boolean isPlaying = false;
-    private ArrayList<String> listOfSongs = new ArrayList<>();
     private Intent intent;
     private ManagerListSongs managerListSongs;
-    //private AtomicReference<SongAdapter> songAdapter;
-    //private RecyclerView recyclerView;
+
     private ImageView playBtn;
-    private ImageView backBigPic;
-    private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
 
-    private SongAdapter.RecyclerViewListener recyclerViewListener;
-//    private RecyclerViewUpdateUIListener listener;
-
-    private BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
+    private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("BroadcastReceiver", "context: " + context + "Intent: " + intent);
-            playBtn.setImageResource(R.drawable.playxhdpi);
+            Log.d("pausePlayingAudio", "context: " + context + "Intent: " + intent);
+            playBtn.setImageResource(R.drawable.pausexhdpi);
+            isPlaying = false;
 
+        }
+    };
+    private final BroadcastReceiver closePlayingAudio = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d("closePlayingAudio", "context: " + context + "Intent: " + intent);
+            playBtn.setImageResource(R.drawable.playxhdpi);
+            isPlaying = false;
 
         }
     };
 
+    //register to actions
+    private void register_pausePlayingAudio() {
+        IntentFilter intentFilter = new IntentFilter(Actions.PAUSE_SONG);
+        registerReceiver(pausePlayingAudio, intentFilter);
+    }
+
+    private void register_closePlayingAudio() {
+        IntentFilter intentFilter = new IntentFilter(Actions.CLOSE_SONG);
+        registerReceiver(closePlayingAudio, intentFilter);
+    }
+
+
+    private ImageView backBigPic;
+    private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
+    private SongAdapter.RecyclerViewListener recyclerViewListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //https://www.geeksforgeeks.org/different-ways-to-hide-action-bar-in-android-with-examples/
+        // Removing top action bar: https://www.geeksforgeeks.org/different-ways-to-hide-action-bar-in-android-with-examples/
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -68,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         playBtn = findViewById(R.id.btn_play_main);
         backBigPic = findViewById(R.id.back_big_pic);
         final ImageView nextBtn = findViewById(R.id.btn_next_main);
+        final ImageView backBtn = findViewById(R.id.btn_prev_main);
         final ImageView addBtn = findViewById(R.id.addLinkBtn);
 
 
@@ -92,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             public void onImgClick(int position, View view) {
                 Log.d("onImgClick", "position: " + position);
                 String songName = managerListSongs.getListOfSongsItems().get(position).getName();
-                managerListSongs.getListOfSongsItems().get(position).getUri();
 
                 SoundBigFragment soundBigFragment = SoundBigFragment.newInstance(songName, managerListSongs.getListOfSongsItems().get(position).getUri());
                 backBigPic.setVisibility(View.VISIBLE);
@@ -108,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         };
 
         ////
-        backBigPic.setOnClickListener(v-> showListOfSongFragment());
+        backBigPic.setOnClickListener(v -> showListOfSongFragment());
         showListOfSongFragment();
 
         //////////////////
@@ -135,16 +151,18 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             }
         });
 
+        nextBtn.setOnClickListener(view -> nextClick());
+        backBtn.setOnClickListener(view -> prevClick());
 
+        // add a song
         addBtn.setOnClickListener(view -> {
             AddSongDialog addSongDialog = new AddSongDialog();
             addSongDialog.show(getSupportFragmentManager(), "add song dialog");
 
         });
 
-        nextBtn.setOnClickListener(view -> nextClick());
-
         register_pausePlayingAudio();
+        register_closePlayingAudio();
 
     }
 
@@ -163,13 +181,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
     @Override
     public void nextClick() {
-        //managerListSongs.nextClick();
 
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.NEXT_SONG);
 
         startService(intent);
-
     }
 
     @Override
@@ -179,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         intent.putExtra("command", Actions.PREV_SONG);
 
         startService(intent);
-
     }
 
     @Override
@@ -189,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         intent.putExtra("command", Actions.PLAY_SONG);
 
         startService(intent);
-
     }
 
     @Override
@@ -197,15 +211,9 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.PAUSE_SONG);
 
-
         startService(intent);
     }
 
-    //register
-    private void register_pausePlayingAudio() {
-        IntentFilter intentFilter = new IntentFilter(Actions.PAUSE_SONG);
-        registerReceiver(pausePlayingAudio, intentFilter);
-    }
 
     /**
      * parameter from the interface AddSongDialogListener
@@ -218,29 +226,14 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         } catch (Exception e) {
             e.printStackTrace();
             Snackbar snackbar = Snackbar
-                    .make(getWindow().getDecorView().findViewById(R.id.RelativeLayout), "" + e.getMessage(), Snackbar.LENGTH_LONG);
+                    .make(getWindow().getDecorView().findViewById(R.id.RelativeLayout),
+                            "" + e.getMessage(), Snackbar.LENGTH_LONG);
             snackbar.show();
         }
-        //songAdapter.updateAndGet()
-        // update the view list
-        ////songAdapter.set(new SongAdapter(managerListSongs.getListOfSongsItems(), this));
-        ////recyclerView.setAdapter(songAdapter.get());
-
-//        listener.onUpdateListItem();
-
 
         //Hide the Keyboard
         com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
     }
 
-//    public void setListener(MainActivity.RecyclerViewUpdateUIListener listener) {
-//
-//        this.listener = listener;
-//    }
-//
-//    public interface RecyclerViewUpdateUIListener {
-//        //        void onInsertItem(int position, View view);
-//        void onUpdateListItem();
-//    }
 }
 

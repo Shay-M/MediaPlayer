@@ -69,10 +69,10 @@ public class SoundBigFragment extends Fragment {
         imgUri = Uri.parse(mSongUri);
 
         TextView songTitle = rootView.findViewById(R.id.big_name_song);
+//        songTitle.setAutoSizeTextTypeUniformWithConfiguration(20,28,2,1);
         ImageView songImg = rootView.findViewById(R.id.big_pic_song);
         songTitle.setText(mSongName);
         Glide.with(this).load(imgUri).centerCrop().into(songImg);//.thumbnail(0.10f)
-
 
 
         return rootView;

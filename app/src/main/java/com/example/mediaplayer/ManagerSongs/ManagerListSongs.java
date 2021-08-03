@@ -32,14 +32,14 @@ public class ManagerListSongs {
         listOfSongsItems = new ArrayList<>();
 
 
-        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
-        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
+//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
+//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
+//        listOfUrlSongsToAddFirstTime.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
+//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3");
+//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3");
+//        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
+//        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+//        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
         listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
         listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
         listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
@@ -91,7 +91,7 @@ public class ManagerListSongs {
     }
 
     public ArrayList<String> getListOfUrlSongs() {
-        Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
+        //Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
         return listOfUrlSongs;
     }
 

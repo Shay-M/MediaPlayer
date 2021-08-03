@@ -1,16 +1,20 @@
 package com.example.mediaplayer.SongsRecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.R;
+
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +27,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private  static SongAdapter.RecyclerViewListener recyclerViewListener = null;
+    private static SongAdapter.RecyclerViewListener recyclerViewListener = null;
 
     private RecyclerView recyclerView;
     private ManagerListSongs managerListSongs;
@@ -87,7 +91,6 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
         managerListSongs = ManagerListSongs.getInstance();
 
         songAdapter = new SongAdapter(managerListSongs.getListOfSongsItems(), getActivity());
-//        songAdapter.notifyDataSetChanged();
 
 
         songAdapter.setListener(recyclerViewListener);
@@ -98,10 +101,39 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
         managerListSongs.setListener(new ManagerListSongs.RecyclerViewUpdateUIListener() {
             @Override
             public void onUpdateListItem() {
-                songAdapter.notifyDataSetChanged();
-                //songAdapter.notifyItemInserted(songAdapter.getItemCount() + 1);
+//                songAdapter.notifyDataSetChanged();
+                songAdapter.notifyItemInserted(songAdapter.getItemCount() + 1);
             }
         });
+
+
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+
+                Collections.swap(managerListSongs.getListOfSongsItems(), fromPosition, toPosition);
+                Collections.swap(managerListSongs.getListOfUrlSongs(), fromPosition, toPosition);
+                Log.d("ItemTouchHelper", "onMove: ");
+                songAdapter.notifyItemMoved(fromPosition, toPosition);
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+                managerListSongs.getListOfSongsItems().remove(viewHolder.getAdapterPosition());
+                managerListSongs.getListOfUrlSongs().remove(viewHolder.getAdapterPosition());
+                songAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
 
         return rootView;
     }

@@ -10,6 +10,7 @@ public interface ActionsPlayer {
 
     void pauseClick();
 
+
 }
 
 

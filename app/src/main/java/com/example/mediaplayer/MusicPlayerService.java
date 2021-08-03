@@ -237,9 +237,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         if (managerListSongs == null) {
             managerListSongs = ManagerListSongs.getInstance();
             Log.d("onStartCommand", "managerListSongs: " + managerListSongs);
-            listOfSongs = managerListSongs.getListOfUrlSongs();
         }
-
+        listOfSongs = managerListSongs.getListOfUrlSongs();
         switch (command) {
             case Actions.NEW_INSTANCE:
                 if (!mediaPlayer.isPlaying()) {
@@ -273,7 +272,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     mediaPlayer.pause();
                 break;
             case Actions.CLOSE_SONG:
-                stopSelf();
+                mediaPlayer.stop();
+               // stopSelf();
 
         }
         return super.onStartCommand(intent, flags, startId);
@@ -282,10 +282,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private void playSong(boolean NextOrPrev) {
 
-        listOfSongs = managerListSongs.getListOfUrlSongs();
+        //listOfSongs = managerListSongs.getListOfUrlSongs();
 
         currentPlaying = managerListSongs.getCurrentPlaying(NextOrPrev);
-
 
         mediaPlayer.reset();
 
@@ -351,8 +350,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     }
-
-
 
 
     /*private void updateNotification(){
