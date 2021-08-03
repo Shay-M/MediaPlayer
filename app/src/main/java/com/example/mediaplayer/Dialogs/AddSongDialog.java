@@ -22,7 +22,7 @@ import com.example.mediaplayer.R;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 
 public class AddSongDialog extends DialogFragment {
-
+    final int GALLERY_REQUEST_CODE = 3;
     private EditText linkText;
     private EditText nameText;
     private ImageView picContentView;
@@ -38,6 +38,7 @@ public class AddSongDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
         cameraManagerUrl = CameraManagerUrl.getInstance();
         managerListSongs = ManagerListSongs.getInstance();
 
@@ -56,7 +57,6 @@ public class AddSongDialog extends DialogFragment {
                         String Name = nameText.getText().toString();
                         String url = linkText.getText().toString();
 
-
                         listener.applyAddSong(Name, url, imgUri);
 
                     }
@@ -67,16 +67,18 @@ public class AddSongDialog extends DialogFragment {
         nameText = view.findViewById(R.id.dialog_name);
 
         ImageView takeApicBtn = view.findViewById(R.id.take_a_pic);
-        ImageView galleriapicBtn = view.findViewById(R.id.add_a_pic);
+        ImageView galleriaPicBtn = view.findViewById(R.id.add_a_pic);
 
         picContentView = view.findViewById(R.id.song_image);
 
         //From Camera
         takeApicBtn.setOnClickListener(v -> takeApicFromCamera());
         //From Galleria
-        galleriapicBtn.setOnClickListener(v -> picFromGalleria());
+        galleriaPicBtn.setOnClickListener(v -> picFromGalleria());
 
         return builder.create();
+
+
     }
 
     private void picFromGalleria() {
@@ -87,18 +89,20 @@ public class AddSongDialog extends DialogFragment {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 3);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
     }
 
-    //Galleria
+    //Galleria Result
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 3) {
+        if (requestCode == GALLERY_REQUEST_CODE) {
             Log.d("onActivityResult", "Intent: " + data);
-
-            imgUri = data.getData();
-            Glide.with(this).load(imgUri).centerCrop().into(picContentView);//.thumbnail(0.10f)
+            if (data != null) {
+                imgUri = data.getData();
+                Glide.with(this).load(imgUri).centerCrop().thumbnail(0.10f).into(picContentView);
+            }
         }
+
     }
 
     @Override
@@ -114,8 +118,9 @@ public class AddSongDialog extends DialogFragment {
 
     private void takeApicFromCamera() {
         imgUri = cameraManagerUrl.dispatchTakePictureIntent();
+        Log.d("takeApicFromCamera", "imgUri: " + imgUri);
 
-        Glide.with(this).load(imgUri).centerCrop().into(picContentView);//.thumbnail(0.10f)
+        Glide.with(this).load(imgUri).centerCrop().thumbnail(0.10f).into(picContentView);
     }
 
 

@@ -1,19 +1,16 @@
 package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/2021 */
 
-import android.net.Uri;
+import static com.example.mediaplayer.ManagerSongs.ManagerSaveSongs.saveSongList;
+
 import android.os.Parcel;
 import android.util.Log;
-import android.view.View;
 
-import com.example.mediaplayer.MainActivity;
-import com.example.mediaplayer.MusicPlayerService;
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ManagerListSongs {
 
@@ -21,40 +18,43 @@ public class ManagerListSongs {
     private static ManagerListSongs instead;
     private final ArrayList<String> listOfUrlSongs;
     private ArrayList<SongItem> listOfSongsItems;
-    private MusicPlayerService musicPlayerService;
     private int currentPlaying;
     private RecyclerViewUpdateUIListener listener;
+    private Boolean FirstTime = false;
+
 
     private ManagerListSongs() {
-        currentPlaying = 0; // todo
+        currentPlaying = 0;
         listOfUrlSongs = new ArrayList<>();
-        ArrayList<String> listOfUrlSongsToAddFirstTime = new ArrayList<>();
         listOfSongsItems = new ArrayList<>();
 
+        try {
+            listOfSongsItems = ManagerSaveSongs.readSongList(null);
 
-//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3");
-//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3");
-//        listOfUrlSongsToAddFirstTime.add("https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3");
-//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3");
-//        listOfUrlSongsToAddFirstTime.add("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
-        listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
+        } catch (Exception e) {
+            FirstTime = true;
+            Log.d("ManagerListSongs", "ManagerSaveSongs: " + e.getMessage());
 
-        for (String songUrl : listOfUrlSongsToAddFirstTime) {
-            try {
-                this.addSong(songUrl, null);//todo
-            } catch (Exception e) {
-                Log.d("ManagerListSongs", "songUrl: " + e.getMessage() + " songUrl: " + songUrl);
+            ArrayList<String> listOfUrlSongsToAddFirstTime = new ArrayList<>();
+
+            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
+            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
+
+            for (String songUrl : listOfUrlSongsToAddFirstTime) {
+                try {
+                    this.addSong(songUrl, null);//todo
+                } catch (Exception ee) {
+                    Log.d("ManagerListSongs", "songUrl: " + ee.getMessage() + " songUrl: " + songUrl);
+                }
+
             }
-//            Set<String> noDuplicatesDlistOfUrlSongs = new LinkedHashSet<>(listOfUrlSongs);
-//            https://stackoverflow.com/questions/203984/how-do-i-remove-repeated-elements-from-arraylist
-//            Log.d(">>>>>>", ">>>songUrl: " + songUrl);
 
-//            todo get from sd  list and  currentPlaying = 0;
         }
-
-
+        if (!FirstTime)
+            for (SongItem songItm : listOfSongsItems) {
+                listOfUrlSongs.add(songItm.getUrl());
+            }
 
     }
 
@@ -67,6 +67,10 @@ public class ManagerListSongs {
         if (instead == null)
             instead = new ManagerListSongs();
         return instead;
+    }
+
+    public void setCurrentPlaying(int currentPlaying) {
+        this.currentPlaying = currentPlaying;
     }
 
     public int getCurrentPlaying(boolean next_p) {
@@ -90,15 +94,24 @@ public class ManagerListSongs {
     }
 
     public ArrayList<String> getListOfUrlSongs() {
-        //Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
         return listOfUrlSongs;
+    }
+
+    public void SaveSongList() {
+        saveSongList(null, listOfSongsItems);
+    }
+
+    public void RemovingSongFromList(int position) {
+        listOfSongsItems.remove(position);
+        listOfUrlSongs.remove(position);
+        saveSongList(null, listOfSongsItems);
     }
 
     /**
      * @param stringUrl song url to add
      * @throws Exception if the url is not in a valid
      */
-    public void addSong(String stringUrl, Uri imgUri) throws Exception {
+    public void addSong(String stringUrl, String imgUri) throws Exception {
         //get song name
         String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
 
@@ -118,7 +131,7 @@ public class ManagerListSongs {
             listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, imgUri));
             listener.onUpdateListItem();
         } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
-
+        SaveSongList();
     }
 
     public void setListener(RecyclerViewUpdateUIListener listener) {
@@ -132,8 +145,10 @@ public class ManagerListSongs {
     }
 
 
-
-
 }
 
+
+//  Set<String> noDuplicatesDlistOfUrlSongs = new LinkedHashSet<>(listOfUrlSongs);
+//            https://stackoverflow.com/questions/203984/how-do-i-remove-repeated-elements-from-arraylist
+//            Log.d(">>>>>>", ">>>songUrl: " + songUrl);
 

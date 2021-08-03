@@ -14,17 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ManagerSaveSongs {
+    static public Context static_context = null;
 
     public static void saveSongList(Context context, List<SongItem> songs) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    FileOutputStream fos = context.openFileOutput("songs_list", Context.MODE_PRIVATE);
+                    FileOutputStream fos = static_context.openFileOutput("songs_list", Context.MODE_PRIVATE);
                     ObjectOutputStream oos = new ObjectOutputStream(fos);
                     oos.writeObject(songs);
                     oos.close();
-                    Log.d("saveSongList", "i am happy");
+                    Log.d("saveSongList", "saveSongList!");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -32,17 +33,18 @@ public class ManagerSaveSongs {
         }).start();
     }
 
-    public static ArrayList<SongItem> readSongList(Context context) {
+    public static ArrayList<SongItem> readSongList(Context context) throws Exception {
 
         ArrayList<SongItem> songs = null;
 
         try {
-            FileInputStream fis = context.openFileInput("songs_list");
+            FileInputStream fis = static_context.openFileInput("songs_list");
             ObjectInputStream ois = new ObjectInputStream(fis);
             songs = (ArrayList<SongItem>) ois.readObject();
             fis.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new Exception(e);
+
         }
 
         return songs;

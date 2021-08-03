@@ -5,7 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -124,10 +127,21 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
+//                managerListSongs.RemovingSongFromList(viewHolder.getAdapterPosition());
                 managerListSongs.getListOfSongsItems().remove(viewHolder.getAdapterPosition());
                 managerListSongs.getListOfUrlSongs().remove(viewHolder.getAdapterPosition());
                 songAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+
+            @Override
+            public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+                super.onSelectedChanged(viewHolder, actionState);
+
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                   // scaleUpAnimation.setFillAfter(true);
+//                    Animation animation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.animate_scale_down);
+//                    viewHolder.itemView.startAnimation(animation);
+                }
             }
         };
 

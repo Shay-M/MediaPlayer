@@ -21,13 +21,10 @@ import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.ManagerSongs.ManagerSaveSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
-import com.example.mediaplayer.SongsRecyclerView.SongItem;
 import com.example.mediaplayer.SongsRecyclerView.SongRecyclerView_UpdateUI_Fragment;
 import com.example.mediaplayer.SongsRecyclerView.SoundBigFragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
@@ -36,12 +33,15 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     private Intent intent;
     private ManagerListSongs managerListSongs;
     private ImageView playBtn;
+    // pause and close from notification
+
+
     private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
             Log.d("pausePlayingAudio", "context: " + context + "Intent: " + intent);
-            playBtn.setImageResource(R.drawable.pausexhdpi);
+            playBtn.setImageResource(R.drawable.playxhdpi);
             isPlaying = false;
 
         }
@@ -57,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         }
     };
     private ImageView backBigPic;
-
-    ///
     private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
     private SongAdapter.RecyclerViewListener recyclerViewListener;
 
@@ -71,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     private void register_closePlayingAudio() {
         IntentFilter intentFilter = new IntentFilter(Actions.CLOSE_SONG);
         registerReceiver(closePlayingAudio, intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        managerListSongs.SaveSongList();
     }
 
     @Override
@@ -89,15 +93,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         final ImageView backBtn = findViewById(R.id.btn_prev_main);
         final ImageView addBtn = findViewById(R.id.addLinkBtn);
 
-
+        ManagerSaveSongs.static_context = this; // init save manager
         managerListSongs = ManagerListSongs.getInstance();
 
         CameraManagerUrl.init(this);
-        ArrayList<SongItem> mSongsList = new ArrayList<>();
-        mSongsList = managerListSongs.getListOfSongsItems();
 
-        ManagerSaveSongs.saveSongList(this, mSongsList);
-//        Log.d("ling", " ManagerSaveSongs.readSongList(this): " + ManagerSaveSongs.readSongList(this));
 
 
         /////////////////
@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             @Override
             public void onItemClick(int position, View view) {
                 Log.d("onItemClick", "position: " + position);
+                pauseClick();
+                managerListSongs.setCurrentPlaying(position - 1); // update list of songs items
+                nextClick();
             }
 
             @Override
@@ -117,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
                 Log.d("onImgClick", "position: " + position);
                 String songName = managerListSongs.getListOfSongsItems().get(position).getName();
 
-                SoundBigFragment soundBigFragment = SoundBigFragment.newInstance(songName, managerListSongs.getListOfSongsItems().get(position).getUri());
+                SoundBigFragment soundBigFragment = SoundBigFragment.newInstance(songName, Uri.parse(managerListSongs.getListOfSongsItems().get(position).getUri()));
                 backBigPic.setVisibility(View.VISIBLE);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -132,30 +135,27 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
         ////
         backBigPic.setOnClickListener(v -> showListOfSongFragment());
+
         showListOfSongFragment();
 
         //////////////////
 
-
         //play button
         playBtn.setOnClickListener(view -> {
             if (!isPlaying) {
-
                 //first time
                 if (intent == null) {
                     intent = new Intent(MainActivity.this, MusicPlayerService.class);
                     intent.putExtra("command", "new_instance");
-
                     startService(intent);
+                    isPlaying = true;
+                    playBtn.setImageResource(R.drawable.pausexhdpi);
 
                 } else playClick();
-                isPlaying = true;
-                playBtn.setImageResource(R.drawable.pausexhdpi);
-            } else {
-                isPlaying = false;
+
+            } else
                 pauseClick();
-                playBtn.setImageResource(R.drawable.playxhdpi);
-            }
+
         });
 
         nextBtn.setOnClickListener(view -> nextClick());
@@ -206,17 +206,22 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
     @Override
     public void playClick() {
-
+        isPlaying = true;
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.PLAY_SONG);
+
+        playBtn.setImageResource(R.drawable.pausexhdpi);
 
         startService(intent);
     }
 
     @Override
     public void pauseClick() {
+        isPlaying = false;
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.PAUSE_SONG);
+
+        playBtn.setImageResource(R.drawable.playxhdpi);
 
         startService(intent);
     }
@@ -228,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     @Override
     public void applyAddSong(String Name, String songUrl, Uri imgUri) {
         try {
-            managerListSongs.addSong(songUrl, imgUri);
+            managerListSongs.addSong(songUrl, imgUri.toString());
 
         } catch (Exception e) {
             e.printStackTrace();

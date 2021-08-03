@@ -169,18 +169,15 @@ public class CameraManagerUrl {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                photoURI = FileProvider.getUriForFile(context,
-                        AUTHORITY_OF_A_FILEPROVIDER ,
-                        photoFile);
+                photoURI = FileProvider.getUriForFile(context, AUTHORITY_OF_A_FILEPROVIDER, photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                Log.d("TAGgg", "dispatchTakePictureIntent: " + context);
                 context.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
-//            return photoURI;
         }
 
         return photoURI;
     }
+
 
     private File createImageFile() throws IOException {
         // Create an image file name

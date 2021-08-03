@@ -318,7 +318,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     /**
-     * Update Notification ui
+     * Update Notification
      */
     public void UpdateSongDetails() {
         String stringUrl = listOfSongs.get(currentPlaying);
@@ -338,13 +338,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 notification,
                 NOTIFY_ID);
 
-        Uri uri = managerListSongs.getListOfSongsItems().get(currentPlaying).getUri();
+        String uri = managerListSongs.getListOfSongsItems().get(currentPlaying).getUri();
 
 
         Glide
                 .with(this.getApplicationContext())
                 .asBitmap()
-                .load(uri)
+                .load(Uri.parse(uri))
                 .centerCrop()
                 .into(notificationTarget);
 
