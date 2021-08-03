@@ -199,7 +199,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         Intent playIntent = new Intent(context, MusicPlayerService.class);
         playIntent.putExtra("command", Actions.PLAY_SONG);
-        PendingIntent playPendingIntent = PendingIntent.getService(context, 0, playIntent, 0);
+        PendingIntent playPendingIntent = PendingIntent.getService(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.play_btn, playPendingIntent);
 
         Intent pauseIntent = new Intent(context, MusicPlayerService.class);

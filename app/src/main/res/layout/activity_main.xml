@@ -53,9 +53,11 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignTop="@+id/btn_play_main"
+        android:layout_alignBottom="@+id/btn_play_main"
         android:layout_alignParentStart="true"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="3dp"
         android:src="@drawable/backxhdpi"
         tools:ignore="ContentDescription" />
 
@@ -63,10 +65,12 @@
         android:id="@+id/btn_play_main"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="22dp"
-        android:layout_marginBottom="47dp"
-        android:layout_toEndOf="@+id/btn_prev_main"
+        android:layout_marginStart="160dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="60dp"
         android:src="@drawable/playxhdpi"
         tools:ignore="ContentDescription" />
 
@@ -77,11 +81,9 @@
         android:layout_alignTop="@+id/btn_play_main"
         android:layout_alignBottom="@+id/btn_play_main"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="-3dp"
-        android:layout_toEndOf="@+id/btn_play_main"
+        android:layout_marginBottom="0dp"
         android:src="@drawable/nextxhdpi"
         tools:ignore="ContentDescription" />
 
@@ -91,8 +93,8 @@
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="33dp"
-        android:layout_marginBottom="41dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="50dp"
         android:background="@null"
         android:src="@drawable/addxhdpi"
         tools:ignore="ContentDescription" />

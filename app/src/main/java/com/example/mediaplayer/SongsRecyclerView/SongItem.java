@@ -2,7 +2,9 @@ package com.example.mediaplayer.SongsRecyclerView;/* Created by Shay Mualem 23/0
 
 import android.net.Uri;
 
-public class SongItem {
+import java.io.Serializable;
+
+public class SongItem implements Serializable {
 
     private String Url;
     private String Name;
@@ -15,7 +17,6 @@ public class SongItem {
             uri = Uri.parse("file:///android_asset/musicxhdpi.png");
         this.uri = uri;
 
-
     }
 
     public SongItem() {
@@ -25,17 +26,10 @@ public class SongItem {
         return uri;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
-    }
-
     public String getUrl() {
         return Url;
     }
 
-    public void setUrl(String url) {
-        Url = url;
-    }
 
     public String getName() {
         return Name;

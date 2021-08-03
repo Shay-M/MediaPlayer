@@ -19,11 +19,15 @@ import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
 import com.example.mediaplayer.Dialogs.AddSongDialog;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
+import com.example.mediaplayer.ManagerSongs.ManagerSaveSongs;
 import com.example.mediaplayer.SongsRecyclerView.SongAdapter;
+import com.example.mediaplayer.SongsRecyclerView.SongItem;
 import com.example.mediaplayer.SongsRecyclerView.SongRecyclerView_UpdateUI_Fragment;
 import com.example.mediaplayer.SongsRecyclerView.SoundBigFragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
@@ -89,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         managerListSongs = ManagerListSongs.getInstance();
 
         CameraManagerUrl.init(this);
+        ArrayList<SongItem> mSongsList = new ArrayList<>();
+        mSongsList = managerListSongs.getListOfSongsItems();
+
+        ManagerSaveSongs.saveSongList(this, mSongsList);
+//        Log.d("ling", " ManagerSaveSongs.readSongList(this): " + ManagerSaveSongs.readSongList(this));
 
 
         /////////////////
