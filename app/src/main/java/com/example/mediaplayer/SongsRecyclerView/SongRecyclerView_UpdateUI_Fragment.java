@@ -1,6 +1,8 @@
 package com.example.mediaplayer.SongsRecyclerView;
 
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -139,7 +142,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
-                String Message = "You are going to delete the song: " + managerListSongs.getListOfSongsItems().get(viewHolder.getAdapterPosition()).getName() + "//nThis action cannot be undone!";
+                Spanned Message = Html.fromHtml("You are going to delete the song: " +"<b>"+ managerListSongs.getListOfSongsItems().get(viewHolder.getAdapterPosition()).getName() +"</b>"+ "\nThis action cannot be undone!", HtmlCompat.FROM_HTML_MODE_LEGACY);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
                 builder.setTitle("Please confirm").setMessage(Message).setIcon(android.R.drawable.ic_menu_delete)
