@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.mediaplayer.R;
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +74,12 @@ public class SoundBigFragment extends Fragment {
 //        songTitle.setAutoSizeTextTypeUniformWithConfiguration(20,28,2,1);
         ImageView songImg = rootView.findViewById(R.id.big_pic_song);
         songTitle.setText(mSongName);
-        Glide.with(this).load(imgUri).centerCrop().into(songImg);//.thumbnail(0.10f)
+
+        if (imgUri == null)
+            imgUri = Uri.parse("file:///android_asset/musicxhdpi.png"); //Uri.parse
+
+            Glide.with(this).load(imgUri).transition(withCrossFade()).centerCrop().into(songImg);//.thumbnail(0.10f)
+
 
 
         return rootView;

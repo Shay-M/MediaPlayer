@@ -65,7 +65,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         ImageView imageView = holder.songImageIv;
 
         if (SongItem.getUri() != null)
-                Glide.with(context).load(SongItem.getUri()).centerCrop().into(imageView);
+                Glide.with(context).load(SongItem.getUri()).thumbnail(0.10f).centerCrop().into(imageView);
             else {
                 // make sure Glide doesn't load anything into this view until told otherwise
                 Glide.with(context).clear(holder.songImageIv);

@@ -143,7 +143,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -349,7 +348,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         final Notification notification = builder.build();
         notificationManager.notify(NOTIFY_ID, notification);
 
-        //add pic using glide https://futurestud.io/tutorials/glide-loading-images-into-notifications-and-appwidgets
+/*
+        add pic using glide https://futurestud.io/tutorials/glide-loading-images-into-notifications-and-appwidgets
+*/
 
         NotificationTarget notificationTarget = new NotificationTarget(
 
@@ -361,17 +362,20 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         String uri = managerListSongs.getListOfSongsItems().get(currentPlaying).getUri();
 
+        Log.d("shay", "uri: "+uri);
+
+        if (uri == null)
+            uri = "file:///android_asset/musicxhdpi.png"; //Uri.parse
 
         Glide
                 .with(this.getApplicationContext())
                 .asBitmap()
-                .load(Uri.parse(uri))
+                .load(uri)
+                .thumbnail(0.10f)
                 .centerCrop()
                 .into(notificationTarget);
 
-
     }
-
 
     /*private void updateNotification(){
 

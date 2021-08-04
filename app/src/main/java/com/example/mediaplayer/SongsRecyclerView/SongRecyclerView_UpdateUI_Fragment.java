@@ -142,7 +142,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
-                Spanned Message = Html.fromHtml("You are going to delete the song: " +"<b>"+ managerListSongs.getListOfSongsItems().get(viewHolder.getAdapterPosition()).getName() +"</b>"+ "\nThis action cannot be undone!", HtmlCompat.FROM_HTML_MODE_LEGACY);
+                Spanned Message = Html.fromHtml("You are going to delete the song:\n" + "<br>" + "<b>" + managerListSongs.getListOfSongsItems().get(viewHolder.getAdapterPosition()).getName() + "<br>" + "<br>" + "</b>" + "This action cannot be undone!", HtmlCompat.FROM_HTML_MODE_LEGACY);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
                 builder.setTitle("Please confirm").setMessage(Message).setIcon(android.R.drawable.ic_menu_delete)
