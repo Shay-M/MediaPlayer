@@ -57,6 +57,9 @@ public class AddSongDialog extends DialogFragment {
                         String Name = nameText.getText().toString();
                         String url = linkText.getText().toString();
 
+                        if (imgUri == null)
+                            imgUri = Uri.parse("file:///android_asset/musicxhdpi.png"); //Uri.parse
+
                         listener.applyAddSong(Name, url, imgUri);
 
                     }

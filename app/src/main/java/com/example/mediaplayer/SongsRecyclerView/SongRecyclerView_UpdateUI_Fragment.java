@@ -1,13 +1,13 @@
 package com.example.mediaplayer.SongsRecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -109,25 +109,33 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
             }
         });
 
-
+        // https://www.youtube.com/watch?v=uvzP8KTz4Fg
         ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                ItemTouchHelper.START | ItemTouchHelper.END) {
+
+            // Load the animation
+            final Animation scaleDownAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.animate_scale_down);
+            final Animation scaleUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.animate_scale_up);
+
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
 
+                // update lists the new Position
                 Collections.swap(managerListSongs.getListOfSongsItems(), fromPosition, toPosition);
                 Collections.swap(managerListSongs.getListOfUrlSongs(), fromPosition, toPosition);
-                Log.d("ItemTouchHelper", "onMove: ");
+
+                // update ui
                 songAdapter.notifyItemMoved(fromPosition, toPosition);
                 return true;
             }
 
+
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//                managerListSongs.RemovingSongFromList(viewHolder.getAdapterPosition());
+//                managerListSongs.RemovingSongFromList(viewHolder.getAdapterPosition()); //todo
                 managerListSongs.getListOfSongsItems().remove(viewHolder.getAdapterPosition());
                 managerListSongs.getListOfUrlSongs().remove(viewHolder.getAdapterPosition());
                 songAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
@@ -136,12 +144,21 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
             @Override
             public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
                 super.onSelectedChanged(viewHolder, actionState);
+                // Log.d("onSelectedChanged", "actionState: "+ actionState);
+                // Log.d("onSelectedChanged", "");
 
                 if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-                   // scaleUpAnimation.setFillAfter(true);
-//                    Animation animation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.animate_scale_down);
-//                    viewHolder.itemView.startAnimation(animation);
+                    scaleUpAnimation.setFillAfter(true);
+                    viewHolder.itemView.startAnimation(scaleUpAnimation);
                 }
+
+            }
+
+            @Override
+            public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                super.clearView(recyclerView, viewHolder);
+                if (viewHolder.itemView.getAnimation() != null)
+                    viewHolder.itemView.startAnimation(scaleDownAnimation);
             }
         };
 

@@ -11,20 +11,51 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="206dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:paddingTop="10dp"
+            android:paddingBottom="3dp"
+            android:src="@drawable/logoxhdpi"
+            tools:ignore="ContentDescription" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_of_songs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="5dp" />
+            android:padding="3dp"
+            tools:listitem="@layout/card_of_song"/>
 
-        <ImageView
-            android:id="@+id/tape"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="200dp"
             android:layout_height="206dp"
-            android:layout_weight="0.3"
-            android:src="@drawable/tapexhdpi"
-            tools:ignore="ContentDescription" />
+            android:layout_gravity="center"
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:id="@+id/tape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tapexhdpi"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/spain1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="49dp"
+                android:layout_marginEnd="45dp"
+                android:layout_marginBottom="58dp"
+                android:src="@drawable/span1xhdpi"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
 
 
     </LinearLayout>

@@ -33,9 +33,8 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     private Intent intent;
     private ManagerListSongs managerListSongs;
     private ImageView playBtn;
+
     // pause and close from notification
-
-
     private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         addBtn.setOnClickListener(view -> {
             AddSongDialog addSongDialog = new AddSongDialog();
             addSongDialog.show(getSupportFragmentManager(), "add song dialog");
-
+            // get from applyAddSong
         });
 
         register_pausePlayingAudio();
@@ -232,8 +231,9 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
      */
     @Override
     public void applyAddSong(String Name, String songUrl, Uri imgUri) {
+
         try {
-            managerListSongs.addSong(songUrl, imgUri.toString());
+            managerListSongs.addSong(songUrl, imgUri.toString()); //todo add name
 
         } catch (Exception e) {
             e.printStackTrace();
