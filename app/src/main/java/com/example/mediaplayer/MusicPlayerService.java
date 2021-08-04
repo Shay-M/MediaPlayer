@@ -145,6 +145,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
@@ -166,6 +167,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private int currentPlaying = 0;
     private RemoteViews remoteViews;
+    private Boolean isPlaying = false;
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
     private ManagerListSongs managerListSongs;
@@ -241,19 +243,18 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             case Actions.NEW_INSTANCE:
                 if (!mediaPlayer.isPlaying()) {
                     try {
-
                         mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
-                        UpdateSongDetails();
                         mediaPlayer.prepareAsync();
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
                 break;
-            case Actions.PLAY_SONG:
-                if (!mediaPlayer.isPlaying())
-                    mediaPlayer.start();
-                break;
+//            case Actions.PLAY_SONG:
+//                if (!mediaPlayer.isPlaying())
+//                    mediaPlayer.start();
+//                break;
             case Actions.NEXT_SONG:
                 if (mediaPlayer.isPlaying())
                     mediaPlayer.stop();
@@ -265,9 +266,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 playSong(false);
                 break;
             case Actions.PAUSE_SONG:
-                sendBroadcast(new Intent(Actions.PAUSE_SONG)); //update ui in main
-                if (mediaPlayer.isPlaying())
+                if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
+                    sendBroadcast(new Intent(Actions.PAUSE_SONG)); //update ui in main}
+                } else {
+                    mediaPlayer.start();
+                    sendBroadcast(new Intent(Actions.PLAY_SONG)); //update ui in main
+                }
+                UpdateSongDetails();
                 break;
             case Actions.CLOSE_SONG:
                 if (mediaPlayer.isPlaying())
@@ -276,6 +282,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 stopSelf();
 
         }
+//        UpdateSongDetails();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -294,6 +302,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     @Override
@@ -303,8 +313,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        UpdateSongDetails();
         mediaPlayer.start();
+        sendBroadcast(new Intent(Actions.PLAY_SONG)); //update ui in main
+        UpdateSongDetails();
     }
 
     @Override
@@ -321,9 +332,19 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      * Update Notification
      */
     public void UpdateSongDetails() {
+
         String stringUrl = listOfSongs.get(currentPlaying);
 
+        //update sound title
         remoteViews.setTextViewText(R.id.notification_title, stringUrl.substring(stringUrl.lastIndexOf('/') + 1));
+
+        Log.d("UpdateSongDetails", "mediaPlayer.isPlaying(): " + mediaPlayer.isPlaying());
+
+        if (mediaPlayer.isPlaying())
+            remoteViews.setImageViewResource(R.id.pause_btn, R.drawable.pausexhdpi);
+        else
+            remoteViews.setImageViewResource(R.id.pause_btn, R.drawable.playxhdpi);
+
 
         final Notification notification = builder.build();
         notificationManager.notify(NOTIFY_ID, notification);

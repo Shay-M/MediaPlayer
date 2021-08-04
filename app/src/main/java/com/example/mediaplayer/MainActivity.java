@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     private Intent intent;
     private ManagerListSongs managerListSongs;
     private ImageView playBtn;
-
     // pause and close from notification
     private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
@@ -43,8 +42,21 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             playBtn.setImageResource(R.drawable.playxhdpi);
             isPlaying = false;
 
+
         }
     };
+    private final BroadcastReceiver playPlayingAudio = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d("playPlayingAudio", "context: " + context + "Intent: " + intent);
+            playBtn.setImageResource(R.drawable.pausexhdpi);
+            playBtn.setAlpha(1f);
+            isPlaying = true;
+
+        }
+    };
+
     private final BroadcastReceiver closePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -55,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
         }
     };
+
     private ImageView backBigPic;
     private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
     private SongAdapter.RecyclerViewListener recyclerViewListener;
@@ -66,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     }
 
     private void register_closePlayingAudio() {
+        IntentFilter intentFilter = new IntentFilter(Actions.PLAY_SONG);
+        registerReceiver(playPlayingAudio, intentFilter);
+    }
+
+    private void register_playPlayingAudio() {
         IntentFilter intentFilter = new IntentFilter(Actions.CLOSE_SONG);
         registerReceiver(closePlayingAudio, intentFilter);
     }
@@ -96,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         managerListSongs = ManagerListSongs.getInstance();
 
         CameraManagerUrl.init(this);
-
 
 
         /////////////////
@@ -142,18 +159,17 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         //play button
         playBtn.setOnClickListener(view -> {
             if (!isPlaying) {
-                //first time
-                if (intent == null) {
+
+                if (intent == null) { //first time
                     intent = new Intent(MainActivity.this, MusicPlayerService.class);
                     intent.putExtra("command", "new_instance");
                     startService(intent);
-                    isPlaying = true;
-                    playBtn.setImageResource(R.drawable.pausexhdpi);
 
                 } else playClick();
-
-            } else
-                pauseClick();
+                playBtn.setAlpha(0.4f);
+                //isPlaying = true;
+                //playBtn.setImageResource(R.drawable.pausexhdpi);
+            } else pauseClick();
 
         });
 
@@ -168,9 +184,11 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         });
 
         register_pausePlayingAudio();
+        register_playPlayingAudio();
         register_closePlayingAudio();
 
     }
+
 
     private void showListOfSongFragment() {
 
@@ -205,22 +223,24 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
     @Override
     public void playClick() {
-        isPlaying = true;
+        Log.d("TAG", "playClick: ");
+//        isPlaying = true;
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
-        intent.putExtra("command", Actions.PLAY_SONG);
+        intent.putExtra("command", Actions.PAUSE_SONG);
 
-        playBtn.setImageResource(R.drawable.pausexhdpi);
+//        playBtn.setImageResource(R.drawable.pausexhdpi);
 
         startService(intent);
     }
 
     @Override
     public void pauseClick() {
-        isPlaying = false;
+        Log.d("TAG", "pauseClick: ");
+//        isPlaying = false;
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.PAUSE_SONG);
 
-        playBtn.setImageResource(R.drawable.playxhdpi);
+//        playBtn.setImageResource(R.drawable.playxhdpi);
 
         startService(intent);
     }
@@ -242,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
                             "" + e.getMessage(), Snackbar.LENGTH_LONG);
             snackbar.show();
         }
-
+        managerListSongs.SaveSongList();
         //Hide the Keyboard
         com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
     }

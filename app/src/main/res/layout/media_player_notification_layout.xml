@@ -14,9 +14,9 @@
         android:layout_height="100dp"
         android:layout_weight="1"
         android:background="@color/_dark_blue"
+        android:cropToPadding="true"
         android:padding="3dp"
         android:src="@drawable/musicxxhdpi"
-        android:cropToPadding="true"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -34,7 +34,7 @@
                 android:layout_width="331dp"
                 android:layout_height="28dp"
                 android:layout_weight="1"
-                android:gravity="bottom"
+                android:gravity="center"
                 android:maxLength="30"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -60,10 +60,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_gravity="start"
             android:layout_weight="1"
-            android:paddingStart="2dp"
-            android:paddingEnd="10dp">
+            android:gravity="start"
+            android:paddingStart="30dp"
+            android:paddingEnd="60dp">
 
+
+            <ImageButton
+                android:id="@+id/prev_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:contentDescription="@string/previous"
+                android:scaleType="centerInside"
+                android:src="@drawable/backxhdpi" />
 
             <ImageButton
                 android:id="@+id/pause_btn"
@@ -85,18 +99,8 @@
                 android:background="@null"
                 android:contentDescription="@string/play"
                 android:scaleType="centerInside"
-                android:src="@drawable/playxhdpi" />
-
-            <ImageButton
-                android:id="@+id/prev_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="@null"
-                android:contentDescription="@string/previous"
-                android:scaleType="centerInside"
-                android:src="@drawable/backxhdpi" />
+                android:src="@drawable/playxhdpi"
+                android:visibility="gone" />
 
 
             <ImageButton

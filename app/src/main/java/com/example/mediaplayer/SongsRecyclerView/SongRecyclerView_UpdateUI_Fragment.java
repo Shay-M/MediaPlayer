@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -84,6 +85,8 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment לנפח
         View rootView = inflater.inflate(R.layout.fragment_song_recycler_view, container, false);
 
@@ -135,10 +138,23 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//                managerListSongs.RemovingSongFromList(viewHolder.getAdapterPosition()); //todo
-                managerListSongs.getListOfSongsItems().remove(viewHolder.getAdapterPosition());
-                managerListSongs.getListOfUrlSongs().remove(viewHolder.getAdapterPosition());
-                songAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+
+                String Message = "You are going to delete the song: " + managerListSongs.getListOfSongsItems().get(viewHolder.getAdapterPosition()).getName() + "//nThis action cannot be undone!";
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                builder.setTitle("Please confirm").setMessage(Message).setIcon(android.R.drawable.ic_menu_delete)
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            songAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                        })
+                        .setPositiveButton("Delete", (dialog, which) -> {
+                            //managerListSongs.RemovingSongFromList(viewHolder.getAdapterPosition()); //todo
+                            managerListSongs.getListOfSongsItems().remove(viewHolder.getAdapterPosition());
+                            managerListSongs.getListOfUrlSongs().remove(viewHolder.getAdapterPosition());
+                            songAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                            managerListSongs.SaveSongList();
+                        }).show();
+
+
             }
 
             @Override
