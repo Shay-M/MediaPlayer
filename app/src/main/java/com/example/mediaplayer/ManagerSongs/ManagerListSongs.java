@@ -29,39 +29,26 @@ public class ManagerListSongs {
         listOfSongsItems = new ArrayList<>();
 
         try {
+            //try to get storage list
             listOfSongsItems = ManagerSaveSongs.readSongList(null);
 
         } catch (Exception e) {
+            //if not make fresh list
             FirstTime = true;
-            Log.d("ManagerListSongs", "ManagerSaveSongs: " + e.getMessage());
+            Log.d("ManagerListSongs", "make fresh list | " + e.getMessage());
 
-            ArrayList<String> listOfUrlSongsToAddFirstTime = new ArrayList<>();
-
-
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call%20of%20The%20Shadows.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call%20of%20The%20Shadows.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call of The Shadows.mp3");
-
-
-            for (String songUrl : listOfUrlSongsToAddFirstTime) {
-                try {
-                    this.addSong(songUrl, null);//todo
-                } catch (Exception ee) {
-//                    Log.d("ManagerListSongs", "songUrl: " + ee.getMessage() + " songUrl: " + songUrl);
-                }
-
+            for (int i = 0; i < 3; i++) {
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob.m4a", "bob s1", "file:///android_asset/bob_img_0.jpg"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob1.m4a", "bob s2", "file:///android_asset/bob_img_1.jpg"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob2.mp3", "bob s3", "file:///android_asset/bob_img_2.jpg"));
             }
 
+            for (SongItem songItm : listOfSongsItems) {
+                listOfUrlSongs.add(songItm.getUrl());
+            }
         }
+
+        // load from Device
         if (!FirstTime)
             for (SongItem songItm : listOfSongsItems) {
                 listOfUrlSongs.add(songItm.getUrl());
@@ -117,10 +104,9 @@ public class ManagerListSongs {
         Log.d("MoveSongList", "toPosition: " + toPosition);
         Log.d("MoveSongList", "currentPlaying: " + currentPlaying);
 
-        if (currentPlaying >= toPosition && currentPlaying < fromPosition) {
+        if (currentPlaying >= toPosition && currentPlaying < fromPosition)
             currentPlaying++;
-            Log.d("MoveSongList", "!!" );
-        }
+
         Log.d("MoveSongList", "new currentPlaying: " + currentPlaying);
 
 
@@ -139,43 +125,47 @@ public class ManagerListSongs {
      * @param stringUrl song url to add
      * @throws Exception if the url is not in a valid
      */
-    public void addSong(String stringUrl, String imgUri) throws Exception {
+    public void addSong(String stringUrl, String imgUri, String songName) throws Exception {
+
         //get song name
         String NameOfSongFromUrl = stringUrl.substring(stringUrl.lastIndexOf('/') + 1);
-
+        if (!NameOfSongFromUrl.contains("."))
+            throw new Exception("Missing file in link, Unsupported file");
 
         // Url Validator
         try {
             new URL(stringUrl).toURI();
         } catch (MalformedURLException | URISyntaxException e) {
             Log.d("addSong", "the URL is not in a valid form: " + e.getMessage());
-            NameOfSongFromUrl = "";
             throw new Exception("the URL is not in a valid form. " + e.getMessage());
         }
+        Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
 
-        if (!NameOfSongFromUrl.isEmpty() && NameOfSongFromUrl.contains(".")) {
-            listOfUrlSongs.add(stringUrl);
-            Log.d("ManagerListSongs", "addSong: " + listOfUrlSongs);
+        //add song to url list
+        listOfUrlSongs.add(stringUrl);
 
-            listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, imgUri));
-            listener.onUpdateListItem();
-        } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
+        // if no name given, get from url
+        if (songName.isEmpty())
+            songName = NameOfSongFromUrl;
+
+        listOfSongsItems.add(new SongItem(stringUrl, songName, imgUri));
         SaveList();
+        Log.d("add", "listOfUrlSongs: " + listOfUrlSongs);
+        listener.onUpdateListItem();
     }
 
     public void setListener(RecyclerViewUpdateUIListener listener) {
-
         this.listener = listener;
     }
 
     public interface RecyclerViewUpdateUIListener {
-        //        void onInsertItem(int position, View view);
         void onUpdateListItem();
     }
 
 
 }
 
+//            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call%20of%20The%20Shadows.mp3");
 
 //  Set<String> noDuplicatesDlistOfUrlSongs = new LinkedHashSet<>(listOfUrlSongs);
 //            https://stackoverflow.com/questions/203984/how-do-i-remove-repeated-elements-from-arraylist

@@ -406,11 +406,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     .centerInside()
                     .thumbnail(0.05f) // https://stackoverflow.com/questions/47203096/what-is-thumbnail0-5f-method-with-glide
                     .centerCrop()
-                    .into(notificationTarget);*/
+                    .into(notificationTarget);
 
 
 
-        }
+        }*/
 
     /*private void updateNotification(){
 

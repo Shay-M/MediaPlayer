@@ -250,10 +250,10 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
      * parameter from the interface AddSongDialogListener
      */
     @Override
-    public void applyAddSong(String Name, String songUrl, Uri imgUri) {
+    public void applyAddSong(String songName, String songUrl, Uri imgUri) {
 
         try {
-            managerListSongs.addSong(songUrl, imgUri.toString()); //todo add name
+            managerListSongs.addSong(songUrl, imgUri.toString(), songName);
 
         } catch (Exception e) {
             e.printStackTrace();
