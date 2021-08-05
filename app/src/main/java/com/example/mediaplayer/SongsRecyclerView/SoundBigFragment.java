@@ -2,6 +2,7 @@ package com.example.mediaplayer.SongsRecyclerView;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.mediaplayer.R;
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+//import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 /**
@@ -38,8 +39,6 @@ public class SoundBigFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment SoundBigFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -78,8 +77,10 @@ public class SoundBigFragment extends Fragment {
         if (imgUri == null)
             imgUri = Uri.parse("file:///android_asset/musicxhdpi.png"); //Uri.parse
 
-            Glide.with(this).load(imgUri).transition(withCrossFade()).centerCrop().into(songImg);//.thumbnail(0.10f)
+        Log.d("shay", "imgUri: "+imgUri);
 
+
+        Glide.with(this).load(imgUri).centerCrop().into(songImg);//.thumbnail(0.10f)  .transition(withCrossFade())
 
 
         return rootView;

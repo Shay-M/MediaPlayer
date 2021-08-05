@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        managerListSongs.SaveSongList();
+        managerListSongs.SaveList();
     }
 
     @Override
@@ -121,15 +121,15 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             @Override
             public void onItemClick(int position, View view) {
                 Log.d("onItemClick", "position: " + position);
-                pauseClick();
+                //pauseClick();
                 managerListSongs.setCurrentPlaying(position - 1); // update list of songs items
                 nextClick();
             }
 
-            @Override
-            public void onLongClick(int position, View view) {
-                Log.d("onLongClick", "position: " + position);
-            }
+//            @Override
+//            public void onLongClick(int position, View view) {
+//                Log.d("onLongClick", "position: " + position);
+//            }
 
             @Override
             public void onImgClick(int position, View view) {
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
                             "" + e.getMessage(), Snackbar.LENGTH_LONG);
             snackbar.show();
         }
-        managerListSongs.SaveSongList();
+        managerListSongs.SaveList();
         //Hide the Keyboard
         com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
     }

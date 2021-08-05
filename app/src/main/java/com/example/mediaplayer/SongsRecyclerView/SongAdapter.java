@@ -102,7 +102,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
 
         void onItemClick(int position, View view);
 
-        void onLongClick(int position, View view);
+        //void onLongClick(int position, View view);
 
         void onImgClick(int position, View view);
     }
@@ -126,11 +126,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
                     listener.onItemClick(getAdapterPosition(), v);
             });
 
-            itemView.setOnLongClickListener(v -> {
-                if (listener != null)
-                    listener.onLongClick(getAdapterPosition(), v);
-                return false;
-            });
+//            itemView.setOnLongClickListener(v -> {
+//                if (listener != null)
+//                    listener.onLongClick(getAdapterPosition(), v);
+//                return false;
+//            });
 
             songImageIv.setOnClickListener(v -> {
                 if (listener != null)

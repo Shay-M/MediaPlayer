@@ -37,24 +37,26 @@ public class ManagerListSongs {
 
             ArrayList<String> listOfUrlSongsToAddFirstTime = new ArrayList<>();
 
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+
             listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
             listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
             listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call%20of%20The%20Shadows.mp3");
             listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
+            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
             listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
-            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call%20of%20The%20Shadows.mp3");
             listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob.m4a");
+            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob1.m4a");
+            listOfUrlSongsToAddFirstTime.add("https://www.syntax.org.il/xtra/bob2.mp3");
+            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call of The Shadows.mp3");
+
 
             for (String songUrl : listOfUrlSongsToAddFirstTime) {
                 try {
                     this.addSong(songUrl, null);//todo
                 } catch (Exception ee) {
-                    Log.d("ManagerListSongs", "songUrl: " + ee.getMessage() + " songUrl: " + songUrl);
+//                    Log.d("ManagerListSongs", "songUrl: " + ee.getMessage() + " songUrl: " + songUrl);
                 }
 
             }
@@ -106,14 +108,31 @@ public class ManagerListSongs {
         return listOfUrlSongs;
     }
 
-    public void SaveSongList() {
+    public void SaveList() {
         saveSongList(null, listOfSongsItems);
+    }
+
+    public void MoveSongList(int fromPosition, int toPosition) {
+        Log.d("MoveSongList", "fromPosition: " + fromPosition);
+        Log.d("MoveSongList", "toPosition: " + toPosition);
+        Log.d("MoveSongList", "currentPlaying: " + currentPlaying);
+
+        if (currentPlaying >= toPosition && currentPlaying < fromPosition) {
+            currentPlaying++;
+            Log.d("MoveSongList", "!!" );
+        }
+        Log.d("MoveSongList", "new currentPlaying: " + currentPlaying);
+
+
+        SaveList();
     }
 
     public void RemovingSongFromList(int position) {
         listOfSongsItems.remove(position);
         listOfUrlSongs.remove(position);
-        saveSongList(null, listOfSongsItems);
+        if (position == currentPlaying)
+            currentPlaying = currentPlaying - 1;
+        SaveList();
     }
 
     /**
@@ -141,7 +160,7 @@ public class ManagerListSongs {
             listOfSongsItems.add(new SongItem(stringUrl, NameOfSongFromUrl, imgUri));
             listener.onUpdateListItem();
         } else throw new Exception("the URL is not in a valid form: " + "Unsupported file");
-        SaveSongList();
+        SaveList();
     }
 
     public void setListener(RecyclerViewUpdateUIListener listener) {

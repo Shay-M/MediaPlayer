@@ -3,6 +3,7 @@ package com.example.mediaplayer.SongsRecyclerView;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ManagerListSongs managerListSongs;
+
+    private int fromPosition;
+    private int toPosition;
     //    private RecyclerViewClickInterface recyclerViewClickInterface;
     //private AtomicReference<SongAdapter> songAdapter;
 
@@ -126,8 +130,9 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                int fromPosition = viewHolder.getAdapterPosition();
-                int toPosition = target.getAdapterPosition();
+                fromPosition = viewHolder.getAdapterPosition();
+                toPosition = target.getAdapterPosition();
+
 
                 // update lists the new Position
                 Collections.swap(managerListSongs.getListOfSongsItems(), fromPosition, toPosition);
@@ -150,11 +155,11 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
                             songAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
                         })
                         .setPositiveButton("Delete", (dialog, which) -> {
-                            //managerListSongs.RemovingSongFromList(viewHolder.getAdapterPosition()); //todo
-                            managerListSongs.getListOfSongsItems().remove(viewHolder.getAdapterPosition());
-                            managerListSongs.getListOfUrlSongs().remove(viewHolder.getAdapterPosition());
+                            managerListSongs.RemovingSongFromList(viewHolder.getAdapterPosition()); //todo
+//                            managerListSongs.getListOfSongsItems().remove(viewHolder.getAdapterPosition());
+//                            managerListSongs.getListOfUrlSongs().remove(viewHolder.getAdapterPosition());
                             songAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                            managerListSongs.SaveSongList();
+                            // managerListSongs.SaveSongList();
                         }).show();
 
 
@@ -163,12 +168,12 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
             @Override
             public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
                 super.onSelectedChanged(viewHolder, actionState);
-                // Log.d("onSelectedChanged", "actionState: "+ actionState);
-                // Log.d("onSelectedChanged", "");
+                Log.d("onSelectedChanged", "");
 
                 if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
                     scaleUpAnimation.setFillAfter(true);
                     viewHolder.itemView.startAnimation(scaleUpAnimation);
+
                 }
 
             }
@@ -176,8 +181,14 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
             @Override
             public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
-                if (viewHolder.itemView.getAnimation() != null)
+
+
+                if (viewHolder.itemView.getAnimation() != null) {
                     viewHolder.itemView.startAnimation(scaleDownAnimation);
+                    Log.d("clearView", "clearView: ");
+                    managerListSongs.MoveSongList(fromPosition, toPosition);
+                }
+
             }
         };
 
