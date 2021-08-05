@@ -142,7 +142,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -151,7 +153,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.NotificationTarget;
+import com.bumptech.glide.request.target.Target;
 import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 
@@ -346,13 +352,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
         final Notification notification = builder.build();
-
+        notificationManager.notify(NOTIFY_ID, notification);
 
 /*
         using Glid
         add pic using glide https://futurestud.io/tutorials/glide-loading-images-into-notifications-and-appwidgets
 */
-        if (mediaPlayer.isPlaying()) {
+       /* if (mediaPlayer.isPlaying()) {
 
             NotificationTarget notificationTarget = new NotificationTarget(
 
@@ -368,17 +374,43 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             if (uri == null)
                 uri = "file:///android_asset/musicxhdpi.png"; //Uri.parse
 
+            //final Handler handler = new Handler();
+
             Glide
                     .with(this.getApplicationContext())
                     .asBitmap()
                     .load(uri)
-                    //.thumbnail(0.05f) // https://stackoverflow.com/questions/47203096/what-is-thumbnail0-5f-method-with-glide
-                    .centerCrop()
-                    .into(notificationTarget);
-        }
 
-        notificationManager.notify(NOTIFY_ID, notification);
-    }
+*//*                    .listener(new RequestListener<Bitmap>() {
+                                  @Override
+                                  public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                                      handler.post(new Runnable() {
+//                                          @Override
+//                                          public void run() {
+//                                              Glide.with(this.getApplicationContext())
+//                                                      .load("file:///android_asset/musicxhdpi.png")
+//                                                      .into(imageView);
+//                                          }
+//                                      });
+                                      Log.d("Glide", "onLoadFailed: ");
+                                      return false;
+                                  }
+
+                                  @Override
+                                  public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                      return false;
+                                  }
+                              }
+                    )*//*
+
+                    .centerInside()
+                    .thumbnail(0.05f) // https://stackoverflow.com/questions/47203096/what-is-thumbnail0-5f-method-with-glide
+                    .centerCrop()
+                    .into(notificationTarget);*/
+
+
+
+        }
 
     /*private void updateNotification(){
 
@@ -397,5 +429,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             mNotificationManager.notify(NOTIF_ID, mBuilder.build());
         }*/
 
+    }
 }
 
