@@ -326,10 +326,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             mediaPlayer.release();
         }
     }
-    public void UpdateSongDetailsInMainActivity() {
 
-
-    }
     /**
      * Update Notification
      */
@@ -342,42 +339,45 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         Log.d("UpdateSongDetails", "mediaPlayer.isPlaying(): " + mediaPlayer.isPlaying());
 
-        if (mediaPlayer.isPlaying()) {
+        if (mediaPlayer.isPlaying())
             remoteViews.setImageViewResource(R.id.pause_btn, R.drawable.pausexhdpi);
-        } else {
+        else
             remoteViews.setImageViewResource(R.id.pause_btn, R.drawable.playxhdpi);
-        }
+
 
         final Notification notification = builder.build();
-        notificationManager.notify(NOTIFY_ID, notification);
+
 
 /*
         using Glid
         add pic using glide https://futurestud.io/tutorials/glide-loading-images-into-notifications-and-appwidgets
 */
+        if (mediaPlayer.isPlaying()) {
 
-        NotificationTarget notificationTarget = new NotificationTarget(
+            NotificationTarget notificationTarget = new NotificationTarget(
 
-                this,
-                R.id.song_image,
-                remoteViews,
-                notification,
-                NOTIFY_ID);
+                    this,
+                    R.id.song_image,
+                    remoteViews,
+                    notification,
+                    NOTIFY_ID);
 
-        String uri = managerListSongs.getListOfSongsItems().get(currentPlaying).getUri();
+            String uri = managerListSongs.getListOfSongsItems().get(currentPlaying).getUri();
 
 
-        if (uri == null)
-            uri = "file:///android_asset/musicxhdpi.png"; //Uri.parse
+            if (uri == null)
+                uri = "file:///android_asset/musicxhdpi.png"; //Uri.parse
 
-        Glide
-                .with(this.getApplicationContext())
-                .asBitmap()
-                .load(uri)
-                .thumbnail(0.10f)
-                .centerCrop()
-                .into(notificationTarget);
+            Glide
+                    .with(this.getApplicationContext())
+                    .asBitmap()
+                    .load(uri)
+                    //.thumbnail(0.05f) // https://stackoverflow.com/questions/47203096/what-is-thumbnail0-5f-method-with-glide
+                    .centerCrop()
+                    .into(notificationTarget);
+        }
 
+        notificationManager.notify(NOTIFY_ID, notification);
     }
 
     /*private void updateNotification(){
