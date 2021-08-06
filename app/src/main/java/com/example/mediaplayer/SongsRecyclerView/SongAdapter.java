@@ -1,6 +1,7 @@
 package com.example.mediaplayer.SongsRecyclerView;/* Created by Shay Mualem 23/07/2021 */
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,13 +66,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
         ImageView imageView = holder.songImageIv;
 
         if (SongItem.getUri() != null)
-                Glide.with(context).load(SongItem.getUri()).thumbnail(0.10f).centerCrop().into(imageView);
-            else {
-                // make sure Glide doesn't load anything into this view until told otherwise
-                Glide.with(context).clear(holder.songImageIv);
-                // remove the placeholder (optional); read comments below
-                holder.songImageIv.setImageDrawable(null);
-            }
+            Glide.with(context).load(SongItem.getUri()).thumbnail(0.10f).centerCrop().into(imageView);
+        else {
+            // make sure Glide doesn't load anything into this view until told otherwise
+            Glide.with(context).clear(holder.songImageIv);
+            // remove the placeholder (optional); read comments below
+            holder.songImageIv.setImageDrawable(null);
+            Log.d("Glide", "onBindViewHolder: is null");
+        }
 
     }
 

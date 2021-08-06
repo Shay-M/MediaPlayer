@@ -1,5 +1,11 @@
 package com.example.mediaplayer.SongsRecyclerView;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -9,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,37 +27,48 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.R;
 
 import java.util.Collections;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SongRecyclerView_UpdateUI_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
-    ///////
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private static SongAdapter.RecyclerViewListener recyclerViewListener = null;
+    private final BroadcastReceiver closePlayingAudio = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //tapeSpin1.clearAnimation();
+            animTapeSpin1.pause();
 
-    private RecyclerView recyclerView;
+        }
+    };
+    private Animation tapeSpinsAni;
+    private final BroadcastReceiver playPlayingAudio = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //tapeSpin2.startAnimation(tapeSpinsAni);
+            // tapeSpin1.startAnimation(tapeSpinsAni);
+            animTapeSpin1.start();
+            animTapeSpin1.resume();
+
+        }
+    };
+    private ValueAnimator animTapeSpin1;
+    // pause and close from notification
+    private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            animTapeSpin1.pause();
+        }
+    };
+    private ValueAnimator animTapeSpin2;
     private ManagerListSongs managerListSongs;
-
+    //////
     private int fromPosition;
     private int toPosition;
-    //    private RecyclerViewClickInterface recyclerViewClickInterface;
-    //private AtomicReference<SongAdapter> songAdapter;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    //////
-
     private SongAdapter songAdapter;
 
     public SongRecyclerView_UpdateUI_Fragment() {
@@ -60,44 +79,57 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
         this.recyclerViewListener = recyclerViewListener;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the ***provided parameters.***
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SongRecyclerView_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SongRecyclerView_UpdateUI_Fragment newInstance(String param1, String param2) {
-        SongRecyclerView_UpdateUI_Fragment fragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    //register to actions
+    private void register_pausePlayingAudio() {
+        IntentFilter intentFilter = new IntentFilter(Actions.PAUSE_SONG);
+        requireActivity().registerReceiver(pausePlayingAudio, intentFilter);
     }
 
+    private void register_closePlayingAudio() {
+        IntentFilter intentFilter = new IntentFilter(Actions.PLAY_SONG);
+        requireActivity().registerReceiver(playPlayingAudio, intentFilter);
+    }
+
+    private void register_playPlayingAudio() {
+        IntentFilter intentFilter = new IntentFilter(Actions.CLOSE_SONG);
+        requireActivity().registerReceiver(closePlayingAudio, intentFilter);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
+
+        tapeSpinsAni = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_loop);
+        register_pausePlayingAudio();
+        register_playPlayingAudio();
+        register_closePlayingAudio();
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         // Inflate the layout for this fragment לנפח
         View rootView = inflater.inflate(R.layout.fragment_song_recycler_view, container, false);
 
-        recyclerView = rootView.findViewById(R.id.recycler_view_of_songs);
+//        final private Animation tapeSpinsAni = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_loop);
+        ImageView tapeSpin1 = rootView.findViewById(R.id.spain1);
+        ImageView tapeSpin2 = rootView.findViewById(R.id.spain2);
+
+        animTapeSpin1 = ObjectAnimator.ofFloat(tapeSpin1, "rotation", 0, 360);
+        animTapeSpin1.setDuration(3300);
+        animTapeSpin1.setRepeatCount(ValueAnimator.INFINITE);
+        animTapeSpin1.setInterpolator(new LinearInterpolator());
+//        anim.setRepeatMode(ObjectAnimator.RESTART);
+
+        animTapeSpin2 = ObjectAnimator.ofFloat(tapeSpin2, "rotation", 0, 360);
+        animTapeSpin2.setDuration(3200);
+        animTapeSpin2.setRepeatCount(ValueAnimator.INFINITE);
+        animTapeSpin2.setInterpolator(new LinearInterpolator());
+
+
+        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_of_songs);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -2,7 +2,6 @@ package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/202
 
 import static com.example.mediaplayer.ManagerSongs.ManagerSaveSongs.saveSongList;
 
-import android.os.Parcel;
 import android.util.Log;
 
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
@@ -20,7 +19,6 @@ public class ManagerListSongs {
     private ArrayList<SongItem> listOfSongsItems;
     private int currentPlaying;
     private RecyclerViewUpdateUIListener listener;
-    private Boolean FirstTime = false;
 
 
     private ManagerListSongs() {
@@ -28,13 +26,14 @@ public class ManagerListSongs {
         listOfUrlSongs = new ArrayList<>();
         listOfSongsItems = new ArrayList<>();
 
+        Boolean firstTime = false;
         try {
             //try to get storage list
             listOfSongsItems = ManagerSaveSongs.readSongList(null);
 
         } catch (Exception e) {
             //if not make fresh list
-            FirstTime = true;
+            firstTime = true;
             Log.d("ManagerListSongs", "make fresh list | " + e.getMessage());
 
             for (int i = 0; i < 3; i++) {
@@ -49,16 +48,13 @@ public class ManagerListSongs {
         }
 
         // load from Device
-        if (!FirstTime)
+        if (!firstTime)
             for (SongItem songItm : listOfSongsItems) {
                 listOfUrlSongs.add(songItm.getUrl());
             }
 
     }
 
-    protected ManagerListSongs(Parcel in) {
-        listOfUrlSongs = in.createStringArrayList();
-    }
 
     //singleton
     public static ManagerListSongs getInstance() {
@@ -100,12 +96,16 @@ public class ManagerListSongs {
     }
 
     public void MoveSongList(int fromPosition, int toPosition) {
+
         Log.d("MoveSongList", "fromPosition: " + fromPosition);
         Log.d("MoveSongList", "toPosition: " + toPosition);
         Log.d("MoveSongList", "currentPlaying: " + currentPlaying);
 
         if (currentPlaying >= toPosition && currentPlaying < fromPosition)
             currentPlaying++;
+        else if (currentPlaying == fromPosition)
+            currentPlaying = toPosition;
+
 
         Log.d("MoveSongList", "new currentPlaying: " + currentPlaying);
 
@@ -167,7 +167,5 @@ public class ManagerListSongs {
 
 //            listOfUrlSongsToAddFirstTime.add("https://www.mboxdrive.com/Raptor-Call%20of%20The%20Shadows.mp3");
 
-//  Set<String> noDuplicatesDlistOfUrlSongs = new LinkedHashSet<>(listOfUrlSongs);
 //            https://stackoverflow.com/questions/203984/how-do-i-remove-repeated-elements-from-arraylist
-//            Log.d(">>>>>>", ">>>songUrl: " + songUrl);
 

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
             Log.d("playPlayingAudio", "context: " + context + "Intent: " + intent);
             playBtn.setImageResource(R.drawable.pausexhdpi);
-            playBtn.setAlpha(1f);
+//            playBtn.setAlpha(1f);
             isPlaying = true;
 
         }
@@ -69,13 +69,13 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     };
 
     private ImageView backBigPic;
-    private SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment;
     private SongAdapter.RecyclerViewListener recyclerViewListener;
 
     //register to actions
     private void register_pausePlayingAudio() {
         IntentFilter intentFilter = new IntentFilter(Actions.PAUSE_SONG);
         registerReceiver(pausePlayingAudio, intentFilter);
+
     }
 
     private void register_closePlayingAudio() {
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
                     startService(intent);
 
                 } else playClick();
-                playBtn.setAlpha(0.4f);
+//                playBtn.setAlpha(0.4f);
                 //isPlaying = true;
                 //playBtn.setImageResource(R.drawable.pausexhdpi);
             } else pauseClick();
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
     private void showListOfSongFragment() {
 
-        songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
+        SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
         backBigPic.setVisibility(View.GONE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

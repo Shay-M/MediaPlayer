@@ -26,7 +26,6 @@ public class SoundBigFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String song_name = "param1";
     private static final String song_uri = "param2";
-    private Uri imgUri;
     // TODO: Rename and change types of parameters
     private String mSongName;
     private String mSongUri;
@@ -67,7 +66,7 @@ public class SoundBigFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_sound_big, container, false);
 
-        imgUri = Uri.parse(mSongUri);
+        Uri imgUri = Uri.parse(mSongUri);
 
         TextView songTitle = rootView.findViewById(R.id.big_name_song);
 //        songTitle.setAutoSizeTextTypeUniformWithConfiguration(20,28,2,1);
@@ -77,10 +76,10 @@ public class SoundBigFragment extends Fragment {
         if (imgUri == null)
             imgUri = Uri.parse("file:///android_asset/musicxhdpi.png"); //Uri.parse
 
-        Log.d("shay", "imgUri: "+imgUri);
+        Log.d("shay", "imgUri: "+ imgUri);
 
 
-        Glide.with(this).load(imgUri).centerCrop().into(songImg);//.thumbnail(0.10f)  .transition(withCrossFade())
+        Glide.with(this).load(imgUri).centerCrop().thumbnail(0.10f).into(songImg);//.thumbnail(0.10f)  .transition(withCrossFade())
 
 
         return rootView;

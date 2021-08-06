@@ -1,5 +1,4 @@
 /*
-package com.example.mediaplayer;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -142,9 +141,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.media.MediaPlayer;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -152,12 +149,6 @@ import android.widget.RemoteViews;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.NotificationTarget;
-import com.bumptech.glide.request.target.Target;
 import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 
@@ -172,7 +163,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private ArrayList<String> listOfSongs = new ArrayList<>();
     private int currentPlaying = 0;
     private RemoteViews remoteViews;
-    private Boolean isPlaying = false;
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
     private ManagerListSongs managerListSongs;
@@ -338,10 +328,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      */
     public void UpdateSongDetails() {
 
-        String stringUrl = listOfSongs.get(currentPlaying);
-
         //update sound title
-        remoteViews.setTextViewText(R.id.notification_title, stringUrl.substring(stringUrl.lastIndexOf('/') + 1));
+        remoteViews.setTextViewText(R.id.notification_title, managerListSongs.getListOfSongsItems().get(currentPlaying).getName());
+
 
         Log.d("UpdateSongDetails", "mediaPlayer.isPlaying(): " + mediaPlayer.isPlaying());
 
@@ -355,7 +344,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         notificationManager.notify(NOTIFY_ID, notification);
 
 /*
-        using Glid
+        using glide
         add pic using glide https://futurestud.io/tutorials/glide-loading-images-into-notifications-and-appwidgets
 */
        /* if (mediaPlayer.isPlaying()) {
