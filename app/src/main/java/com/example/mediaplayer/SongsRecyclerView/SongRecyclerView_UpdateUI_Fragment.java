@@ -37,9 +37,10 @@ import java.util.Collections;
 public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
     private static SongAdapter.RecyclerViewListener recyclerViewListener = null;
-    private Animation tapeSpinsAni;
+//    private Animation tapeSpinsAni;
     private ValueAnimator animTapeSpin1;
     private ValueAnimator animTapeSpin2;
+
     private final BroadcastReceiver closePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -82,7 +83,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
     }
 
     public SongRecyclerView_UpdateUI_Fragment(SongAdapter.RecyclerViewListener recyclerViewListener) {
-        this.recyclerViewListener = recyclerViewListener;
+        SongRecyclerView_UpdateUI_Fragment.recyclerViewListener = recyclerViewListener;
     }
 
     //register to actions
@@ -105,8 +106,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        tapeSpinsAni = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_loop);
+//        tapeSpinsAni = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_loop);
         register_pausePlayingAudio();
         register_playPlayingAudio();
         register_closePlayingAudio();

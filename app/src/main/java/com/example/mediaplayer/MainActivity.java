@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.MysplashScreen);
         super.onCreate(savedInstanceState);
+        setTheme(R.style.MyScreen);
         setContentView(R.layout.activity_main);
 
         // Removing top action bar: https://www.geeksforgeeks.org/different-ways-to-hide-action-bar-in-android-with-examples/
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         backBigPic.setOnClickListener(v -> showListOfSongFragment());
 
         showListOfSongFragment();
+
 
         //////////////////
 

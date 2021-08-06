@@ -37,9 +37,9 @@ public class ManagerListSongs {
             Log.d("ManagerListSongs", "make fresh list | " + e.getMessage());
 
             for (int i = 0; i < 3; i++) {
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob.m4a", "bob s1", "file:///android_asset/bob_img_0.jpg"));
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob1.m4a", "bob s2", "file:///android_asset/bob_img_1.jpg"));
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob2.mp3", "bob s3", "file:///android_asset/bob_img_2.jpg"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob.m4a", "~One More Cup Of Coffee", "file:///android_asset/bob_img_0.jpg"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob1.m4a", "The Main In me", "file:///android_asset/bob_img_1.jpg"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob2.mp3", "Sara", "file:///android_asset/bob_img_2.jpg"));
             }
 
             for (SongItem songItm : listOfSongsItems) {

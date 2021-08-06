@@ -16,9 +16,10 @@
             android:layout_height="206dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="0.5"
-            android:background="@color/_R_black"
             android:src="@drawable/logoxhdpi"
             tools:ignore="ContentDescription" />
 
