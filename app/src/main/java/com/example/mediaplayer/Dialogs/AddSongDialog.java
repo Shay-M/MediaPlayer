@@ -84,6 +84,7 @@ public class AddSongDialog extends DialogFragment {
 
     }
 
+    //pic from galleria
     private void picFromGalleria() {
 //        GalleryManagerUrl galleryManagerUrl = new GalleryManagerUrl();
 
@@ -100,10 +101,17 @@ public class AddSongDialog extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_REQUEST_CODE) {
             Log.d("onActivityResult", "Intent: " + data);
-            if (data != null) {
+            /*if (data != null) {
                 imgUri = data.getData();
                 Glide.with(this).load(imgUri).centerCrop().thumbnail(0.10f).into(picContentView);
+            }*/
+            try {
+                imgUri = data.getData();
+                Glide.with(this).load(imgUri).centerCrop().thumbnail(0.10f).into(picContentView);
+            } catch (Exception e) {
+                Log.d("picFromGalleria", "onActivityResult: " + e.getMessage());
             }
+
         }
 
     }

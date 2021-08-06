@@ -37,34 +37,40 @@ import java.util.Collections;
 public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
     private static SongAdapter.RecyclerViewListener recyclerViewListener = null;
+    private Animation tapeSpinsAni;
+    private ValueAnimator animTapeSpin1;
+    private ValueAnimator animTapeSpin2;
     private final BroadcastReceiver closePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //tapeSpin1.clearAnimation();
             animTapeSpin1.pause();
+            animTapeSpin2.pause();
 
         }
     };
-    private Animation tapeSpinsAni;
     private final BroadcastReceiver playPlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //tapeSpin2.startAnimation(tapeSpinsAni);
             // tapeSpin1.startAnimation(tapeSpinsAni);
-            animTapeSpin1.start();
-            animTapeSpin1.resume();
-
+            if (animTapeSpin1.isStarted()) {
+                animTapeSpin2.resume();
+                animTapeSpin1.resume();
+            } else {
+                animTapeSpin1.start();
+                animTapeSpin2.start();
+            }
         }
     };
-    private ValueAnimator animTapeSpin1;
     // pause and close from notification
     private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             animTapeSpin1.pause();
+            animTapeSpin2.pause();
         }
     };
-    private ValueAnimator animTapeSpin2;
     private ManagerListSongs managerListSongs;
     //////
     private int fromPosition;
