@@ -16,11 +16,10 @@
             android:id="@+id/song_image"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/roundedbutton"
-            android:backgroundTint="@color/_R_red"
+            android:background="@color/_R_red"
             android:contentDescription="@+id/song_image"
             android:cropToPadding="true"
-            android:src="@drawable/musicxxhdpi" />
+            android:src="@null" />
 
         <TextView
             android:id="@+id/song_title"

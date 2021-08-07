@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -26,6 +28,8 @@ import com.example.mediaplayer.SongsRecyclerView.SoundBigFragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.HashMap;
+
 
 public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
     final String REGISTER_FRAGMENT_TAG = "register_fragment";
@@ -40,23 +44,12 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
             Log.d("pausePlayingAudio", "context: " + context + "Intent: " + intent);
             playBtn.setImageResource(R.drawable.playxhdpi);
+
             isPlaying = false;
 
 
         }
     };
-    private final BroadcastReceiver playPlayingAudio = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            Log.d("playPlayingAudio", "context: " + context + "Intent: " + intent);
-            playBtn.setImageResource(R.drawable.pausexhdpi);
-//            playBtn.setAlpha(1f);
-            isPlaying = true;
-
-        }
-    };
-
     private final BroadcastReceiver closePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -67,7 +60,19 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
         }
     };
+    private ProgressBar LoadSongProgressBar;
+    private final BroadcastReceiver playPlayingAudio = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
+            Log.d("playPlayingAudio", "context: " + context + "Intent: " + intent);
+            playBtn.setImageResource(R.drawable.pausexhdpi);
+//            playBtn.setAlpha(1f);
+            isPlaying = true;
+            LoadSongProgressBar.setVisibility(View.GONE);
+
+        }
+    };
     private ImageView backBigPic;
     private SongAdapter.RecyclerViewListener recyclerViewListener;
 
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         playBtn = findViewById(R.id.btn_play_main);
         backBigPic = findViewById(R.id.back_big_pic);
         final ImageView nextBtn = findViewById(R.id.btn_next_main);
+        LoadSongProgressBar = findViewById(R.id.progressBarLoadSong);
         final ImageView backBtn = findViewById(R.id.btn_prev_main);
         final ImageView addBtn = findViewById(R.id.addLinkBtn);
 
@@ -162,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         //play button
         playBtn.setOnClickListener(view -> {
             if (!isPlaying) {
+                LoadSongProgressBar.setVisibility(View.VISIBLE);
 
                 if (intent == null) { //first time
                     intent = new Intent(MainActivity.this, MusicPlayerService.class);
@@ -184,11 +191,13 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             AddSongDialog addSongDialog = new AddSongDialog();
             addSongDialog.show(getSupportFragmentManager(), "add song dialog");
             // get from applyAddSong
+
         });
 
         register_pausePlayingAudio();
         register_playPlayingAudio();
         register_closePlayingAudio();
+
 
     }
 
@@ -205,6 +214,9 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         fragmentTransaction.commit();
 
     }
+
+
+
 
     @Override
     public void nextClick() {
@@ -227,6 +239,8 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     @Override
     public void playClick() {
         Log.d("TAG", "playClick: ");
+        LoadSongProgressBar.setVisibility(View.VISIBLE);
+
 //        isPlaying = true;
         intent = new Intent(MainActivity.this, MusicPlayerService.class);
         intent.putExtra("command", Actions.PAUSE_SONG);

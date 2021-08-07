@@ -57,10 +57,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
     public void onBindViewHolder(SongAdapter.SongsViewHolder holder, int position) {
         SongItem SongItem = songItemList.get(position);
 
-
+        //set song titale
         holder.songTitleTv.setText(SongItem.getName());
 //        holder.songDetailsTv.setText(SongItem.getUrl());
-        //holder.songDetailsTv.setText(SongItem.getDuration());//todo
+        //set song Duration
+        holder.songDetailsTv.setText(SongItem.getSongDuration());//todo
 
         //update img song
         ImageView imageView = holder.songImageIv;

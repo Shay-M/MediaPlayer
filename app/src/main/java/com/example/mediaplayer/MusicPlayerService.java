@@ -185,7 +185,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         remoteViews = new RemoteViews(getPackageName(), R.layout.media_player_notification_layout);
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel("channelId", "channelName", NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel channel = new NotificationChannel("channelId", "channelName", NotificationManager.IMPORTANCE_DEFAULT);
+
         //Notification sound https://stackoverflow.com/questions/48986856/android-notification-setsound-is-not-working
         channel.setSound(null, null);
         notificationManager.createNotificationChannel(channel);
@@ -194,10 +195,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         builder.setSmallIcon(android.R.drawable.ic_media_play);
 
 
-        Intent playIntent = new Intent(context, MusicPlayerService.class);
-        playIntent.putExtra("command", Actions.PLAY_SONG);
-        PendingIntent playPendingIntent = PendingIntent.getService(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.play_btn, playPendingIntent);
+//        Intent playIntent = new Intent(context, MusicPlayerService.class);
+//        playIntent.putExtra("command", Actions.PLAY_SONG);
+//        PendingIntent playPendingIntent = PendingIntent.getService(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        remoteViews.setOnClickPendingIntent(R.id.play_btn, playPendingIntent);
 
         Intent pauseIntent = new Intent(context, MusicPlayerService.class);
         pauseIntent.putExtra("command", Actions.PAUSE_SONG);
@@ -240,7 +241,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     try {
                         mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
                         mediaPlayer.prepareAsync();
-
+//                        mediaPlayer.getDuration()
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

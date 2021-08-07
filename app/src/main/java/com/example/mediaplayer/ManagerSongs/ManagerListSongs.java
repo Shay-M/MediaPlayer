@@ -2,6 +2,7 @@ package com.example.mediaplayer.ManagerSongs;/* Created by Shay Mualem 22/07/202
 
 import static com.example.mediaplayer.ManagerSongs.ManagerSaveSongs.saveSongList;
 
+import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
 import com.example.mediaplayer.SongsRecyclerView.SongItem;
@@ -10,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ManagerListSongs {
 
@@ -37,9 +39,9 @@ public class ManagerListSongs {
             Log.d("ManagerListSongs", "make fresh list | " + e.getMessage());
 
             for (int i = 0; i < 3; i++) {
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob.m4a", "~One More Cup Of Coffee", "file:///android_asset/bob_img_0.jpg"));
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob1.m4a", "The Main In me", "file:///android_asset/bob_img_1.jpg"));
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob2.mp3", "Sara", "file:///android_asset/bob_img_2.jpg"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob.m4a", "One More Cup Of Coffee", "file:///android_asset/bob_img_0.jpg", SongDuration("https://www.syntax.org.il/xtra/bob.m4a")));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob1.m4a", "The Main In me", "file:///android_asset/bob_img_1.jpg", SongDuration("https://www.syntax.org.il/xtra/bob1.m4a")));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob2.mp3", "Sara", "file:///android_asset/bob_img_2.jpg", SongDuration("https://www.syntax.org.il/xtra/bob2.mp3")));
             }
 
             for (SongItem songItm : listOfSongsItems) {
@@ -148,10 +150,40 @@ public class ManagerListSongs {
         if (songName.isEmpty())
             songName = NameOfSongFromUrl;
 
-        listOfSongsItems.add(new SongItem(stringUrl, songName, imgUri));
+        listOfSongsItems.add(new SongItem(stringUrl, songName, imgUri, SongDuration(stringUrl)));
         SaveList();
         Log.d("add", "listOfUrlSongs: " + listOfUrlSongs);
         listener.onUpdateListItem();
+
+    }
+
+    private String SongDuration(String pathStr) {
+
+
+        // load data file
+// filePath is of type String which holds the path of file
+        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        metaRetriever.setDataSource(pathStr, new HashMap<String, String>());
+
+// get mp3 info
+        String duration = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        long dur = Long.parseLong(duration);
+
+// convert duration to minute:seconds
+        String seconds = String.valueOf((dur % 60000) / 1000);
+        String minutes = String.valueOf(dur / 60000);
+        String out = "0:00"; //= minutes + ":" + seconds;
+
+        if (seconds.length() == 1)
+            out = "0" + minutes + ":0" + seconds;
+        else
+            out = "0" + minutes + ":" + seconds;
+
+        // close object
+        metaRetriever.release();
+
+        return out;
+
     }
 
     public void setListener(RecyclerViewUpdateUIListener listener) {
