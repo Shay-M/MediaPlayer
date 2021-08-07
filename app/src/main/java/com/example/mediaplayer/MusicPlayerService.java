@@ -194,6 +194,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         builder = new NotificationCompat.Builder(context, "channelId");
         builder.setSmallIcon(android.R.drawable.ic_media_play);
 
+        Intent openAppIntent = new Intent(this, MainActivity.class);
+        openAppIntent.putExtra("restarted_from_notification", true);
+        PendingIntent openAppPendingIntent = PendingIntent.getActivity(this, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.song_image, openAppPendingIntent);
 
 //        Intent playIntent = new Intent(context, MusicPlayerService.class);
 //        playIntent.putExtra("command", Actions.PLAY_SONG);
@@ -235,6 +239,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             managerListSongs = ManagerListSongs.getInstance();
 
         listOfSongs = managerListSongs.getListOfUrlSongs();
+
         switch (command) {
             case Actions.NEW_INSTANCE:
                 if (!mediaPlayer.isPlaying()) {

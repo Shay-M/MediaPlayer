@@ -59,9 +59,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongsViewHolde
 
         //set song titale
         holder.songTitleTv.setText(SongItem.getName());
-//        holder.songDetailsTv.setText(SongItem.getUrl());
+
         //set song Duration
-        holder.songDetailsTv.setText(SongItem.getSongDuration());//todo
+        holder.songDetailsTv.setText(SongItem.getSongDuration());
 
         //update img song
         ImageView imageView = holder.songImageIv;

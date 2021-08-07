@@ -158,18 +158,16 @@ public class ManagerListSongs {
     }
 
     private String SongDuration(String pathStr) {
-
-
-        // load data file
-// filePath is of type String which holds the path of file
+        // load data file, filePath is of type String which holds the path of file
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
         metaRetriever.setDataSource(pathStr, new HashMap<String, String>());
 
-// get mp3 info
+        // get mp3 info
         String duration = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+//        String duration = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
         long dur = Long.parseLong(duration);
 
-// convert duration to minute:seconds
+        // convert duration to minute:seconds
         String seconds = String.valueOf((dur % 60000) / 1000);
         String minutes = String.valueOf(dur / 60000);
         String out = "0:00"; //= minutes + ":" + seconds;

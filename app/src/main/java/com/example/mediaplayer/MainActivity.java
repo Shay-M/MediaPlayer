@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,8 +26,6 @@ import com.example.mediaplayer.SongsRecyclerView.SongRecyclerView_UpdateUI_Fragm
 import com.example.mediaplayer.SongsRecyclerView.SoundBigFragment;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity implements ActionsPlayer, AddSongDialog.AddSongDialogListener {
@@ -102,14 +99,14 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MysplashScreen);
+
+        // Removing top action bar: https://www.geeksforgeeks.org/different-ways-to-hide-action-bar-in-android-with-examples/
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
+
         super.onCreate(savedInstanceState);
         setTheme(R.style.MyScreen);
         setContentView(R.layout.activity_main);
-
-        // Removing top action bar: https://www.geeksforgeeks.org/different-ways-to-hide-action-bar-in-android-with-examples/
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
 
         playBtn = findViewById(R.id.btn_play_main);
         backBigPic = findViewById(R.id.back_big_pic);
@@ -214,8 +211,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         fragmentTransaction.commit();
 
     }
-
-
 
 
     @Override
