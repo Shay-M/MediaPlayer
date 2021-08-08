@@ -9,14 +9,6 @@ public class SongItem implements Serializable {
     private String name;
     private String uri;
 
-//    public SongItem(String url, String name, String uri) {
-//        this.url = url;
-//        this.name = name;
-//        if (uri == null)
-//            uri = ("file:///android_asset/musicxhdpi.png"); //Uri.parse
-//        this.uri = uri;
-//
-//    }
 
     public SongItem() {
     }
@@ -24,8 +16,8 @@ public class SongItem implements Serializable {
     public SongItem(String stringUrl, String songName, String imgUri, String songDuration) {
         this.url = stringUrl;
         this.name = songName;
-        if (uri == null)
-            uri = ("file:///android_asset/musicxhdpi.png"); //Uri.parse
+        if (imgUri == null)
+            imgUri = ("file:///android_asset/musicxhdpi.png"); //Uri.parse
         this.uri = imgUri;
         this.songDuration = songDuration;
     }

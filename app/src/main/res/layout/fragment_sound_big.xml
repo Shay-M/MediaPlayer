@@ -35,7 +35,7 @@
             android:requiresFadingEdge="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.80"
+            app:layout_constraintVertical_bias="0.90"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:textSize="28sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/big_pic_song"
-            app:layout_constraintVertical_bias="0.80" />
+            app:layout_constraintVertical_bias="0.90" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

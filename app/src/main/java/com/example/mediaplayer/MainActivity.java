@@ -98,6 +98,14 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        View decorView = getWindow().getDecorView();
+//        // Hide the status bar.
+//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        // Show Status Bar.
+//        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+//        decorView.setSystemUiVisibility(uiOptions);
+
+
         setTheme(R.style.MysplashScreen);
 
         // Removing top action bar: https://www.geeksforgeeks.org/different-ways-to-hide-action-bar-in-android-with-examples/
@@ -105,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             getSupportActionBar().hide();
 
         super.onCreate(savedInstanceState);
-        setTheme(R.style.MyScreen);
         setContentView(R.layout.activity_main);
+
 
         playBtn = findViewById(R.id.btn_play_main);
         backBigPic = findViewById(R.id.back_big_pic);
@@ -127,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             public void onItemClick(int position, View view) {
                 Log.d("onItemClick", "position: " + position);
                 //pauseClick();
+                LoadSongProgressBar.setVisibility(View.VISIBLE);
                 managerListSongs.setCurrentPlaying(position - 1); // update list of songs items
                 nextClick();
             }

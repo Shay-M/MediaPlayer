@@ -13,7 +13,6 @@
         android:layout_gravity="center|center_horizontal|center_vertical"
         android:layout_weight="1"
         android:background="@color/_dark_blue"
-        android:cropToPadding="true"
         android:padding="3dp"
         android:src="@drawable/musicxxhdpi"
         tools:ignore="ContentDescription" />

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.MediaPlayer" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
@@ -10,21 +10,23 @@
         <item name="colorSecondaryVariant">@color/_R_green</item>
         <item name="colorOnSecondary">@color/_R_black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/_R_red</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/_R_black</item>
     </style>
 
     <!--    https://medium.com/geekculture/implementing-the-perfect-splash-screen-in-android-295de045a8dc-->
-        <style name="MysplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
-            <item name="android:windowBackground">@drawable/splash_screen_image</item>
-        </style>
-
-    <style name="MyScreen" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MysplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen_image</item>
         <item name="android:statusBarColor">@color/_R_red</item>
     </style>
 
-    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/_R_yellow</item>
+    <style name="MyScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/_R_red</item>
+
+    </style>
+
+    <style name="MyDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/_R_red</item>
     </style>
 </resources>
