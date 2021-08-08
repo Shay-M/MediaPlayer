@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.astritveliu.boom.Boom;
 import com.bumptech.glide.Glide;
 import com.example.mediaplayer.R;
 import com.example.mediaplayer.utils.CameraManagerUrl;
@@ -73,9 +74,12 @@ public class AddSongDialog extends DialogFragment {
 
         picContentView = view.findViewById(R.id.song_image);
 
-        //From Camera
+        //From Camera Button
+        new Boom(takeApicBtn);
         takeApicBtn.setOnClickListener(v -> takeApicFromCamera());
-        //From Galleria
+
+        //From Galleria Button
+        new Boom(galleriaPicBtn);
         galleriaPicBtn.setOnClickListener(v -> picFromGalleria());
 
         return builder.create();

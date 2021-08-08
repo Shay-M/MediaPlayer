@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.astritveliu.boom.Boom;
 import com.example.mediaplayer.ActionsMediaPlayer.Actions;
 import com.example.mediaplayer.ActionsMediaPlayer.ActionsPlayer;
 import com.example.mediaplayer.Dialogs.AddSongDialog;
@@ -171,7 +172,8 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
         //////////////////
 
-        //play button
+        //play Button
+        new Boom(playBtn);
         playBtn.setOnClickListener(view -> {
             if (!isPlaying) {
                 LoadSongProgressBar.setVisibility(View.VISIBLE);
@@ -188,11 +190,16 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             } else pauseClick();
 
         });
-
+        //next Button
+        new Boom(nextBtn);
         nextBtn.setOnClickListener(view -> nextClick());
+
+        //back Button
+        new Boom(backBtn);
         backBtn.setOnClickListener(view -> prevClick());
 
-        // add a song
+        // add a song Button
+        new Boom(addBtn);
         addBtn.setOnClickListener(view -> {
             AddSongDialog addSongDialog = new AddSongDialog();
             addSongDialog.show(getSupportFragmentManager(), "add song dialog");
