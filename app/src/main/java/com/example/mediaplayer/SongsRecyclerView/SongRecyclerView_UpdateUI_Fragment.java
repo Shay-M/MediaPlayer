@@ -37,7 +37,8 @@ import java.util.Collections;
 public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
     private static SongAdapter.RecyclerViewListener recyclerViewListener = null;
-//    private Animation tapeSpinsAni;
+    private boolean isPlaying;
+    //    private Animation tapeSpinsAni;
     private ValueAnimator animTapeSpin1;
     private ValueAnimator animTapeSpin2;
 
@@ -45,8 +46,7 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             //tapeSpin1.clearAnimation();
-            animTapeSpin1.pause();
-            animTapeSpin2.pause();
+            AnimTape(false);
 
         }
     };
@@ -55,21 +55,14 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             //tapeSpin2.startAnimation(tapeSpinsAni);
             // tapeSpin1.startAnimation(tapeSpinsAni);
-            if (animTapeSpin1.isStarted()) {
-                animTapeSpin2.resume();
-                animTapeSpin1.resume();
-            } else {
-                animTapeSpin1.start();
-                animTapeSpin2.start();
-            }
+            AnimTape(true);
         }
     };
     // pause and close from notification
     private final BroadcastReceiver pausePlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            animTapeSpin1.pause();
-            animTapeSpin2.pause();
+            AnimTape(false);
         }
     };
     private ManagerListSongs managerListSongs;
@@ -78,13 +71,19 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
     private int toPosition;
     private SongAdapter songAdapter;
 
+
     public SongRecyclerView_UpdateUI_Fragment() {
         // Required empty public constructor
+
     }
 
-    public SongRecyclerView_UpdateUI_Fragment(SongAdapter.RecyclerViewListener recyclerViewListener) {
+    public SongRecyclerView_UpdateUI_Fragment(SongAdapter.RecyclerViewListener recyclerViewListener, boolean isPlaying) {
+        // Required empty public constructor
         SongRecyclerView_UpdateUI_Fragment.recyclerViewListener = recyclerViewListener;
+        this.isPlaying = isPlaying;
+
     }
+
 
     //register to actions
     private void register_pausePlayingAudio() {
@@ -113,6 +112,22 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
 
     }
 
+    public void AnimTape(boolean toAni) {
+        if (toAni) {
+            if (animTapeSpin1.isStarted()) {
+                animTapeSpin2.resume();
+                animTapeSpin1.resume();
+            } else {
+                animTapeSpin1.start();
+                animTapeSpin2.start();
+            }
+
+        } else {
+            animTapeSpin1.pause();
+            animTapeSpin2.pause();
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -133,6 +148,9 @@ public class SongRecyclerView_UpdateUI_Fragment extends Fragment {
         animTapeSpin2.setDuration(3200);
         animTapeSpin2.setRepeatCount(ValueAnimator.INFINITE);
         animTapeSpin2.setInterpolator(new LinearInterpolator());
+
+        if (isPlaying)
+            AnimTape(true);
 
 
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_of_songs);

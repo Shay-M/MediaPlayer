@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 //                Log.d("onLongClick", "position: " + position);
 //            }
 
+            // image song Button
             @Override
             public void onImgClick(int position, View view) {
                 Log.d("onImgClick", "position: " + position);
@@ -168,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         backBigPic.setOnClickListener(v -> showListOfSongFragment());
 
         showListOfSongFragment();
-
 
         //////////////////
 
@@ -217,13 +217,15 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
 
     private void showListOfSongFragment() {
 
-        SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener);
+
+        SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener,isPlaying);
         backBigPic.setVisibility(View.GONE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.fragment_list_and_big, songRecyclerViewFragment, REGISTER_FRAGMENT_TAG);
+
         fragmentTransaction.commit();
 
     }
