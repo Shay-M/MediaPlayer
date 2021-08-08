@@ -284,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
             snackbar.show();
         }
         managerListSongs.SaveList();
+
         //Hide the Keyboard
         com.example.shiftmanagerhit.Utility.HidesKeyboard.hideKeyboard(this);
     }

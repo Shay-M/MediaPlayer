@@ -51,6 +51,7 @@
         android:textColor="@color/_R_black"
         android:textStyle="bold" />
 
+
     <ImageView
         android:id="@+id/take_a_pic"
         android:layout_width="60dp"

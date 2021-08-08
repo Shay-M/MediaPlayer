@@ -28,7 +28,7 @@ public class ManagerListSongs {
         listOfUrlSongs = new ArrayList<>();
         listOfSongsItems = new ArrayList<>();
 
-        Boolean firstTime = false;
+        boolean firstTime = false;
         try {
             //try to get storage list
             listOfSongsItems = ManagerSaveSongs.readSongList(null);
@@ -39,9 +39,9 @@ public class ManagerListSongs {
             Log.d("ManagerListSongs", "make fresh list | " + e.getMessage());
 
             for (int i = 0; i < 3; i++) {
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob.m4a", "One More Cup Of Coffee", "file:///android_asset/bob_img_0.jpg", SongDuration("https://www.syntax.org.il/xtra/bob.m4a")));
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob1.m4a", "The Main In me", "file:///android_asset/bob_img_1.jpg", SongDuration("https://www.syntax.org.il/xtra/bob1.m4a")));
-                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob2.mp3", "Sara", "file:///android_asset/bob_img_2.jpg", SongDuration("https://www.syntax.org.il/xtra/bob2.mp3")));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob.m4a", "One More Cup Of Coffee", "file:///android_asset/bob_img_0.jpg", "03:47"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob1.m4a", "The Main In me", "file:///android_asset/bob_img_1.jpg", "05:31"));
+                listOfSongsItems.add(new SongItem("https://www.syntax.org.il/xtra/bob2.mp3", "Sara", "file:///android_asset/bob_img_2.jpg", "03:06"));
             }
 
             for (SongItem songItm : listOfSongsItems) {
@@ -160,7 +160,7 @@ public class ManagerListSongs {
     private String SongDuration(String pathStr) {
         // load data file, filePath is of type String which holds the path of file
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-        metaRetriever.setDataSource(pathStr, new HashMap<String, String>());
+        metaRetriever.setDataSource(pathStr, new HashMap<>());
 
         // get mp3 info
         String duration = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);

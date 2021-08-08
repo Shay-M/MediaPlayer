@@ -35,7 +35,7 @@ public class ManagerSaveSongs {
 
     public static ArrayList<SongItem> readSongList(Context context) throws Exception {
 
-        ArrayList<SongItem> songs = null;
+        ArrayList<SongItem> songs;
 
         try {
             FileInputStream fis = static_context.openFileInput("songs_list");

@@ -30,7 +30,6 @@
         android:src="@drawable/playxhdpi"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 
@@ -38,7 +37,7 @@
         android:id="@+id/btn_prev_main"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/backxhdpi"
         app:layout_constraintBottom_toBottomOf="@+id/btn_play_main"
         app:layout_constraintEnd_toStartOf="@+id/btn_play_main"

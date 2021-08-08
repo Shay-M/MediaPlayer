@@ -17,7 +17,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
-import com.example.mediaplayer.ManagerSongs.ManagerListSongs;
 import com.example.mediaplayer.R;
 import com.example.mediaplayer.utils.CameraManagerUrl;
 
@@ -29,7 +28,6 @@ public class AddSongDialog extends DialogFragment {
 
     private Uri imgUri = null;
 
-    private ManagerListSongs managerListSongs;
     private CameraManagerUrl cameraManagerUrl;
 
     private AddSongDialogListener listener;
@@ -40,7 +38,6 @@ public class AddSongDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         cameraManagerUrl = CameraManagerUrl.getInstance();
-        managerListSongs = ManagerListSongs.getInstance();
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyDialogTheme);
@@ -51,6 +48,7 @@ public class AddSongDialog extends DialogFragment {
                 .setNegativeButton("Cancel", (dialog, which) -> {
                 })
                 .setPositiveButton("Add", (dialog, which) -> {
+
                     String songUrl = linkText.getText().toString();
                     if (!songUrl.isEmpty()) {
 
@@ -68,6 +66,7 @@ public class AddSongDialog extends DialogFragment {
 
         linkText = view.findViewById(R.id.dialog_link);
         nameText = view.findViewById(R.id.dialog_name);
+
 
         ImageView takeApicBtn = view.findViewById(R.id.take_a_pic);
         ImageView galleriaPicBtn = view.findViewById(R.id.add_a_pic);
