@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("pausePlayingAudio", "context: " + context + "Intent: " + intent);
+            Log.d("pausePlayingAudio", "Intent: " + intent);
             playBtn.setImageResource(R.drawable.playxhdpi);
 
             isPlaying = false;
@@ -52,18 +52,19 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("closePlayingAudio", "context: " + context + "Intent: " + intent);
+            Log.d("closePlayingAudio", "Intent: " + intent);
             playBtn.setImageResource(R.drawable.playxhdpi);
             isPlaying = false;
 
         }
     };
     private ProgressBar LoadSongProgressBar;
+
     private final BroadcastReceiver playPlayingAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("playPlayingAudio", "context: " + context + "Intent: " + intent);
+            Log.d("playPlayingAudio", "Intent: " + intent);
             playBtn.setImageResource(R.drawable.pausexhdpi);
 //            playBtn.setAlpha(1f);
             isPlaying = true;
@@ -168,14 +169,14 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         ////
         backBigPic.setOnClickListener(v -> showListOfSongFragment());
 
-        showListOfSongFragment();
 
-        //////////////////
+
 
         //play Button
         new Boom(playBtn);
         playBtn.setOnClickListener(view -> {
             if (!isPlaying) {
+//                if (!isMyServiceRunning(ManagerSaveSongs.class))
                 LoadSongProgressBar.setVisibility(View.VISIBLE);
 
                 if (intent == null) { //first time
@@ -211,14 +212,26 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
         register_playPlayingAudio();
         register_closePlayingAudio();
 
+        showListOfSongFragment();
+
+//        Log.d("isPlaying", "isMyServiceRunning: "+isMyServiceRunning(MusicPlayerService.class));
+
 
     }
+   /* private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }*/
 
-
+    //list fragment
     private void showListOfSongFragment() {
 
-
-        SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener,isPlaying);
+        SongRecyclerView_UpdateUI_Fragment songRecyclerViewFragment = new SongRecyclerView_UpdateUI_Fragment(recyclerViewListener, isPlaying);
         backBigPic.setVisibility(View.GONE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -252,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements ActionsPlayer, Ad
     @Override
     public void playClick() {
         Log.d("TAG", "playClick: ");
-        LoadSongProgressBar.setVisibility(View.VISIBLE);
+        //LoadSongProgressBar.setVisibility(View.VISIBLE);
 
 //        isPlaying = true;
         intent = new Intent(MainActivity.this, MusicPlayerService.class);

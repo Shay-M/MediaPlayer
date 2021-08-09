@@ -30,16 +30,17 @@
         android:textStyle="bold"
         tools:ignore="TextFields" />
 
+
     <EditText
         android:id="@+id/dialog_link"
-        android:layout_width="wrap_content"
+        android:layout_width="224dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dialog_name"
         android:layout_alignParentStart="true"
         android:layout_gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
         android:layout_toStartOf="@+id/take_a_pic"
         android:autofillHints="@string/enter_music_link"
         android:background="@drawable/roundedbutton"
@@ -51,7 +52,6 @@
         android:textColor="@color/_R_black"
         android:textStyle="bold" />
 
-
     <ImageView
         android:id="@+id/take_a_pic"
         android:layout_width="60dp"
@@ -59,7 +59,7 @@
         android:layout_below="@+id/dialog_name"
         android:layout_gravity="center"
         android:layout_marginTop="18dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="8dp"
         android:layout_toStartOf="@+id/add_a_pic"
         android:background="@drawable/roundedbutton"
         android:contentDescription="@+id/take_a_pic"
@@ -92,7 +92,6 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp"
         android:background="@drawable/roundedbutton"
-        android:backgroundTint="@color/_R_red"
         android:contentDescription="@+id/song_image"
         android:gravity="center"
         android:scaleType="centerInside"

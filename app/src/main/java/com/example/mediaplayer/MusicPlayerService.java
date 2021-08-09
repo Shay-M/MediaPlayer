@@ -166,6 +166,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
     private ManagerListSongs managerListSongs;
+    private Boolean isFirstTime;
 
 
     @Nullable
@@ -242,14 +243,24 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
         switch (command) {
             case Actions.NEW_INSTANCE:
-                if (!mediaPlayer.isPlaying()) {
-                    try {
-                        mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
-                        mediaPlayer.prepareAsync();
-//                        mediaPlayer.getDuration()
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                Log.d("shay", "isPaused: " + isFirstTime);
+                if (isFirstTime == null) {
+                    if (!mediaPlayer.isPlaying()) {
+                        try {
+                            mediaPlayer.setDataSource(listOfSongs.get(currentPlaying));
+                            mediaPlayer.prepareAsync();
+                            isFirstTime = false;
+                        } catch (IOException e) {
+                            Log.d("TAG", "onStartCommand: " + e.getMessage());
+                            //mediaPlayer.start();
+                            //sendBroadcast(new Intent(Actions.PLAY_SONG));
+                            //e.printStackTrace();
+                        }
+                    }// Log.d("how", "how ");// else sendBroadcast(new Intent(Actions.PLAY_SONG)); //update ui in main
+                } else {
+                    mediaPlayer.start();
+                    sendBroadcast(new Intent(Actions.PLAY_SONG)); //update ui in main
+                    UpdateSongDetails();
                 }
                 break;
 //            case Actions.PLAY_SONG:
@@ -327,6 +338,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 mediaPlayer.stop();
             mediaPlayer.release();
         }
+        isFirstTime = true;
     }
 
     /**

@@ -66,7 +66,10 @@ public class AddSongDialog extends DialogFragment {
 
 
         linkText = view.findViewById(R.id.dialog_link);
+        new Boom(linkText);
+
         nameText = view.findViewById(R.id.dialog_name);
+        new Boom(nameText);
 
 
         ImageView takeApicBtn = view.findViewById(R.id.take_a_pic);

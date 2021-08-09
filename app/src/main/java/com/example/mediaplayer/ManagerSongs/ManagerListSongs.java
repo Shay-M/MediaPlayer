@@ -99,17 +99,19 @@ public class ManagerListSongs {
 
     public void MoveSongList(int fromPosition, int toPosition) {
 
-        Log.d("MoveSongList", "fromPosition: " + fromPosition);
-        Log.d("MoveSongList", "toPosition: " + toPosition);
-        Log.d("MoveSongList", "currentPlaying: " + currentPlaying);
+//        Log.d("MoveSongList", "fromPosition: " + fromPosition);
+//        Log.d("MoveSongList", "toPosition: " + toPosition);
+//        Log.d("MoveSongList", "currentPlaying: " + currentPlaying);
 
         if (currentPlaying >= toPosition && currentPlaying < fromPosition)
             currentPlaying++;
         else if (currentPlaying == fromPosition)
             currentPlaying = toPosition;
+       else if (currentPlaying == toPosition)
+            currentPlaying--;
 
 
-        Log.d("MoveSongList", "new currentPlaying: " + currentPlaying);
+//        Log.d("MoveSongList", "new currentPlaying: " + currentPlaying);
 
 
         SaveList();
